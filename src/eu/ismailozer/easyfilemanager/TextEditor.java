@@ -22,7 +22,7 @@ import javax.swing.text.Document;
  * painted on the pane itself, but a separate JPanel handles painting the line
  * numbers.<br>
  * 
- * @author Daniel Sjöblom<br>
+ * @author Daniel Sjï¿½blom<br>
  *         Created on Mar 3, 2004<br>
  *         Copyright (c) 2004<br>
  * @version 1.0<br>
@@ -110,7 +110,9 @@ class EasyTextEditorPanel extends JPanel {
 
 	public void paint(Graphics g) {
 		super.paint(g);
+		@SuppressWarnings("deprecation")
 		int start = pane.viewToModel(scrollPane.getViewport().getViewPosition());
+		@SuppressWarnings("deprecation")
 		int end = pane.viewToModel(new Point(scrollPane.getViewport().getViewPosition().x + pane.getWidth(),
 				scrollPane.getViewport().getViewPosition().y + pane.getHeight()));
 		// translate offsets to lines

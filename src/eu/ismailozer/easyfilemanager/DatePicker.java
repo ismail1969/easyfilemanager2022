@@ -43,7 +43,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.event.MouseInputListener;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "deprecation" })
 public class DatePicker extends Observable implements Runnable, WindowFocusListener {
 	protected static Font plain = new Font("Arial", Font.PLAIN, 10);
 	protected static Font bold = new Font("Arial", Font.BOLD, 10);
@@ -340,7 +340,7 @@ public class DatePicker extends Observable implements Runnable, WindowFocusListe
 			int y = c.get(Calendar.YEAR);
 			years = new Integer[7];
 			for (int i = y - 3, j = 0; i <= y + 3; i++, j++) {
-				years[j] = new Integer(i);
+				years[j] =  Integer.valueOf(i);
 			}
 			if (yearBox == null) {
 				yearBox = new JComboBox<>(years);
