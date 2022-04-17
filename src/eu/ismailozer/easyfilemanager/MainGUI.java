@@ -482,7 +482,9 @@ public class MainGUI extends javax.swing.JFrame
 			getContentPane().setLayout(null);
 			determinePreferedSizes();
 			loadPropertiesFile(PROPS_FILE);
-			this.setPreferredSize(new java.awt.Dimension(WIDTH_FRM, HEIGHT_FRM));
+			if(OSValidator.isWindows()) {
+				this.setPreferredSize(new java.awt.Dimension(WIDTH_FRM, HEIGHT_FRM));	
+			}
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 			SwingUtilities.updateComponentTreeUI(this);
 			this.setTitle(this.VERSION_FILEMANAGER);
@@ -696,7 +698,7 @@ public class MainGUI extends javax.swing.JFrame
 			pnlFilePreview.setSize(dimensionPreview);
 
 			pnlBottomCmdButton = new JPanel();
-			pnlBottomCmdButton.setBounds(60, jTabbedPanelForTables.getY() + jTabbedPanelForTables.getHeight() + 10,
+			pnlBottomCmdButton.setBounds(60, jTabbedPanelForTables.getY() + jTabbedPanelForTables.getHeight() + 20,
 					WIDTH_FRM - 60, 30);
 			add(pnlBottomCmdButton);
 
@@ -1278,7 +1280,7 @@ public class MainGUI extends javax.swing.JFrame
 
 		lblSourceDir = new JLabel("Search Path:");
 		//lblSourceDir.setPreferredSize(DIMENSION_100_22);
-		lblSourceDir.setPreferredSize(new java.awt.Dimension(10, 22));
+		lblSourceDir.setPreferredSize(new java.awt.Dimension(100, 22));
 
 		pnlDirectory.add(lblSourceDir);
 
@@ -3495,7 +3497,7 @@ public class MainGUI extends javax.swing.JFrame
 			pCanRename = true;
 		}
 
-		pTblModel.addRow(new Object[] { new Integer(pTblModel.getRowCount() + 1), pSourceFilename, pTargetFilename,
+		pTblModel.addRow(new Object[] { Integer.valueOf(pTblModel.getRowCount() + 1), pSourceFilename, pTargetFilename,
 				getFileExtension(pSourceFilename),
 				getDateFromat().format(new Date((new File(pSourceFilename).lastModified()))),
 				getFileSize(pSourceFilename), pCanRename, new File(pSourceFilename).isDirectory() });
@@ -3533,7 +3535,7 @@ public class MainGUI extends javax.swing.JFrame
 		String fileExtension = getFileExtension(pFile);
 		try {
 			pTblModel.addRow(
-					new Object[] { new Integer(pTblModel.getRowCount() + 1), pFile.getCanonicalPath(), lTargetFilename,
+					new Object[] { Integer.valueOf(pTblModel.getRowCount() + 1), pFile.getCanonicalPath(), lTargetFilename,
 							// pFile.getParent() + getFileSeparator() + lTargetFilename,
 							fileExtension, getDateFromat().format(pFile.lastModified()), getFileSize(pFile), pCanRename,
 							pFile.isDirectory() });
@@ -3561,7 +3563,7 @@ public class MainGUI extends javax.swing.JFrame
 
 		try {
 			pDublicateTblModel.addRow(
-					new Object[] { new Integer(pDublicateTblModel.getRowCount() + 1), pLeftFile.getCanonicalPath(),
+					new Object[] { Integer.valueOf(pDublicateTblModel.getRowCount() + 1), pLeftFile.getCanonicalPath(),
 							getFileExtension(pLeftFile), getDateFromat().format(pLeftFile.lastModified()),
 							getFileSize(pLeftFile), pRightFile.getCanonicalPath(), getFileExtension(pRightFile),
 							getDateFromat().format(pRightFile.lastModified()), getFileSize(pRightFile),
@@ -3584,7 +3586,7 @@ public class MainGUI extends javax.swing.JFrame
 			return;
 		}
 		try {
-			pDublicateTblModel.addRow(new Object[] { new Integer(pDublicateTblModel.getRowCount() + 1),
+			pDublicateTblModel.addRow(new Object[] { Integer.valueOf(pDublicateTblModel.getRowCount() + 1),
 					pSourceFile.getCanonicalPath(), getFileExtension(pSourceFile),
 					getDateFromat().format(new Date((pSourceFile.lastModified()))), getFileSize(pSourceFile),
 					pDublicateFile.getCanonicalPath(), getFileExtension(pDublicateFile),
@@ -4584,6 +4586,7 @@ public class MainGUI extends javax.swing.JFrame
 	}
 }
 
+@SuppressWarnings("deprecation")
 class ObservingTextField extends JFormattedTextField implements Observer {
 	/**
 	 * 
