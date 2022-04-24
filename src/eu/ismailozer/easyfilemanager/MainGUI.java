@@ -37,15 +37,14 @@ import org.w3c.dom.Element;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.awt.Dimension;
 
 public class MainGUI extends javax.swing.JFrame
 		implements ItemListener, ActionListener, KeyListener, WindowListener, MouseListener, MouseMotionListener,
 		InputMethodListener, FocusListener, ChangeListener, TableModelListener, PropertyChangeListener {
 
-	//private static final Dimension DIMENSION_100_22 = new java.awt.Dimension(100, 22);
+	private static final Dimension DIMENSION_100_22 = new java.awt.Dimension(100, 22);
 
-	//private static final Dimension DIMENSION_500_22 = new java.awt.Dimension(500, 22);
+	private static final Dimension DIMENSION_500_22 = new java.awt.Dimension(500, 22);
 
 	/**
 	 * 
@@ -482,26 +481,374 @@ public class MainGUI extends javax.swing.JFrame
 			getContentPane().setLayout(null);
 			determinePreferedSizes();
 			loadPropertiesFile(PROPS_FILE);
+			this.setPreferredSize(new java.awt.Dimension(WIDTH_FRM, HEIGHT_FRM));	
 			if(OSValidator.isWindows()) {
-				this.setPreferredSize(new java.awt.Dimension(WIDTH_FRM, HEIGHT_FRM));	
+				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");	
 			}
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			
 			SwingUtilities.updateComponentTreeUI(this);
 			this.setTitle(this.VERSION_FILEMANAGER);
 
-			pnlDirectory = getPanelSearchArea();
+			pnlDirectory = new JPanel();
+			FlowLayout pnlDirectoryLayout = new FlowLayout();
+			pnlDirectoryLayout.setAlignment(FlowLayout.LEFT);
+			pnlDirectory.setLayout(pnlDirectoryLayout);
+			pnlDirectory.setBounds(20, 10, 760, 30);
+
+			lblSourceDir = new JLabel("Search Path:");
+			lblSourceDir.setPreferredSize(DIMENSION_100_22);
+			pnlDirectory.add(lblSourceDir);
+
+			txtSearchDir = new JTextField(defaultSearchDir);
+			txtSearchDir.setPreferredSize(DIMENSION_500_22);
+			txtSearchDir.addFocusListener(this);
+			pnlDirectory.add(txtSearchDir);
+
+			btnChooseDir = new JButton("Open directory");
+			btnChooseDir.setPreferredSize(DIMENSION_140_22);
+			pnlDirectory.add(btnChooseDir);
+			btnChooseDir.addActionListener(this);
 
 			getContentPane().add(pnlDirectory);
 
-			pnlCompareDir = getPanelCompareDir();
+			// begin: compare path
+
+			pnlCompareDir = new JPanel();
+			FlowLayout pnlCompareDirLayout = new FlowLayout();
+			pnlCompareDirLayout.setAlignment(FlowLayout.LEFT);
+			pnlCompareDir.setLayout(pnlCompareDirLayout);
+			pnlCompareDir.setBounds(20, 40, 760, 30);
+			String lComparePath = "";
+			if (defaultCompareDir != null && !defaultCompareDir.isEmpty()) {
+				lComparePath = defaultCompareDir;
+			}
+			lblCompareDir = new JLabel("Compare Path:");
+			lblCompareDir.setPreferredSize(DIMENSION_100_22);
+			pnlCompareDir.add(lblCompareDir);
+			txtCompareDir = new JTextField(lComparePath);
+			txtCompareDir.setPreferredSize(DIMENSION_500_22);
+			pnlCompareDir.add(txtCompareDir);
+			btnChooseCompareDir = new JButton("Open Compare Dir");
+			btnChooseCompareDir.setPreferredSize(DIMENSION_140_22);
+			pnlCompareDir.add(btnChooseCompareDir);
+			btnChooseCompareDir.addActionListener(this);
 			getContentPane().add(pnlCompareDir);
 
 			getContentPane().add(getPanelOptions());
+			// begin: panel options
+			pnlOptions = new JPanel();
+			FlowLayout pnlOptionsLayout = new FlowLayout();
+			pnlOptionsLayout.setAlignment(FlowLayout.LEFT);
+			pnlOptions.setLayout(pnlOptionsLayout);
+			pnlOptions.setBounds(100, 80, 730, 30);
+			getContentPane().add(pnlOptions);
+			cbxIncludeFiles = new JCheckBox("Include Files");
+			cbxIncludeFiles.setSelected(true);
+			pnlOptions.add(cbxIncludeFiles);
+			cbxIncludeDirectories = new JCheckBox("Include Directories");
+			// cbxIncludeDirectories.setSelected(true);
+			pnlOptions.add(cbxIncludeDirectories);
+			cbxLoggingInFile = new JCheckBox("Logging in file");
+			cbxLoggingInFile.setSelected(false);
+			pnlOptions.add(cbxLoggingInFile);
+			cbxLoggingCommandLine = new JCheckBox("Commandline logging");
+			cbxLoggingCommandLine.setSelected(false);
+			pnlOptions.add(cbxLoggingCommandLine);
+			cbxRecursiveMode = new JCheckBox("Include Subfolders");
+			cbxRecursiveMode.setSelected(true);
+			pnlOptions.add(cbxRecursiveMode);
+			cbxSearchLimits = getMyComboBox(searchLimitList, "");
+			pnlOptions.add(cbxSearchLimits);
+			// end: panel options
+			// Start With
+			jTabbedPaneOptionsTop = new JTabbedPane();
+			getContentPane().add(jTabbedPaneOptionsTop);
+			// jTabbedPane1.setBounds(60, 120, 720, 200);
+			jTabbedPaneOptionsTop.setBounds(20, 110, 760, 230);
+			pnlSearchOptions = new JPanel();
+			pnlSearchOptions.setLayout(null);
+			pnlSearchOptions.setBounds(60, 12, 400, 280);
+			jTabbedPaneOptionsTop.addTab("Search Options", null, pnlSearchOptions, null);
+			lblStartsWith = new JLabel("Starts With");
+			lblStartsWith.setBounds(10, 10, 80, 22);
+			pnlSearchOptions.add(lblStartsWith);
+			txtStartsWith = new JTextField();
+			pnlSearchOptions.add(txtStartsWith);
+			txtStartsWith.setBounds(90, 10, 200, 22);
+			txtStartsWith.addKeyListener(this);
+			// Reset Search Values
+			btnResetSearchOpt = new JButton("Reset Values");
+			btnResetSearchOpt.setBounds(380, 10, 120, 22);
+			pnlSearchOptions.add(btnResetSearchOpt);
+			btnResetSearchOpt.addActionListener(this);
+			// Ends With
+			lblEndsWith = new JLabel("Ends With");
+			pnlSearchOptions.add(lblEndsWith);
+			lblEndsWith.setBounds(10, 31, 200, 22);
+			txtEndsWith = new JTextField();
+			pnlSearchOptions.add(txtEndsWith);
+			txtEndsWith.setBounds(90, 34, 200, 22);
+			// File extentions
+			cbxFileExtentions = getMyComboBox(fileExtentionList, "");
+			cbxFileExtentions.setBounds(380, 34, 120, 22);
+			// cbxFileExtentions.setSelectedIndex(fileExtentionList[0]);
+			pnlSearchOptions.add(cbxFileExtentions);
+			// Contain String
+			lblContainStr = new JLabel("Contain Str.");
+			pnlSearchOptions.add(lblContainStr);
+			lblContainStr.setBounds(10, 58, 80, 22);
+			txtContainStr = new JTextField();
+			pnlSearchOptions.add(txtContainStr);
+			txtContainStr.setBounds(90, 58, 200, 22);
+			// Search Include Files
+			// Regular Expression
+			lblRegExp = new JLabel("Regul. Expr.");
+			lblRegExp.setBounds(10, 82, 80, 22);
+			pnlSearchOptions.add(lblRegExp);
+			txtSearchPattern = new JTextField();
+			txtSearchPattern.setBounds(90, 82, 200, 22);
+			pnlSearchOptions.add(txtSearchPattern);
+			// File size Panel
+			JPanel pnlFileSize = new JPanel();
+			FlowLayout pnlFileSizeLayout = new FlowLayout();
+			pnlFileSizeLayout.setAlignment(FlowLayout.LEFT);
+			pnlFileSize.setLayout(pnlFileSizeLayout);
+			pnlFileSize.setBounds(80, 106, 400, 30);
+			lblFileSize = new JLabel("File size [KB]");
+			lblFileSize.setBounds(10, 106, 80, 22);
+			pnlSearchOptions.add(lblFileSize);
+			rbtAllSize = new JRadioButton("All", true);
+			rbtFileSizeGreater = new JRadioButton(">> (GT)");
+			rbtFileSizeLower = new JRadioButton("<< (LT)");
+			rbtFileSizeEqual = new JRadioButton("= (EQ)");
+			btnGrpFileSize = new ButtonGroup();
+			btnGrpFileSize.add(rbtAllSize);
+			btnGrpFileSize.add(rbtFileSizeGreater);
+			btnGrpFileSize.add(rbtFileSizeLower);
+			btnGrpFileSize.add(rbtFileSizeEqual);
+			rbtAllSize.addItemListener(this);
+			rbtFileSizeGreater.addItemListener(this);
+			rbtFileSizeLower.addItemListener(this);
+			rbtFileSizeEqual.addItemListener(this);
+			pnlFileSize.add(rbtAllSize);
+			pnlFileSize.add(rbtFileSizeGreater);
+			pnlFileSize.add(rbtFileSizeLower);
+			pnlFileSize.add(rbtFileSizeEqual);
+			txtFileSize = new JTextField();
+			txtFileSize.setPreferredSize(DIMENSION_100_22);
+			pnlFileSize.add(txtFileSize);
+			JLabel lblKByte = new JLabel("KByte");
+			pnlFileSize.add(lblKByte);
+			pnlSearchOptions.add(pnlFileSize);
+			// Date interval
+			JLabel lblCreationFrom = new JLabel("Date From");
+			lblCreationFrom.setBounds(10, 138, 60, 22);
+			pnlSearchOptions.add(lblCreationFrom);
+			txtCreationDateFrom = new ObservingTextField(getsDateFormt());
+			txtCreationDateFrom.setBounds(90, 138, 100, 22);
+			pnlSearchOptions.add(txtCreationDateFrom);
+			ImageIcon icon = new ImageIcon(getClass().getResource("resources/JDateChooserIcon.gif"));
+			btnCreationFrom = new JButton(icon);
+			// btnCreationFrom = new JButton("Select..");
+			btnCreationFrom.setBounds(200, 138, 50, 22);
+			pnlSearchOptions.add(btnCreationFrom);
+			btnCreationFrom.addActionListener(this);
+			JLabel lblCreationTo = new JLabel("To");
+			lblCreationTo.setBounds(250, 138, 30, 22);
+			pnlSearchOptions.add(lblCreationTo);
+			txtCreationDateTo = new ObservingTextField(getsDateFormt());
+			txtCreationDateTo.setBounds(300, 138, 100, 22);
+			pnlSearchOptions.add(txtCreationDateTo);
+			// btnCreationTo = new JButton(icon);
+			btnCreationTo = new JButton(icon);
+			btnCreationTo.setBounds(410, 138, 50, 22);
+			pnlSearchOptions.add(btnCreationTo);
+			btnCreationTo.addActionListener(this);
 
-			// JPanel pnlTabbbedPaneOptionsTop = new JPanel();
-			// pnlTabbbedPaneOptionsTop.setLayout(new FlowLayout());
-			// pnlTabbbedPaneOptionsTop.add(getJTabbbedPaneOptionsTop());
-			getContentPane().add(getJTabbbedPaneOptionsTop());
+			// --> SearchOpion Additionala
+			//
+			JPanel pnlSearchOptionAdditional = new JPanel();
+			FlowLayout pnlSearchOptionAdditionalLayout = new FlowLayout();
+			pnlSearchOptionAdditionalLayout.setAlignment(FlowLayout.LEFT);
+			pnlSearchOptionAdditional.setLayout(pnlSearchOptionAdditionalLayout);
+			pnlSearchOptionAdditional.setBounds(80, 160, 400, 30);
+			cbxSuccessiveUppercaseChars = new JCheckBox("Successive Uppercase Chars");
+			cbxSuccessiveUppercaseChars.setSelected(false);
+			pnlSearchOptionAdditional.add(cbxSuccessiveUppercaseChars);
+			pnlSearchOptions.add(pnlSearchOptionAdditional);
+			// pnlSearchOptionAdditional.add(rbtSuccessiveUppercaseChars);
+			// pnlSearchOptions.add(pnlSearchOptionAdditional);
+			// <-- SearchOpion Additionala
+			pnlRenameOptions = new JPanel();
+			jTabbedPaneOptionsTop.addTab("Rename Options", null, pnlRenameOptions, null);
+			pnlRenameOptions.setLayout(null);
+			pnlRenameOptions.setRequestFocusEnabled(false);
+			pnlRenameOptions.setPreferredSize(new java.awt.Dimension(660, 230));
+			lblPrefix = new JLabel("Prefix");
+			pnlRenameOptions.add(lblPrefix);
+			lblPrefix.setBounds(10, 10, 60, 22);
+			txtPrefix = new JTextField();
+			pnlRenameOptions.add(txtPrefix);
+			txtPrefix.setBounds(90, 10, 200, 22);
+			btnResetRenameOpt = new JButton("Reset Values");
+			pnlRenameOptions.add(btnResetRenameOpt);
+			btnResetRenameOpt.setBounds(380, 10, 120, 22);
+			btnResetRenameOpt.addActionListener(this);
+			lblReplaceAll = new JLabel("Replace All");
+			pnlRenameOptions.add(lblReplaceAll);
+			lblReplaceAll.setBounds(10, 34, 80, 22);
+			txtReplaceAll = new JTextField();
+			pnlRenameOptions.add(txtReplaceAll);
+			txtReplaceAll.setBounds(90, 34, 200, 22);
+			lblReplace = new JLabel("Replace");
+			pnlRenameOptions.add(lblReplace);
+			lblReplace.setBounds(10, 58, 80, 22);
+			txtReplaceOld = new JTextField();
+			pnlRenameOptions.add(txtReplaceOld);
+			txtReplaceOld.setBounds(90, 58, 200, 22);
+			lblReplWith = new JLabel("With");
+			pnlRenameOptions.add(lblReplWith);
+			lblReplWith.setBounds(310, 58, 60, 22);
+			txtReplaceNew = new JTextField();
+			pnlRenameOptions.add(txtReplaceNew);
+			txtReplaceNew.setBounds(380, 58, 200, 22);
+			lblSuffix = new JLabel("Suffix");
+			pnlRenameOptions.add(lblSuffix);
+			lblSuffix.setBounds(10, 82, 60, 22);
+			txtSuffix = new JTextField();
+			pnlRenameOptions.add(txtSuffix);
+			txtSuffix.setBounds(90, 82, 200, 22);
+			// Replace Regexp
+			lblRegexpReplaceOld = new JLabel("Regexp Repl.");
+			pnlRenameOptions.add(lblRegexpReplaceOld);
+			lblRegexpReplaceOld.setBounds(10, 106, 80, 22);
+			txtRegexpReplaceOld = new JTextField();
+			pnlRenameOptions.add(txtRegexpReplaceOld);
+			txtRegexpReplaceOld.setBounds(90, 106, 200, 22);
+			lblRegexpReplaceNew = new JLabel("With");
+			pnlRenameOptions.add(lblRegexpReplaceNew);
+			lblRegexpReplaceNew.setBounds(310, 106, 60, 22);
+			txtRegexpReplaceNew = new JTextField();
+			pnlRenameOptions.add(txtRegexpReplaceNew);
+			txtRegexpReplaceNew.setBounds(380, 106, 200, 22);
+			// Replace Regexp
+			// Sequence
+			lblSequence = new JLabel("Sequence");
+			pnlRenameOptions.add(lblSequence);
+			lblSequence.setBounds(10, 130, 60, 22);
+			txtSequence = new JTextField();
+			pnlRenameOptions.add(txtSequence);
+			txtSequence.setBounds(90, 130, 80, 22);
+			txtSequence.setEditable(false);
+			// Sequence
+			cbxLeadingZeros = getMyComboBox(sequences, "");
+			cbxLeadingZeros.addActionListener(this);
+			cbxLeadingZeros.setBounds(190, 130, 80, 22);
+			pnlRenameOptions.add(cbxLeadingZeros);
+			cbxResetCounter = new JCheckBox("Reset sequence each directory");
+			cbxResetCounter.setSelected(true);
+			pnlRenameOptions.add(cbxResetCounter);
+			cbxResetCounter.setBounds(330, 130, 240, 22);
+			pnlTransformOpt = new JPanel();
+			FlowLayout pnlOptLayout = new FlowLayout();
+			pnlOptLayout.setAlignment(FlowLayout.LEFT);
+			pnlTransformOpt.setLayout(pnlOptLayout);
+			pnlRenameOptions.add(pnlTransformOpt);
+			pnlTransformOpt.setBounds(80, 150, 600, 30);
+			rbtNormal = new JRadioButton("Normal", true);
+			rbtLowerCase = new JRadioButton("To Lowercase");
+			rbtUpperCase = new JRadioButton("To Uppercase");
+			rbtCapitalize = new JRadioButton("To Capitalize");
+			rbtParentAsFilename = new JRadioButton("Filename from parent dir");
+			btnGrpTransform = new ButtonGroup();
+			btnGrpTransform.add(rbtNormal);
+			btnGrpTransform.add(rbtLowerCase);
+			btnGrpTransform.add(rbtUpperCase);
+			btnGrpTransform.add(rbtCapitalize);
+			btnGrpTransform.add(rbtParentAsFilename);
+			rbtNormal.addItemListener(this);
+			rbtLowerCase.addItemListener(this);
+			rbtUpperCase.addItemListener(this);
+			rbtCapitalize.addItemListener(this);
+			rbtParentAsFilename.addItemListener(this);
+			pnlTransformOpt.add(rbtNormal);
+			pnlTransformOpt.add(rbtLowerCase);
+			pnlTransformOpt.add(rbtUpperCase);
+			pnlTransformOpt.add(rbtCapitalize);
+			pnlTransformOpt.add(rbtParentAsFilename);
+			// >> New Tab for CompareOptions
+			pnlCompareFileOptions = new JPanel();
+			jTabbedPaneOptionsTop.addTab("Compare Options", null, pnlCompareFileOptions, null);
+			pnlCompareFileOptions.setLayout(null);
+			pnlCompareFileOptions.setRequestFocusEnabled(false);
+			pnlCompareFileOptions.setPreferredSize(new java.awt.Dimension(660, 230));
+			lblLeftOffset = new JLabel("Left offset");
+			pnlCompareFileOptions.add(lblLeftOffset);
+			lblLeftOffset.setBounds(10, 10, 100, 22);
+			txtLeftOffset = new JTextField("1");
+			pnlCompareFileOptions.add(txtLeftOffset);
+			txtLeftOffset.setBounds(90, 10, 100, 22);
+			// txtLeftStart.addKeyListener(this);
+			addMyKeyListener(txtLeftOffset);
+			cbxLefOffset = getMyComboBox(this.compareLimitList, "1");
+			cbxLefOffset.setBounds(220, 10, 60, 22);
+			pnlCompareFileOptions.add(cbxLefOffset);
+			lblItemsLeft = new JLabel("Items left");
+			pnlCompareFileOptions.add(lblItemsLeft);
+			lblItemsLeft.setBounds(300, 10, 80, 22);
+			txtItemsLeft = new JTextField("99999");
+			pnlCompareFileOptions.add(txtItemsLeft);
+			txtItemsLeft.setBounds(400, 10, 100, 22);
+			addMyKeyListener(txtItemsLeft);
+			cbxItemsLeft = getMyComboBox(this.compareLimitList, "1");
+			cbxItemsLeft.setBounds(520, 10, 60, 22);
+			pnlCompareFileOptions.add(cbxItemsLeft);
+			// Rights >>
+			lblRightStart = new JLabel("Right offset");
+			pnlCompareFileOptions.add(lblRightStart);
+			lblRightStart.setBounds(10, 40, 100, 22);
+			txtRightOffset = new JTextField("1");
+			pnlCompareFileOptions.add(txtRightOffset);
+			txtRightOffset.setBounds(90, 40, 100, 22);
+			// txtRightStart.addKeyListener(this);
+			addMyKeyListener(txtRightOffset);
+			cbxRightOffset = getMyComboBox(this.compareLimitList, "1");
+			cbxRightOffset.setBounds(220, 40, 60, 22);
+			pnlCompareFileOptions.add(cbxRightOffset);
+			lblItemsRight = new JLabel("Items right");
+			pnlCompareFileOptions.add(lblItemsRight);
+			lblItemsRight.setBounds(300, 40, 80, 22);
+			txtItemsRight = new JTextField("99999");
+			pnlCompareFileOptions.add(txtItemsRight);
+			txtItemsRight.setBounds(400, 40, 100, 22);
+			addMyKeyListener(txtItemsRight);
+			cbxItemsRight = getMyComboBox(this.compareLimitList, "1");
+			cbxItemsRight.setBounds(520, 40, 60, 22);
+			pnlCompareFileOptions.add(cbxItemsRight);
+			// Rights <<
+			// blocksize
+			lblBufferSize = new JLabel("Buffer size");
+			pnlCompareFileOptions.add(lblBufferSize);
+			lblBufferSize.setBounds(10, 70, 100, 22);
+			txtBufferSize = new JTextField(bufferSizeList[4]);
+			pnlCompareFileOptions.add(txtBufferSize);
+			txtBufferSize.setBounds(90, 70, 100, 22);
+			// txtRightStart.addKeyListener(this);
+			addMyKeyListener(txtBufferSize);
+			cbxBufferSize = getMyComboBox(this.bufferSizeList, "1");
+			cbxBufferSize.setBounds(220, 70, 60, 22);
+			cbxBufferSize.setSelectedIndex(4);
+			pnlCompareFileOptions.add(cbxBufferSize);
+			lblBufferSizeFactor = new JLabel("Buffer factor");
+			pnlCompareFileOptions.add(lblBufferSizeFactor);
+			lblBufferSizeFactor.setBounds(300, 70, 100, 22);
+			txtBufferSizeFactor = new JTextField(bufferSizeFactorList[5]);
+			pnlCompareFileOptions.add(txtBufferSizeFactor);
+			txtBufferSizeFactor.setBounds(400, 70, 100, 22);
+			addMyKeyListener(txtBufferSizeFactor);
+			cbxBufferSizeFactor = getMyComboBox(this.bufferSizeFactorList, "1");
+			cbxBufferSizeFactor.setBounds(520, 70, 60, 22);
+			pnlCompareFileOptions.add(cbxBufferSizeFactor);
 
 			// << blocksize
 
@@ -511,11 +858,10 @@ public class MainGUI extends javax.swing.JFrame
 			JPanel pnlTopCmdButtons = new JPanel();
 
 			FlowLayout pnlTopCmdButtonsLayout = new FlowLayout();
+			// pnlTopCmdButtonsLayout.setAlignment(FlowLayout.RIGHT);
 			pnlTopCmdButtonsLayout.setAlignment(FlowLayout.LEFT);
 			pnlTopCmdButtons.setLayout(pnlTopCmdButtonsLayout);
-			//pnlTopCmdButtons.setBounds(60, 340, WIDTH_FRM - 160, 30);
-			//pnlTopCmdButtons.setBounds(60, 360, WIDTH_FRM - 160, 30);
-			pnlTopCmdButtons.setBounds(10, 330, WIDTH_FRM - 10, 60);
+			pnlTopCmdButtons.setBounds(10, 340, WIDTH_FRM - 10, 30);
 			// pnlTopCmdButtons.setBounds(60, 330, 720 , 30);
 			getContentPane().add(pnlTopCmdButtons);
 
@@ -566,8 +912,7 @@ public class MainGUI extends javax.swing.JFrame
 			// Panel for Table Scroll
 			jTabbedPanelForTables = new JTabbedPane();
 			// jTabbedPanelForTables.setBounds(10, 370, WIDTH_FRM - 60, 220);
-			//jTabbedPanelForTables.setBounds(10, 370, WIDTH_FRM - 30, HEIGHT_FRM - 550 - 30);
-			jTabbedPanelForTables.setBounds(10, 380, WIDTH_FRM - 30, HEIGHT_FRM - 550 - 30);
+			jTabbedPanelForTables.setBounds(10, 370, WIDTH_FRM - 30, HEIGHT_FRM - 550 - 30);
 			getContentPane().add(jTabbedPanelForTables);
 
 			pnlTableForRenameFiles = new JPanel();
@@ -740,7 +1085,7 @@ public class MainGUI extends javax.swing.JFrame
 			lblFileInfo.setBackground(Color.GREEN);
 			pnlInfo.add(lblFileInfo);
 			// pnlInfo.setBounds(60, 590, WIDTH_FRM - 60, 30);
-			pnlInfo.setBounds(60, pnlBottomCmdButton.getY() + pnlBottomCmdButton.getHeight() + 10, WIDTH_FRM - 60, 30);
+			pnlInfo.setBounds(60, pnlBottomCmdButton.getY() + pnlBottomCmdButton.getHeight() + 10, WIDTH_FRM - 10, 20);
 
 			add(pnlInfo);
 
@@ -764,7 +1109,7 @@ public class MainGUI extends javax.swing.JFrame
 			progressBar.setMinimum(minValue);
 			progressBar.setMaximum(maxValue);
 			progressBar.setStringPainted(true);
-			progressBar.setPreferredSize(new Dimension(400, 30));
+			progressBar.setPreferredSize(new Dimension(400, 22));
 			// progressBar.setBounds(new Rectangle(DIMENSION_140_22));
 			pnlProgressBar.add(progressBar);
 
@@ -3497,7 +3842,7 @@ public class MainGUI extends javax.swing.JFrame
 			pCanRename = true;
 		}
 
-		pTblModel.addRow(new Object[] { Integer.valueOf(pTblModel.getRowCount() + 1), pSourceFilename, pTargetFilename,
+		pTblModel.addRow(new Object[] { new Integer(pTblModel.getRowCount() + 1), pSourceFilename, pTargetFilename,
 				getFileExtension(pSourceFilename),
 				getDateFromat().format(new Date((new File(pSourceFilename).lastModified()))),
 				getFileSize(pSourceFilename), pCanRename, new File(pSourceFilename).isDirectory() });
