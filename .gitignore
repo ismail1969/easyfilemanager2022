@@ -3,3 +3,4 @@
 '*.JPG\n*.JPEG\n*.PNG\n*.GIF\n' 
 bin/
 '*.csv\n*.class\n'
+filemanager.properties
