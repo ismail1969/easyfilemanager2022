@@ -195,7 +195,12 @@ public class MainGUI extends javax.swing.JFrame
 	private String PROPS_FILE = "filemanager.properties";
 	private String defaultCompareDir;
 	private String defaultSearchDir = "C:\\Temp";
-	private String VERSION_FILEMANAGER = "Easy File Manager 2022.4 - 15.04.2022 (c) www.ismailozer.eu";
+	private String HYPHEN = " - ";
+	private String FILEMANAGER_LABEL = "Easy File Manager";
+	private String FILEMANAGER_RELEASE = "2022.4";
+	private String FILEMANAGER_RELEASE_DATE = "15.04.2022";
+	private String FILEMANAGER_COPYRIGHT = "(c) www.ismailozer.eu";
+
 	private StringBuffer STR_BUFFER;
 	private int DIR_COUNTER;
 	private int FILE_COUNTER;
@@ -455,6 +460,26 @@ public class MainGUI extends javax.swing.JFrame
 			}
 		}
 	}
+	
+	public String getReleaseInfo() {
+		StringBuilder stringBuilder = new StringBuilder(100);
+		stringBuilder.append(FILEMANAGER_LABEL);
+		stringBuilder.append(" ");
+		stringBuilder.append(FILEMANAGER_RELEASE);
+		stringBuilder.append(HYPHEN);
+		stringBuilder.append(FILEMANAGER_RELEASE_DATE);
+		stringBuilder.append(" ");
+		stringBuilder.append(FILEMANAGER_COPYRIGHT);
+		return stringBuilder.toString();
+		
+//List<String> alphabets = Arrays.asList(
+//		FILEMANAGER_LABEL, 
+//		FILEMANAGER_RELEASE,
+//		FILEMANAGER_RELEASE_DATE,
+//		FILEMANAGER_COPYRIGHT);
+//
+//		return String.join(HYPHEN, alphabets);
+	}
 
 	public MainGUI() {
 		super();
@@ -487,7 +512,7 @@ public class MainGUI extends javax.swing.JFrame
 			}
 			
 			SwingUtilities.updateComponentTreeUI(this);
-			this.setTitle(this.VERSION_FILEMANAGER);
+			this.setTitle(this.getReleaseInfo());
 
 			pnlDirectory = new JPanel();
 			FlowLayout pnlDirectoryLayout = new FlowLayout();
@@ -4843,7 +4868,7 @@ public class MainGUI extends javax.swing.JFrame
 	}
 
 	private void changeFrameTitle() {
-		this.setTitle(VERSION_FILEMANAGER + " - " + getSelectedFilename());
+		this.setTitle(getReleaseInfo() + " - " + getSelectedFilename());
 	}
 
 	public int getLeftOffset() {
