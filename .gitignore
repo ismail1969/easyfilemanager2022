@@ -3,4 +3,3 @@
 '*.JPG\n*.JPEG\n*.PNG\n*.GIF\n' 
 bin/
 '*.csv\n*.class\n'
-bin/xxx/
