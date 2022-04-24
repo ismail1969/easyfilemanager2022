@@ -1,0 +1,5 @@
+'*\n!*.mp4\n!*.flv\n' 
+'*.jpg\n*.jpeg\n*.png\n*.gif\n'
+'*.JPG\n*.JPEG\n*.PNG\n*.GIF\n' 
+bin/
+'*.csv\n*.class\n'
