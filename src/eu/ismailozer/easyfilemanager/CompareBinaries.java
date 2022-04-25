@@ -22,6 +22,54 @@ public class CompareBinaries {
 
 	public static final int BUFFER_SIZE = 65536;
 
+	public static boolean fileContentsEquals(File file1, File file2, int pBufferSize) {
+		// InputStream is1 = null;
+		// InputStream is2 = null;
+
+		// DataInputStream is1 = null;
+		// DataInputStream is2 = null;
+
+		BufferedInputStream is1 = null;
+		BufferedInputStream is2 = null;
+
+		if (file1.length() != file2.length())
+			return false;
+
+		try {
+			// is1 = new FileInputStream(file1);
+			// is2 = new FileInputStream(file2);
+
+			is1 = new BufferedInputStream(new FileInputStream(file1), pBufferSize);
+			is2 = new BufferedInputStream(new FileInputStream(file2), pBufferSize);
+
+			// is1 = new DataInputStream(new BufferedInputStream(new
+			// FileInputStream(file1), 10*pBufferSize));
+			// is2= new DataInputStream(new BufferedInputStream(new
+			// FileInputStream(file2), 10*pBufferSize));
+			// OK: return inputStreamEquals(is1, is2, pBufferSize);
+			return inputStreamEquals(is1, is2, file1.length(), file1.length(), pBufferSize);
+
+		} catch (Exception ei) {
+			return false;
+		} finally {
+			try {
+				if (is1 != null)
+					is1.close();
+				if (is2 != null)
+					is2.close();
+			} catch (Exception ei2) {
+			}
+		}
+	}
+
+	public static boolean fileContentsEquals(String fn1, String fn2, int pBufferSize) {
+		return fileContentsEquals(new File(fn1), new File(fn2), pBufferSize);
+	}
+
+	public static String getTimeStamp() {
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
+	}
+
 	public static boolean inputStreamEquals(InputStream is1, InputStream is2) throws IOException {
 		return inputStreamEquals(is1, is2, 0x200);
 	}
@@ -91,101 +139,6 @@ public class CompareBinaries {
 		}
 	}
 
-	public static boolean fileContentsEquals(File file1, File file2, int pBufferSize) {
-		// InputStream is1 = null;
-		// InputStream is2 = null;
-
-		// DataInputStream is1 = null;
-		// DataInputStream is2 = null;
-
-		BufferedInputStream is1 = null;
-		BufferedInputStream is2 = null;
-
-		if (file1.length() != file2.length())
-			return false;
-
-		try {
-			// is1 = new FileInputStream(file1);
-			// is2 = new FileInputStream(file2);
-
-			is1 = new BufferedInputStream(new FileInputStream(file1), pBufferSize);
-			is2 = new BufferedInputStream(new FileInputStream(file2), pBufferSize);
-
-			// is1 = new DataInputStream(new BufferedInputStream(new
-			// FileInputStream(file1), 10*pBufferSize));
-			// is2= new DataInputStream(new BufferedInputStream(new
-			// FileInputStream(file2), 10*pBufferSize));
-			// OK: return inputStreamEquals(is1, is2, pBufferSize);
-			return inputStreamEquals(is1, is2, file1.length(), file1.length(), pBufferSize);
-
-		} catch (Exception ei) {
-			return false;
-		} finally {
-			try {
-				if (is1 != null)
-					is1.close();
-				if (is2 != null)
-					is2.close();
-			} catch (Exception ei2) {
-			}
-		}
-	}
-
-	public static boolean fileContentsEquals(String fn1, String fn2, int pBufferSize) {
-		return fileContentsEquals(new File(fn1), new File(fn2), pBufferSize);
-	}
-
-	public static boolean isFileBinaryEqual(File first, File second, int pBufferSize) throws IOException {
-		// TODO: Test: Missing test
-		// public static final int BUFFER_SIZE = 65536;
-		boolean retval = false;
-
-		if ((first.exists()) && (second.exists()) && (first.isFile()) && (second.isFile())) {
-			if (first.getCanonicalPath().equals(second.getCanonicalPath())) {
-				retval = true;
-			} else {
-				FileInputStream firstInput = null;
-				FileInputStream secondInput = null;
-				BufferedInputStream bufFirstInput = null;
-				BufferedInputStream bufSecondInput = null;
-
-				try {
-					firstInput = new FileInputStream(first);
-					secondInput = new FileInputStream(second);
-					bufFirstInput = new BufferedInputStream(firstInput, pBufferSize);
-					bufSecondInput = new BufferedInputStream(secondInput, pBufferSize);
-
-					int firstByte;
-					int secondByte;
-
-					while (true) {
-						firstByte = bufFirstInput.read();
-						secondByte = bufSecondInput.read();
-						if (firstByte != secondByte) {
-							break;
-						}
-						if ((firstByte < 0) && (secondByte < 0)) {
-							retval = true;
-							break;
-						}
-					}
-				} finally {
-					try {
-						if (bufFirstInput != null) {
-							bufFirstInput.close();
-						}
-					} finally {
-						if (bufSecondInput != null) {
-							bufSecondInput.close();
-						}
-					}
-				}
-			}
-		}
-
-		return retval;
-	}
-
 	// ismail
 
 	public static boolean inputStreamEquals(InputStream is1, InputStream is2, long is1_length, long is2_length,
@@ -253,20 +206,55 @@ public class CompareBinaries {
 		}
 	}
 
-	public static String getTimeStamp() {
-		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
-	}
+	public static boolean isFileBinaryEqual(File first, File second, int pBufferSize) throws IOException {
+		// TODO: Test: Missing test
+		// public static final int BUFFER_SIZE = 65536;
+		boolean retval = false;
 
-	public static boolean sameContentFiles(File pFirstFile, File pSecondFile) {
-		try {
-			return FileUtils.contentEquals(pFirstFile, pSecondFile);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
+		if ((first.exists()) && (second.exists()) && (first.isFile()) && (second.isFile())) {
+			if (first.getCanonicalPath().equals(second.getCanonicalPath())) {
+				retval = true;
+			} else {
+				FileInputStream firstInput = null;
+				FileInputStream secondInput = null;
+				BufferedInputStream bufFirstInput = null;
+				BufferedInputStream bufSecondInput = null;
+
+				try {
+					firstInput = new FileInputStream(first);
+					secondInput = new FileInputStream(second);
+					bufFirstInput = new BufferedInputStream(firstInput, pBufferSize);
+					bufSecondInput = new BufferedInputStream(secondInput, pBufferSize);
+
+					int firstByte;
+					int secondByte;
+
+					while (true) {
+						firstByte = bufFirstInput.read();
+						secondByte = bufSecondInput.read();
+						if (firstByte != secondByte) {
+							break;
+						}
+						if ((firstByte < 0) && (secondByte < 0)) {
+							retval = true;
+							break;
+						}
+					}
+				} finally {
+					try {
+						if (bufFirstInput != null) {
+							bufFirstInput.close();
+						}
+					} finally {
+						if (bufSecondInput != null) {
+							bufSecondInput.close();
+						}
+					}
+				}
+			}
 		}
-		// compareResult = FileUtils.contentEquals(file1, file2);
-		// System.out.println("Are the files are same? " + compareResult);
+
+		return retval;
 	}
 
 	public static boolean sameContent(Path file1, Path file2) throws IOException {
@@ -289,6 +277,18 @@ public class CompareBinaries {
 		}
 
 		return true;
+	}
+
+	public static boolean sameContentFiles(File pFirstFile, File pSecondFile) {
+		try {
+			return FileUtils.contentEquals(pFirstFile, pSecondFile);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		// compareResult = FileUtils.contentEquals(file1, file2);
+		// System.out.println("Are the files are same? " + compareResult);
 	}
 
 	/**

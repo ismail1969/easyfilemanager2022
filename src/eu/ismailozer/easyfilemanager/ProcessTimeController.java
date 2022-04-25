@@ -5,17 +5,12 @@ public class ProcessTimeController {
 	private static long startTime;
 	private static long endTime;
 
-	public ProcessTimeController() {
-
-	}
-
-	public static void start() {
-		startTime = System.currentTimeMillis();
-		endTime = 0;
-	}
-
 	public static void end() {
 		endTime = System.currentTimeMillis();
+	}
+
+	public static String getElapsedTime() {
+		return Long.toString((System.currentTimeMillis() - startTime) / 1000);
 	}
 
 	public static String getProzessTime() {
@@ -28,7 +23,12 @@ public class ProcessTimeController {
 		startTime = 0;
 	}
 
-	public static String getElapsedTime() {
-		return Long.toString((System.currentTimeMillis() - startTime) / 1000);
+	public static void start() {
+		startTime = System.currentTimeMillis();
+		endTime = 0;
+	}
+
+	public ProcessTimeController() {
+
 	}
 }

@@ -27,12 +27,12 @@ public class DublicateFiles {
 		return leftFile;
 	}
 
-	public void setLeftFile(File leftFile) {
-		this.leftFile = leftFile;
-	}
-
 	public File getRightFile() {
 		return rightFile;
+	}
+
+	public void setLeftFile(File leftFile) {
+		this.leftFile = leftFile;
 	}
 
 	public void setRightFile(File rightFile) {

@@ -31,6 +31,10 @@ public class DuplicateTableModel extends javax.swing.table.DefaultTableModel {
 		super(data, columnNames);
 	}
 
+	public TableCellRenderer getCellRenderer(int row, int column) {
+		return new ClientsTableRenderer();
+	}
+
 	// public Class getColumnClass(int c) {
 	// return getValueAt(0, c).getClass();
 	// }
@@ -65,9 +69,5 @@ public class DuplicateTableModel extends javax.swing.table.DefaultTableModel {
 		default:
 			return false;
 		}
-	}
-
-	public TableCellRenderer getCellRenderer(int row, int column) {
-		return new ClientsTableRenderer();
 	}
 }

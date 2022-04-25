@@ -13,6 +13,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.WindowConstants;
 
 public class SimpleFileEditor extends JPanel {
 
@@ -20,6 +22,14 @@ public class SimpleFileEditor extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	public static void main(String args[]) throws Exception {
+		JFrame frame = new JFrame();
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		frame.add(new SimpleFileEditor("c:\\Temp\\file.xml"), BorderLayout.CENTER);
+		frame.setSize(400, 400);
+		frame.setVisible(true);
+	}
 
 	public SimpleFileEditor(String pEditFile /* , int pWith, int pHeight */) {
 		setLayout(new BorderLayout());
@@ -37,8 +47,8 @@ public class SimpleFileEditor extends JPanel {
 			e.printStackTrace();
 		}
 		JScrollPane scroll = new JScrollPane(textArea);
-		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		add(scroll, BorderLayout.CENTER);
 		// scroll.setSize(400, 400);
 		setSize(400, 400);
@@ -59,13 +69,5 @@ public class SimpleFileEditor extends JPanel {
 		}
 		in2.close();
 		return buffer.toString();
-	}
-
-	public static void main(String args[]) throws Exception {
-		JFrame frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.add(new SimpleFileEditor("c:\\Temp\\file.xml"), BorderLayout.CENTER);
-		frame.setSize(400, 400);
-		frame.setVisible(true);
 	}
 }

@@ -11,6 +11,7 @@ class ImageFileFilter implements FileFilter {
 		extention = pExtention;
 	}
 
+	@Override
 	public boolean accept(File file) {
 		if (file.getName().toLowerCase().endsWith(extention)) {
 			return true;

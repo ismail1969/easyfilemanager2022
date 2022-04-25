@@ -22,15 +22,9 @@ public class FullImageViewer extends JFrame implements MouseListener, KeyListene
 	 * 
 	 */
 	private static final long serialVersionUID = 6637347323459632612L;
-	Image resizedImage;
-	int offset_w = 30;
-	int offset_h = 20;
-	String imageFile;
-	int image_w;
-	int image_h;
 
 	public static void main(String[] args) {
-		String s = (String) javax.swing.JOptionPane.showInputDialog(new JFrame("Directory"), "Open the file:\n",
+		String s = javax.swing.JOptionPane.showInputDialog(new JFrame("Directory"), "Open the file:\n",
 				"Customized Dialog", javax.swing.JOptionPane.PLAIN_MESSAGE);
 
 		String filename = "C:\\Temp\\testpics\\testpics01.jpg";
@@ -45,6 +39,14 @@ public class FullImageViewer extends JFrame implements MouseListener, KeyListene
 			e.printStackTrace();
 		}
 	}
+
+	Image resizedImage;
+	int offset_w = 30;
+	int offset_h = 20;
+	String imageFile;
+	int image_w;
+
+	int image_h;
 
 	public FullImageViewer(String pImageFile, boolean pHideWinFrame) throws InterruptedException {
 		super();
@@ -84,8 +86,8 @@ public class FullImageViewer extends JFrame implements MouseListener, KeyListene
 		int scaled_height;
 
 		if (max_rate > 1) {
-			scaled_width = (int) ((double) image_w / max_rate);
-			scaled_height = (int) ((double) image_h / max_rate);
+			scaled_width = (int) (image_w / max_rate);
+			scaled_height = (int) (image_h / max_rate);
 			resizedImage = source_img.getScaledInstance(scaled_width, scaled_height, Image.SCALE_SMOOTH);
 
 		} else {
@@ -113,6 +115,7 @@ public class FullImageViewer extends JFrame implements MouseListener, KeyListene
 		addMouseListener(this);
 		addKeyListener(this);
 		addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent we) {
 				dispose();
 			}
@@ -121,19 +124,40 @@ public class FullImageViewer extends JFrame implements MouseListener, KeyListene
 		setVisible(true);
 	}
 
-	public void paint(Graphics g) {
-		g.drawImage(resizedImage, 0, 0, null);
-
-		String dim_Text = imageFile + "(" + image_w + " x " + image_h + ")";
-		g.setFont(new Font("Serif", Font.BOLD, 16));
-		// g.setColor(Color.black);
-		// g.drawString(dim_Text, 10, 15);
-		g.setColor(Color.white);
-		g.drawString(dim_Text, 10, 20);
-
-		// g.drawString(imageFile, image_h - 50 ,image_w- 50);
+	@Override
+	public void focusGained(FocusEvent e) {
+		// System.out.println("focus Gained");
 	}
 
+	@Override
+	public void focusLost(FocusEvent e) {
+		// this.dispose();
+		// System.exit(NORMAL);
+		// System.out.println("focus Lost");
+		dispose();
+	}
+
+	@Override
+	public void keyPressed(KeyEvent event) {
+		// Object source = event.getSource();
+		if (event.getKeyCode() == KeyEvent.VK_ENTER || event.getKeyCode() == KeyEvent.VK_UP
+				|| event.getKeyCode() == KeyEvent.VK_SPACE || event.getKeyCode() == KeyEvent.VK_ESCAPE
+				|| event.getKeyCode() == KeyEvent.VK_DOWN) {
+			this.dispose();
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+
+	}
+
+	@Override
 	public void mouseClicked(MouseEvent event) {
 		if (SwingUtilities.isLeftMouseButton(event) && event.getClickCount() == 1) {
 			dispose();
@@ -161,36 +185,17 @@ public class FullImageViewer extends JFrame implements MouseListener, KeyListene
 	}
 
 	@Override
-	public void keyPressed(KeyEvent event) {
-		// Object source = event.getSource();
-		if (event.getKeyCode() == KeyEvent.VK_ENTER || event.getKeyCode() == KeyEvent.VK_UP
-				|| event.getKeyCode() == KeyEvent.VK_SPACE || event.getKeyCode() == KeyEvent.VK_ESCAPE
-				|| event.getKeyCode() == KeyEvent.VK_DOWN) {
-			this.dispose();
-		}
-	}
+	public void paint(Graphics g) {
+		g.drawImage(resizedImage, 0, 0, null);
 
-	@Override
-	public void keyReleased(KeyEvent arg0) {
+		String dim_Text = imageFile + "(" + image_w + " x " + image_h + ")";
+		g.setFont(new Font("Serif", Font.BOLD, 16));
+		// g.setColor(Color.black);
+		// g.drawString(dim_Text, 10, 15);
+		g.setColor(Color.white);
+		g.drawString(dim_Text, 10, 20);
 
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-
-	}
-
-	@Override
-	public void focusGained(FocusEvent e) {
-		// System.out.println("focus Gained");
-	}
-
-	@Override
-	public void focusLost(FocusEvent e) {
-		// this.dispose();
-		// System.exit(NORMAL);
-		// System.out.println("focus Lost");
-		dispose();
+		// g.drawString(imageFile, image_h - 50 ,image_w- 50);
 	}
 
 	@Override

@@ -2,57 +2,22 @@ package eu.ismailozer.easyfilemanager;
 
 import java.awt.image.BufferedImage;
 
-import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-
 //import com.sun.jmx.snmp.Timestamp;
-
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 public class BatchImageConverterGUI extends javax.swing.JFrame {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private List<String> files;
-	private String targetFormat;
-	private boolean showSuccessInfo = false;
-
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				String lDir = "C:\\Temp\\batch-converter\\bmp";
-				new BatchImageConverterGUI(lDir, "bmp", "jpg", false);
-			}
-		});
-	}
-
-	public BatchImageConverterGUI(String[] pFiles, String pTargetFormat, boolean pSuccessInfo) {
-		super();
-		targetFormat = pTargetFormat;
-		showSuccessInfo = pSuccessInfo;
-		startConvertImage();
-	}
-
-	public BatchImageConverterGUI(String pDir, String pSrcExtention, String pTargetFormat, boolean pSuccessInfo) {
-		super();
-		files = getFileList(pDir, pSrcExtention);
-		targetFormat = pTargetFormat;
-		showSuccessInfo = pSuccessInfo;
-		startConvertImage();
-	}
-
-	public BatchImageConverterGUI(List<String> pFileList, String pTargetFormat, boolean pSuccessInfo) {
-		super();
-		files = pFileList;
-		targetFormat = pTargetFormat;
-		showSuccessInfo = pSuccessInfo;
-		startConvertImage();
-	}
 
 	private static List<String> getFileList(String pDirectory, String pSrcExtention) {
 		List<String> fileList = new ArrayList<String>();
@@ -66,34 +31,43 @@ public class BatchImageConverterGUI extends javax.swing.JFrame {
 		return fileList;
 	}
 
-	private String getTargetImageName(String pFileSource, String pTargetFormat) {
-		return pFileSource.substring(0, pFileSource.lastIndexOf('.')) + "." + pTargetFormat;
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				String lDir = "C:\\Temp\\batch-converter\\bmp";
+				new BatchImageConverterGUI(lDir, "bmp", "jpg", false);
+			}
+		});
 	}
 
-	private void startConvertImage() {
-		/*
-		 * if (JOptionPane.showConfirmDialog( null,
-		 * "Do you realy want convert the images \n", // + txtSourceDir.getText() +
-		 * " to \n" // + txtTargetDir.getText() + "?", "Convert image file?",
-		 * "Convert image file?", JOptionPane.YES_NO_OPTION,
-		 * JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
-		 * convertFiles(this.files, this.targetFormat); }
-		 */
-		if (convertFiles(this.files, this.targetFormat)) {
-			JOptionPane.showMessageDialog(this, "Image conversion successfully finished!");
-		} else {
-			JOptionPane.showMessageDialog(this, "There was some errors on image conversion!");
-		}
+	private List<String> files;
+
+	private String targetFormat;
+
+	private boolean showSuccessInfo = false;
+
+	public BatchImageConverterGUI(List<String> pFileList, String pTargetFormat, boolean pSuccessInfo) {
+		super();
+		files = pFileList;
+		targetFormat = pTargetFormat;
+		showSuccessInfo = pSuccessInfo;
+		startConvertImage();
 	}
 
-	private boolean convertFiles(List<String> pFileList, String pTargetFormat) {
-		Iterator<String> it = pFileList.iterator();
-		boolean success = true;
-		while (it.hasNext()) {
-			String file = (String) it.next();
-			success = success & convertFile(file, pTargetFormat);
-		}
-		return success;
+	public BatchImageConverterGUI(String pDir, String pSrcExtention, String pTargetFormat, boolean pSuccessInfo) {
+		super();
+		files = getFileList(pDir, pSrcExtention);
+		targetFormat = pTargetFormat;
+		showSuccessInfo = pSuccessInfo;
+		startConvertImage();
+	}
+
+	public BatchImageConverterGUI(String[] pFiles, String pTargetFormat, boolean pSuccessInfo) {
+		super();
+		targetFormat = pTargetFormat;
+		showSuccessInfo = pSuccessInfo;
+		startConvertImage();
 	}
 
 	private boolean convertFile(String pFile, String pTargetFormat) {
@@ -132,5 +106,35 @@ public class BatchImageConverterGUI extends javax.swing.JFrame {
 			}
 		}
 		return success;
+	}
+
+	private boolean convertFiles(List<String> pFileList, String pTargetFormat) {
+		Iterator<String> it = pFileList.iterator();
+		boolean success = true;
+		while (it.hasNext()) {
+			String file = it.next();
+			success = success & convertFile(file, pTargetFormat);
+		}
+		return success;
+	}
+
+	private String getTargetImageName(String pFileSource, String pTargetFormat) {
+		return pFileSource.substring(0, pFileSource.lastIndexOf('.')) + "." + pTargetFormat;
+	}
+
+	private void startConvertImage() {
+		/*
+		 * if (JOptionPane.showConfirmDialog( null,
+		 * "Do you realy want convert the images \n", // + txtSourceDir.getText() +
+		 * " to \n" // + txtTargetDir.getText() + "?", "Convert image file?",
+		 * "Convert image file?", JOptionPane.YES_NO_OPTION,
+		 * JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
+		 * convertFiles(this.files, this.targetFormat); }
+		 */
+		if (convertFiles(this.files, this.targetFormat)) {
+			JOptionPane.showMessageDialog(this, "Image conversion successfully finished!");
+		} else {
+			JOptionPane.showMessageDialog(this, "There was some errors on image conversion!");
+		}
 	}
 }

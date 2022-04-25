@@ -25,12 +25,14 @@ public class ButtonEditor extends DefaultCellEditor {
 		button = new JButton();
 		button.setOpaque(true);
 		button.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				fireEditingStopped();
 			}
 		});
 	}
 
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		if (isSelected) {
 			button.setForeground(table.getSelectionForeground());
@@ -45,6 +47,7 @@ public class ButtonEditor extends DefaultCellEditor {
 		return button;
 	}
 
+	@Override
 	public Object getCellEditorValue() {
 		if (isPushed) {
 			//
@@ -56,11 +59,13 @@ public class ButtonEditor extends DefaultCellEditor {
 		return new String(label);
 	}
 
+	@Override
 	public boolean stopCellEditing() {
 		isPushed = false;
 		return super.stopCellEditing();
 	}
 
+	@Override
 	protected void fireEditingStopped() {
 		super.fireEditingStopped();
 	}

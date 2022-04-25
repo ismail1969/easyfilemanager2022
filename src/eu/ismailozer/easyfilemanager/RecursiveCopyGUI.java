@@ -20,82 +20,6 @@ public class RecursiveCopyGUI extends javax.swing.JFrame implements ActionListen
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTextField txtSourceDir;
-	private JTextField txtTargetDir;
-	private JButton btnOpenSourceDir;
-	private JButton btnOpenTargetDir;
-	private JButton btnCopyFiles;
-	private JLabel lblInfo;
-
-	/**
-	 * Auto-generated main method to display this JFrame
-	 */
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				new RecursiveCopyGUI("Copy Recursive Directories");
-			}
-		});
-	}
-
-	public RecursiveCopyGUI(String pTitle) {
-		super(pTitle);
-		initGUI();
-	}
-
-	private void initGUI() {
-		try {
-			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-			setLayout(null);
-			setTitle("Recursive Copy");
-			{
-				txtSourceDir = new JTextField("C:\\Temp\\kizlar");
-				getContentPane().add(txtSourceDir);
-				txtSourceDir.setBounds(10, 10, 400, 25);
-			}
-			{
-				btnOpenSourceDir = new JButton("Select Source");
-				getContentPane().add(btnOpenSourceDir);
-				btnOpenSourceDir.addActionListener(this);
-				btnOpenSourceDir.setBounds(440, 10, 150, 25);
-			}
-			{
-				txtTargetDir = new JTextField("C:\\Temp\\kizlar_tekrar");
-				getContentPane().add(txtTargetDir);
-				txtTargetDir.setBounds(10, 40, 400, 25);
-			}
-			{
-				btnOpenTargetDir = new JButton("Select Target");
-				getContentPane().add(btnOpenTargetDir);
-				btnOpenTargetDir.addActionListener(this);
-				btnOpenTargetDir.setBounds(440, 40, 150, 25);
-
-			}
-
-			lblInfo = new JLabel("Info:");
-			getContentPane().add(lblInfo);
-			lblInfo.setBounds(10, 70, 400, 25);
-			{
-				btnCopyFiles = new JButton();
-				getContentPane().add(btnCopyFiles);
-				btnCopyFiles.setText("Copy Recursive");
-				btnCopyFiles.addActionListener(this);
-			}
-
-			btnCopyFiles.setBounds(440, 70, 150, 25);
-
-			setPreferredSize(new java.awt.Dimension(600, 180));
-			setLocationRelativeTo(null);
-			setVisible(true);
-			pack();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public long getTimeStampTime() {
-		return System.currentTimeMillis();
-	}
 
 	public static void copyFiles(File src, File dest) throws IOException {
 		if (!src.exists()) {
@@ -161,6 +85,32 @@ public class RecursiveCopyGUI extends javax.swing.JFrame implements ActionListen
 		}
 	}
 
+	/**
+	 * Auto-generated main method to display this JFrame
+	 */
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				new RecursiveCopyGUI("Copy Recursive Directories");
+			}
+		});
+	}
+
+	private JTextField txtSourceDir;
+	private JTextField txtTargetDir;
+	private JButton btnOpenSourceDir;
+	private JButton btnOpenTargetDir;
+
+	private JButton btnCopyFiles;
+
+	private JLabel lblInfo;
+
+	public RecursiveCopyGUI(String pTitle) {
+		super(pTitle);
+		initGUI();
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
@@ -170,6 +120,71 @@ public class RecursiveCopyGUI extends javax.swing.JFrame implements ActionListen
 			chooseLogDirectory(txtTargetDir);
 		} else if (source == btnCopyFiles) {
 			startCopy();
+		}
+	}
+
+	private void chooseLogDirectory(JTextField pTextField) {
+		JFileChooser jfilechooser = new JFileChooser(new File(pTextField.getText()));
+		jfilechooser.setFileSelectionMode(1);
+		jfilechooser.setCurrentDirectory(new File(pTextField.getText()));
+		jfilechooser.setAcceptAllFileFilterUsed(false);
+		int i = jfilechooser.showOpenDialog(this);
+		if (i == 0) {
+			pTextField.setText(jfilechooser.getSelectedFile().getPath());
+		}
+	}
+
+	public long getTimeStampTime() {
+		return System.currentTimeMillis();
+	}
+
+	private void initGUI() {
+		try {
+			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+			setLayout(null);
+			setTitle("Recursive Copy");
+			{
+				txtSourceDir = new JTextField("C:\\Temp\\kizlar");
+				getContentPane().add(txtSourceDir);
+				txtSourceDir.setBounds(10, 10, 400, 25);
+			}
+			{
+				btnOpenSourceDir = new JButton("Select Source");
+				getContentPane().add(btnOpenSourceDir);
+				btnOpenSourceDir.addActionListener(this);
+				btnOpenSourceDir.setBounds(440, 10, 150, 25);
+			}
+			{
+				txtTargetDir = new JTextField("C:\\Temp\\kizlar_tekrar");
+				getContentPane().add(txtTargetDir);
+				txtTargetDir.setBounds(10, 40, 400, 25);
+			}
+			{
+				btnOpenTargetDir = new JButton("Select Target");
+				getContentPane().add(btnOpenTargetDir);
+				btnOpenTargetDir.addActionListener(this);
+				btnOpenTargetDir.setBounds(440, 40, 150, 25);
+
+			}
+
+			lblInfo = new JLabel("Info:");
+			getContentPane().add(lblInfo);
+			lblInfo.setBounds(10, 70, 400, 25);
+			{
+				btnCopyFiles = new JButton();
+				getContentPane().add(btnCopyFiles);
+				btnCopyFiles.setText("Copy Recursive");
+				btnCopyFiles.addActionListener(this);
+			}
+
+			btnCopyFiles.setBounds(440, 70, 150, 25);
+
+			setPreferredSize(new java.awt.Dimension(600, 180));
+			setLocationRelativeTo(null);
+			setVisible(true);
+			pack();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -189,17 +204,6 @@ public class RecursiveCopyGUI extends javax.swing.JFrame implements ActionListen
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
-	}
-
-	private void chooseLogDirectory(JTextField pTextField) {
-		JFileChooser jfilechooser = new JFileChooser(new File(pTextField.getText()));
-		jfilechooser.setFileSelectionMode(1);
-		jfilechooser.setCurrentDirectory(new File(pTextField.getText()));
-		jfilechooser.setAcceptAllFileFilterUsed(false);
-		int i = jfilechooser.showOpenDialog(this);
-		if (i == 0) {
-			pTextField.setText(jfilechooser.getSelectedFile().getPath());
 		}
 	}
 }

@@ -80,9 +80,9 @@ public class FileInfos implements Comparable<FileInfos> {
 
 		// TODO Auto-generated method stub
 		int retval;
-		if (this.length == ((FileInfos) other).length) {
+		if (this.length == other.length) {
 			retval = 0;// return 0;
-		} else if ((this.length) > ((FileInfos) other).length) {
+		} else if ((this.length) > other.length) {
 			retval = 1; // return 1;
 		} else {
 			retval = -1; // return -1;
@@ -93,9 +93,9 @@ public class FileInfos implements Comparable<FileInfos> {
 
 		// compare filenamelength
 
-		if (this.length == ((FileInfos) other).length) {
+		if (this.length == other.length) {
 			retval = 0;// return 0;
-		} else if ((this.length) > ((FileInfos) other).length) {
+		} else if ((this.length) > other.length) {
 			retval = 1; // return 1;
 		} else {
 			retval = -1; // return -1;

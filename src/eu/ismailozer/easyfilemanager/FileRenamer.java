@@ -8,6 +8,61 @@ public class FileRenamer {
 
 	private static final java.util.Locale LOCALE_TR = new java.util.Locale("tr");
 
+	public static String capitalizeString(String string) {
+		char[] chars = string.toLowerCase(LOCALE_TR).toCharArray();
+		boolean found = false;
+		for (int i = 0; i < chars.length; i++) {
+			if (!found && Character.isLetter(chars[i])) {
+				// chars[i] = Character.toUpperCase(chars[i]);
+				// tr I dont work otherwise
+				chars[i] = Character.toString(chars[i]).toUpperCase(LOCALE_TR).charAt(0);
+				// chars[i] = lStr.charAt(0);
+				found = true;
+			} else if (Character.isWhitespace(chars[i]) || chars[i] == '.' || chars[i] == '\''
+					|| !Character.isLetter(chars[i])) {
+				found = false;
+			}
+		}
+		return String.valueOf(chars);
+	}
+
+	private static String getNameSequence(int i, int s) {
+		String s1 = (new StringBuilder()).append("%0").append(s).append("d").toString();
+		return String.format(s1, i);
+	}
+
+	public static String replaceFirst(String s, String sub, String with) {
+		int i = s.indexOf(sub);
+		if (i == -1) {
+			return s;
+		}
+		return s.substring(0, i) + with + s.substring(i + sub.length());
+	}
+
+	public String getFileSeparator() {
+		return System.getProperty("file.separator");
+	}
+
+	public String getNewFilenameFromParent(String pParent, String lNewFile, String pOldFilename) {
+		// C:\Temp\subdir1\subdir2\myfile3.txt -> filename =C subdir2
+		int ind = pParent.lastIndexOf(getFileSeparator());
+		if (ind == -1) {
+			return lNewFile;
+		}
+		String lParentName = pParent.substring(ind + 1);
+		return replaceFirst(lNewFile, pOldFilename, lParentName);
+	}
+
+	public String getNewFilenameFromRegExpReplacement(String pSearchedRegExpress, String pReplaceRegExpress,
+			String pStringToChange) {
+		if (pSearchedRegExpress == null || pStringToChange == null) {
+			return null;
+		}
+		Pattern pattern = Pattern.compile(pSearchedRegExpress);
+		Matcher matcher = pattern.matcher(pStringToChange);
+		return matcher.replaceAll(pReplaceRegExpress);
+	}
+
 	public String getRenamedFilename(File pFilename, String pRegexpReplaceOld, String pRegexpReplaceNew,
 			String pReplaceAll, String pReplaceOld, String pReplaceNew, String pPrefix, String pSuffix,
 			boolean pRenameLowerCase, boolean pRenameUpperCase, boolean pRenameCapitalize,
@@ -100,61 +155,6 @@ public class FileRenamer {
 		}
 		result.append(str.substring(s));
 		return result.toString();
-	}
-
-	public String getNewFilenameFromRegExpReplacement(String pSearchedRegExpress, String pReplaceRegExpress,
-			String pStringToChange) {
-		if (pSearchedRegExpress == null || pStringToChange == null) {
-			return null;
-		}
-		Pattern pattern = Pattern.compile(pSearchedRegExpress);
-		Matcher matcher = pattern.matcher(pStringToChange);
-		return matcher.replaceAll(pReplaceRegExpress);
-	}
-
-	public String getFileSeparator() {
-		return System.getProperty("file.separator");
-	}
-
-	private static String getNameSequence(int i, int s) {
-		String s1 = (new StringBuilder()).append("%0").append(s).append("d").toString();
-		return String.format(s1, i);
-	}
-
-	public String getNewFilenameFromParent(String pParent, String lNewFile, String pOldFilename) {
-		// C:\Temp\subdir1\subdir2\myfile3.txt -> filename =C subdir2
-		int ind = pParent.lastIndexOf(getFileSeparator());
-		if (ind == -1) {
-			return lNewFile;
-		}
-		String lParentName = pParent.substring(ind + 1);
-		return replaceFirst(lNewFile, pOldFilename, lParentName);
-	}
-
-	public static String capitalizeString(String string) {
-		char[] chars = string.toLowerCase(LOCALE_TR).toCharArray();
-		boolean found = false;
-		for (int i = 0; i < chars.length; i++) {
-			if (!found && Character.isLetter(chars[i])) {
-				// chars[i] = Character.toUpperCase(chars[i]);
-				// tr I dont work otherwise
-				chars[i] = Character.toString(chars[i]).toUpperCase(LOCALE_TR).charAt(0);
-				// chars[i] = lStr.charAt(0);
-				found = true;
-			} else if (Character.isWhitespace(chars[i]) || chars[i] == '.' || chars[i] == '\''
-					|| !Character.isLetter(chars[i])) {
-				found = false;
-			}
-		}
-		return String.valueOf(chars);
-	}
-
-	public static String replaceFirst(String s, String sub, String with) {
-		int i = s.indexOf(sub);
-		if (i == -1) {
-			return s;
-		}
-		return s.substring(0, i) + with + s.substring(i + sub.length());
 	}
 
 }

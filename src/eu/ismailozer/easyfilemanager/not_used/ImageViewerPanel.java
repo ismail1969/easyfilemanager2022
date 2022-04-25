@@ -92,8 +92,8 @@ public class ImageViewerPanel extends JPanel implements MouseListener, MouseMoti
 		int scaled_height;
 
 		if (max_rate > 1) {
-			scaled_width = (int) ((double) src_image_w / max_rate);
-			scaled_height = (int) ((double) src_image_h / max_rate);
+			scaled_width = (int) (src_image_w / max_rate);
+			scaled_height = (int) (src_image_h / max_rate);
 			resizedImage = source_img.getScaledInstance(scaled_width, scaled_height, Image.SCALE_SMOOTH);
 
 		} else {
@@ -109,6 +109,7 @@ public class ImageViewerPanel extends JPanel implements MouseListener, MouseMoti
 		setPreferredSize(new Dimension(scaled_width, scaled_height));
 	}
 
+	@Override
 	public void paint(Graphics g) {
 		g.drawImage(resizedImage, 0, 0, null);
 		// draw the image dimensions

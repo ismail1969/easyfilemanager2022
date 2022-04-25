@@ -21,7 +21,7 @@ public class ProgressViewer extends JFrame implements ActionListener {
 	public ProgressViewer(String pTitle) {
 		super(pTitle);
 		// JFrame frame = new JFrame("Indeterminate");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 

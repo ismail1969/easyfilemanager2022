@@ -12,24 +12,55 @@ public class FileSizeCollector implements Comparable<FileSizeCollector> {
 		this.filenamelength = filenamelength;
 	}
 
-	public long getFilelength() {
-		return filelength;
+	@Override
+	public int compareTo(FileSizeCollector other) {
+		// TODO Auto-generated method stub
+		int retval;
+		if (this.filelength == other.filelength) {
+			retval = 0;// return 0;
+		} else if ((this.filelength) > other.filelength) {
+			retval = 1; // return 1;
+		} else {
+			retval = -1; // return -1;
+		}
+		if (retval != 0) {
+			return retval;
+		}
+
+		// compare filenamelength
+
+		if (this.filenamelength == other.filenamelength) {
+			retval = 0;// return 0;
+		} else if ((this.filenamelength) > other.filenamelength) {
+			retval = 1; // return 1;
+		} else {
+			retval = -1; // return -1;
+		}
+		if (retval != 0) {
+			return retval;
+		}
+
+		// compare filenames
+		retval = filename.compareTo(other.filename);
+		if (retval != 0)
+			return retval;
+		return retval;
 	}
 
-	public void setFilelength(long filelength) {
-		this.filelength = filelength;
+	public long getFilelength() {
+		return filelength;
 	}
 
 	public String getFilename() {
 		return filename;
 	}
 
-	public void setFilename(String filename) {
-		this.filename = filename;
+	public int getFilenamelength() {
+		return filenamelength;
 	}
 
-	public String toString() {
-		return "Filelength " + filelength + " -> Filename " + filename + "\n";
+	public void setFilelength(long filelength) {
+		this.filelength = filelength;
 	}
 
 	// @Override
@@ -53,46 +84,16 @@ public class FileSizeCollector implements Comparable<FileSizeCollector> {
 	// return Integer.valueOf(age).compareTo(Integer.valueOf(other.age));
 	// }
 
-	@Override
-	public int compareTo(FileSizeCollector other) {
-		// TODO Auto-generated method stub
-		int retval;
-		if (this.filelength == ((FileSizeCollector) other).filelength) {
-			retval = 0;// return 0;
-		} else if ((this.filelength) > ((FileSizeCollector) other).filelength) {
-			retval = 1; // return 1;
-		} else {
-			retval = -1; // return -1;
-		}
-		if (retval != 0) {
-			return retval;
-		}
-
-		// compare filenamelength
-
-		if (this.filenamelength == ((FileSizeCollector) other).filenamelength) {
-			retval = 0;// return 0;
-		} else if ((this.filenamelength) > ((FileSizeCollector) other).filenamelength) {
-			retval = 1; // return 1;
-		} else {
-			retval = -1; // return -1;
-		}
-		if (retval != 0) {
-			return retval;
-		}
-
-		// compare filenames
-		retval = filename.compareTo(other.filename);
-		if (retval != 0)
-			return retval;
-		return retval;
-	}
-
-	public int getFilenamelength() {
-		return filenamelength;
+	public void setFilename(String filename) {
+		this.filename = filename;
 	}
 
 	public void setFilenamelength(int filenamelength) {
 		this.filenamelength = filenamelength;
+	}
+
+	@Override
+	public String toString() {
+		return "Filelength " + filelength + " -> Filename " + filename + "\n";
 	}
 }
