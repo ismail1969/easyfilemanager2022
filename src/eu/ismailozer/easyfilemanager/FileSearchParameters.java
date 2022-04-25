@@ -18,7 +18,7 @@ public class FileSearchParameters {
 	public FileSearchParameters() {
 
 	}
-	
+
 //	public FileSearchParameters(String startsWith, String endsWith, String containStr, String searchPattern,
 //			int fileSize, boolean fileSizeGreater, boolean fileSizeLower, boolean fileSizeEqual, Date creationDateFrom,
 //			Date creationDateTo, boolean successiveUppercaseChars) {
@@ -50,12 +50,13 @@ public class FileSearchParameters {
 		this.creationDateTo = creationDateTo;
 		this.successiveUppercaseChars = successiveUppercaseChars;
 	}
-	
-	public static FileSearchParameters getFileSearchParameters(String startsWith, String endsWith, String containStr, String searchPattern, int fileSize,
-			boolean fileSizeGreater, boolean fileSizeLower, boolean fileSizeEqual, Date creationDateFrom,
-			Date creationDateTo, boolean successiveUppercaseChars) {
+
+	public static FileSearchParameters getFileSearchParameters(String startsWith, String endsWith, String containStr,
+			String searchPattern, int fileSize, boolean fileSizeGreater, boolean fileSizeLower, boolean fileSizeEqual,
+			Date creationDateFrom, Date creationDateTo, boolean successiveUppercaseChars) {
 		FileSearchParameters searchObject = new FileSearchParameters();
-		searchObject.setParameters(startsWith, endsWith, containStr, searchPattern, fileSize, fileSizeGreater, fileSizeLower, fileSizeEqual, creationDateFrom, creationDateTo, successiveUppercaseChars);
+		searchObject.setParameters(startsWith, endsWith, containStr, searchPattern, fileSize, fileSizeGreater,
+				fileSizeLower, fileSizeEqual, creationDateFrom, creationDateTo, successiveUppercaseChars);
 		return searchObject;
 	}
 }

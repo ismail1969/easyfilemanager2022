@@ -134,18 +134,3 @@ public class BatchImageConverterGUI extends javax.swing.JFrame {
 		return success;
 	}
 }
-
-class ImageFileFilter implements FileFilter {
-	private String extention;
-
-	public ImageFileFilter(String pExtention) {
-		extention = pExtention;
-	}
-
-	public boolean accept(File file) {
-		if (file.getName().toLowerCase().endsWith(extention)) {
-			return true;
-		}
-		return false;
-	}
-}

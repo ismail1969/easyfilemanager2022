@@ -382,13 +382,13 @@ public class MainGUI extends javax.swing.JFrame
 //					rbtFileSizeGreater.isSelected(), rbtFileSizeLower.isSelected(), rbtFileSizeEqual.isSelected(),
 //					date_from, date_to, cbxSuccessiveUppercaseChars.isSelected());
 //		}
-		
-		return FileSearchParameters.getFileSearchParameters(txtStartsWith.getText(), txtEndsWith.getText(), txtContainStr.getText(),
-				txtSearchPattern.getText(), (int) getSearchedFileSize(txtFileSize.getText()),
+
+		return FileSearchParameters.getFileSearchParameters(txtStartsWith.getText(), txtEndsWith.getText(),
+				txtContainStr.getText(), txtSearchPattern.getText(), (int) getSearchedFileSize(txtFileSize.getText()),
 				rbtFileSizeGreater.isSelected(), rbtFileSizeLower.isSelected(), rbtFileSizeEqual.isSelected(),
-				date_from, date_to, cbxSuccessiveUppercaseChars.isSelected());		
-		
-		//return fileSearchParameters;
+				date_from, date_to, cbxSuccessiveUppercaseChars.isSelected());
+
+		// return fileSearchParameters;
 	}
 
 	public FileRenamer getFileRenamer() {
@@ -2428,11 +2428,10 @@ public class MainGUI extends javax.swing.JFrame
 	public void searchFiles() {
 		try {
 			initProgressBar(progressBar);
-			if(jTabbedPanelForTables != null){
-				jTabbedPanelForTables.setSelectedIndex(0);	
+			if (jTabbedPanelForTables != null) {
+				jTabbedPanelForTables.setSelectedIndex(0);
 			}
-			
-			
+
 			DIR_COUNTER = 0;
 			FILE_COUNTER = 0;
 			searchThread = new Thread() {
@@ -2531,11 +2530,11 @@ public class MainGUI extends javax.swing.JFrame
 					progressBarValue = (int) HUNDERD;
 					progressBar.setValue(progressBarValue);
 
-					//jTabbedPanelForTables.setSelectedIndex(0);
-					if(jTabbedPanelForTables != null){
-						jTabbedPanelForTables.setSelectedIndex(0);	
+					// jTabbedPanelForTables.setSelectedIndex(0);
+					if (jTabbedPanelForTables != null) {
+						jTabbedPanelForTables.setSelectedIndex(0);
 					}
-					
+
 					ProcessTimeController.end();
 					// progress.stop();
 					logTimeStamp();
@@ -4602,7 +4601,7 @@ public class MainGUI extends javax.swing.JFrame
 		String filename = "";
 		JTable tablename = null;
 		int selectedTabIndex = 0;
-		if (jTabbedPanelForTables != null && jTabbedPanelForTables.getSelectedIndex() >=0 ) {
+		if (jTabbedPanelForTables != null && jTabbedPanelForTables.getSelectedIndex() >= 0) {
 			jTabbedPanelForTables.getSelectedIndex();
 		}
 
