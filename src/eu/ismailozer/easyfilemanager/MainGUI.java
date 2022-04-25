@@ -45,24 +45,24 @@ public class MainGUI extends javax.swing.JFrame
 		implements ItemListener, ActionListener, KeyListener, WindowListener, MouseListener, MouseMotionListener,
 		InputMethodListener, FocusListener, ChangeListener, TableModelListener, PropertyChangeListener {
 
+	private static String DEFAULT_COMPARE_DIR = "defaultCompareDir";
+
+	private static String DEFAULT_SEARCH_DIR = "defaultSearchDir";
+
 	private static final Dimension DIMENSION_100_22 = new java.awt.Dimension(100, 22);
 
 	private static final Dimension DIMENSION_500_22 = new java.awt.Dimension(500, 22);
-
+	private static final double HUNDERD = 100;
+//	private static int BUFFSIZE = 0x2000; // 8192
+//	private static int BUFFSIZE_MULTIPLE = 1;
+	private static final java.util.Locale LOCALE_TR = new java.util.Locale("tr");
+	private static double NUMBER_ENTRIES_PER_PORCENT;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7272088068571396768L;
-
-	private static String DEFAULT_COMPARE_DIR = "defaultCompareDir";
-	private static String DEFAULT_SEARCH_DIR = "defaultSearchDir";
-//	private static int BUFFSIZE = 0x2000; // 8192
-//	private static int BUFFSIZE_MULTIPLE = 1;
-	private static final java.util.Locale LOCALE_TR = new java.util.Locale("tr");
-	private static final double HUNDERD = 100;
 	private static final double TEN = 10;
 	private static int TOTAL_FOUND_ENTRIES;
-	private static double NUMBER_ENTRIES_PER_PORCENT;
 
 	public static String capitalizeString(String string) {
 		char[] chars = string.toLowerCase(LOCALE_TR).toCharArray();
@@ -217,21 +217,6 @@ public class MainGUI extends javax.swing.JFrame
 		}
 	}
 
-	/**
-	 * Auto-generated main method to display this JFrame
-	 */
-
-	// EasyProgressViewer progress;
-	JPanel pnlBottomCmdButton;
-	JPanel pnlInfo;
-	TreeSet<String> extTreeSet = new TreeSet<String>();
-	boolean isSearchOptionEmtyp;
-	boolean isSearchOptionFilled;
-	private ButtonGroup btnGrpFileSize;
-	private ButtonGroup btnGrpTransform;
-	private Date dateCreationFrom;
-	private Date dateCreationTo;
-	private Dimension dimensionPreview = new Dimension(400, 330);
 	private JButton btnChooseCompareDir;
 	private JButton btnChooseDir;
 	private JButton btnClearAll;
@@ -246,34 +231,70 @@ public class MainGUI extends javax.swing.JFrame
 	private JButton btnDeleteFiles;
 	private JButton btnEditTextFile;
 	private JButton btnExportTable;
+	private ButtonGroup btnGrpFileSize;
+	private ButtonGroup btnGrpTransform;
+	private JButton btnOpenfile;
 	private JButton btnOpenFileFolder;
 	private JButton btnOpenSelectedFile;
-	private JButton btnOpenfile;
+	private JButton btnRemoveFomList;
 	private JButton btnRenameSelectedFiles;
 	private JButton btnResetRenameOpt;
 	private JButton btnResetSearchOpt;
+	private JButton btnsearchDuplicateFiles;
 	private JButton btnSearchFiles;
 	private JButton btnSelectAll;
-	private JButton btnRemoveFomList;
+	private JButton btnStopRunner;
 	private JButton btnViewLogFiles;
 	private JButton btnZoomoutPicture;
-	private JButton btnStopRunner;
-	private JButton btnsearchDuplicateFiles;
-	private JCheckBox cbxIncludeDirectories;
-	private JCheckBox cbxIncludeFiles;
-	private JCheckBox cbxLoggingCommandLine;
-	private JCheckBox cbxLoggingInFile;
-	private JCheckBox cbxRecursiveMode;
-	private JCheckBox cbxResetCounter;
+	private final String bufferSizeFactorList[] = { "1", "2", "4", "8", "16", "32" };
+	private final String bufferSizeList[] = { "512", "1024", "2048", "4096", "8192", "16384" };
+	JCheckBoxMenuItem cbMenuItem;
 	private JComboBox<String> cbxBufferSize;
 	private JComboBox<String> cbxBufferSizeFactor;
 	private JComboBox<String> cbxFileExtentions;
+	private JCheckBox cbxIncludeDirectories;
+	private JCheckBox cbxIncludeFiles;
 	private JComboBox<String> cbxItemsLeft;
 	private JComboBox<String> cbxItemsRight;
 	private JComboBox<String> cbxLeadingZeros;
 	private JComboBox<String> cbxLefOffset;
+	private JCheckBox cbxLoggingCommandLine;
+	private JCheckBox cbxLoggingInFile;
+	private JCheckBox cbxRecursiveMode;
+	private JCheckBox cbxResetCounter;
 	private JComboBox<String> cbxRightOffset;
 	private JComboBox<String> cbxSearchLimits;
+	private JCheckBox cbxSuccessiveUppercaseChars;
+	private final String compareLimitList[] = { "1", "10", "50", "100", "200", "500", "1000", "2000", "5000", "99999" };
+	protected int counter = 0;
+	private Date dateCreationFrom;
+	private Date dateCreationTo;
+	private String DATEFORMATPATTERN = "dd.MM.yyyy";
+	private String defaultCompareDir;
+	private String defaultSearchDir = "C:\\Temp";
+	Dimension DIMENSION_140_22 = new Dimension(140, 22);
+	// private int LOOP_COUNTER = 1000;
+	// private int LOOP_COUNTER = 2000;
+	private Dimension dimensionPreview = new Dimension(400, 330);
+	private int DIR_COUNTER;
+	private DuplicateTableModel dublicateTableModel;
+	TreeSet<String> extTreeSet = new TreeSet<String>();
+	private int FILE_COUNTER;
+	String[] fileExtentionList = { "", "mp3", "jpg", "jpeg", "gif", "png", "bmp", "csv", "java", "htm", "html", "php",
+			"txt", "log", "ini", "xml", "sql", "avi", "mpeg", "mp4", "mov", "zip", "pdf", "exe", "jar" };
+	private String FILEMANAGER_COPYRIGHT = "(c) www.ismailozer.eu";
+	private String FILEMANAGER_LABEL = "Easy File Manager";
+	private String FILEMANAGER_RELEASE = "2022.4";
+	private String FILEMANAGER_RELEASE_DATE = "24.04.2022";
+	FileRenamer filerenamer;
+	FileSearchParameters fileSearchParameters;
+	private int HEIGHT_FRM;
+	private int HEIGHT_SCR;
+	private String HYPHEN = " - ";
+	boolean isSearchOptionEmtyp;
+	boolean isSearchOptionFilled;
+	private JTabbedPane jTabbedPanelForTables;
+	private JTabbedPane jTabbedPaneOptionsTop;
 	private JLabel lblBufferSize;
 	private JLabel lblBufferSizeFactor;
 	private JLabel lblCompareDir;
@@ -288,22 +309,39 @@ public class MainGUI extends javax.swing.JFrame
 	private JLabel lblRegExp;
 	private JLabel lblRegexpReplaceNew;
 	private JLabel lblRegexpReplaceOld;
-	private JLabel lblReplWith;
 	private JLabel lblReplace;
 	private JLabel lblReplaceAll;
+	private JLabel lblReplWith;
 	private JLabel lblRightStart;
 	private JLabel lblSequence;
 	private JLabel lblSourceDir;
 	private JLabel lblStartsWith;
 	private JLabel lblSuffix;
+	private String LOG_DIR = "log_";
+	private String LOG_FILE = "log_";
+	protected int maxValue = 100;
+	JMenu menu, submenu;
+	// Where the GUI is created:
+	JMenuBar menuBar;
+	JMenuItem menuItem;
 	private JMenuItem menuItemCopyFilesTo;
 	private JMenuItem menuItemEditTextFile;
+	JMenuItem menuItemImportToCompareTbl;
+	JMenuItem menuItemMoreLessItems;
 	private JMenuItem menuItemOpenFileFolder;
+	protected int minValue = 0;
 	private JMenuItem openFileFolder;
+	/**
+	 * Auto-generated main method to display this JFrame
+	 */
+
+	// EasyProgressViewer progress;
+	JPanel pnlBottomCmdButton;
 	private JPanel pnlCompareDir;
 	private JPanel pnlCompareFileOptions;
 	private JPanel pnlDirectory;
 	private JPanel pnlFilePreview;
+	JPanel pnlInfo;
 	private JPanel pnlNoPreview;
 	private JPanel pnlOptions;
 	private JPanel pnlRenameOptions;
@@ -312,6 +350,15 @@ public class MainGUI extends javax.swing.JFrame
 	private JPanel pnlTableForRenameFiles;
 	private JPanel pnlTransformOpt;
 	private JPopupMenu popupMenu;
+	private int preview_height = 320;
+	private int preview_width = 400;
+
+	protected JProgressBar progressBar;
+	protected int progressBarValue;
+	// private ProgressMonitor progressMonitor;
+	private Properties prop = new Properties();
+	private String PROPS_FILE = "filemanager.properties";
+	JRadioButtonMenuItem rbMenuItem;
 	private JRadioButton rbtAllSize;
 	private JRadioButton rbtCapitalize;
 	private JRadioButton rbtFileSizeEqual;
@@ -319,128 +366,81 @@ public class MainGUI extends javax.swing.JFrame
 	private JRadioButton rbtFileSizeLower;
 	private JRadioButton rbtLowerCase;
 	private JRadioButton rbtNormal;
+
 	private JRadioButton rbtParentAsFilename;
 	private JRadioButton rbtUpperCase;
+
 	private JScrollPane scrollPaneForCompare;
+
 	private JScrollPane scrollPaneForRenameFiles;
-	private JTabbedPane jTabbedPaneOptionsTop;
-	private JTabbedPane jTabbedPanelForTables;
-	private JTable tableCompareResult;
-	private JTable tableSearchResult;
-	private JTextField txtBufferSize;
-	private JTextField txtBufferSizeFactor;
-	private JTextField txtCompareDir;
-	private JTextField txtContainStr;
-	private JTextField txtEndsWith;
-	private JTextField txtFileSize;
-	private JTextField txtItemsLeft;
-	private JTextField txtItemsRight;
-	private JTextField txtLeftOffset;
-	private JTextField txtPrefix;
-	private JTextField txtRegexpReplaceNew;
-	private JTextField txtRegexpReplaceOld;
-	private JTextField txtReplaceAll;
-	private JTextField txtReplaceNew;
-	private JTextField txtReplaceOld;
-	private JTextField txtRightOffset;
-	private JTextField txtSearchDir;
-	private JTextField txtSearchPattern;
-	private JTextField txtSequence;
-	private JTextField txtStartsWith;
-	private JTextField txtSuffix;
-
-	private DuplicateTableModel dublicateTableModel;
-	private SearcherTableModel searchTableModel;
-	private ObservingTextField txtCreationDateFrom = null;
-	private ObservingTextField txtCreationDateTo = null;
-	// private ProgressMonitor progressMonitor;
-	private Properties prop = new Properties();
-	private String DATEFORMATPATTERN = "dd.MM.yyyy";
 	private SimpleDateFormat sDateFormt = new SimpleDateFormat(DATEFORMATPATTERN);
-	private String LOG_DIR = "log_";
-	private String LOG_FILE = "log_";
-	private String PROPS_FILE = "filemanager.properties";
-	private String defaultCompareDir;
-	private String defaultSearchDir = "C:\\Temp";
 
-	private String HYPHEN = " - ";
-	private String FILEMANAGER_LABEL = "Easy File Manager";
-
-	private String FILEMANAGER_RELEASE = "2022.4";
-
-	private String FILEMANAGER_RELEASE_DATE = "24.04.2022";
-	private String FILEMANAGER_COPYRIGHT = "(c) www.ismailozer.eu";
-
-	private StringBuffer STR_BUFFER;
-
-	private int DIR_COUNTER;
-
-	private int FILE_COUNTER;
-	private int HEIGHT_FRM;
-	private int HEIGHT_SCR;
-	private int WIDTH_FRM;
-	private int WIDTH_SCR;
-	private int ZOOM_FACTOR = 100;
-
-	private int preview_height = 320;
-	private int preview_width = 400;
-
-	private final String sequences[] = { "None", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
+	Thread searchDublicateThread;
 
 	private final String searchLimitList[] = { "All", "10", "50", "100", "200", "500", "1000", "2000", "5000", "10000",
 			"9999999" };
 
-	private final String compareLimitList[] = { "1", "10", "50", "100", "200", "500", "1000", "2000", "5000", "99999" };
-	private final String bufferSizeList[] = { "512", "1024", "2048", "4096", "8192", "16384" };
-	private final String bufferSizeFactorList[] = { "1", "2", "4", "8", "16", "32" };
-	String[] fileExtentionList = { "", "mp3", "jpg", "jpeg", "gif", "png", "bmp", "csv", "java", "htm", "html", "php",
-			"txt", "log", "ini", "xml", "sql", "avi", "mpeg", "mp4", "mov", "zip", "pdf", "exe", "jar" };
+	private SearcherTableModel searchTableModel;
+	Thread searchThread;
+	private final String sequences[] = { "None", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
+	private StringBuffer STR_BUFFER;
+	private JTable tableCompareResult;
+	private JTable tableSearchResult;
+
+	private JTextField txtBufferSize;
+	private JTextField txtBufferSizeFactor;
+
+	private JTextField txtCompareDir;
+
+	private JTextField txtContainStr;
+
+	private ObservingTextField txtCreationDateFrom = null;
+	private ObservingTextField txtCreationDateTo = null;
+	private JTextField txtEndsWith;
+	private JTextField txtFileSize;
 
 	// private JPanel pnlSearchOptionAdditional;
 	// private JRadioButton rbtSuccessiveUppercaseChars;
 
-	Dimension DIMENSION_140_22 = new Dimension(140, 22);
-	// private int LOOP_COUNTER = 1000;
-	// private int LOOP_COUNTER = 2000;
+	private JTextField txtItemsLeft;
 
-	// Where the GUI is created:
-	JMenuBar menuBar;
+	private JTextField txtItemsRight;
 
-	JMenu menu, submenu;
-	JMenuItem menuItem;
+	private JTextField txtLeftOffset;
+	private JTextField txtPrefix;
 
-	JMenuItem menuItemMoreLessItems;
+	private JTextField txtRegexpReplaceNew;
 
-	JRadioButtonMenuItem rbMenuItem;
+	private JTextField txtRegexpReplaceOld;
 
 	// private JLabel lblEntries;
 	//
 	// private JTextField txtEntries;
 	// 01.01.2018
 
-	JCheckBoxMenuItem cbMenuItem;
+	private JTextField txtReplaceAll;
 
-	JMenuItem menuItemImportToCompareTbl;
+	private JTextField txtReplaceNew;
 
-	protected JProgressBar progressBar;
+	private JTextField txtReplaceOld;
 
-	protected int minValue = 0;
+	private JTextField txtRightOffset;
 
-	protected int progressBarValue;
+	private JTextField txtSearchDir;
 
-	protected int maxValue = 100;
+	private JTextField txtSearchPattern;
 
-	protected int counter = 0;
+	private JTextField txtSequence;
 
-	Thread searchThread;
+	private JTextField txtStartsWith;
 
-	Thread searchDublicateThread;
+	private JTextField txtSuffix;
 
-	private JCheckBox cbxSuccessiveUppercaseChars;
+	private int WIDTH_FRM;
 
-	FileSearchParameters fileSearchParameters;
+	private int WIDTH_SCR;
 
-	FileRenamer filerenamer;
+	private int ZOOM_FACTOR = 100;
 
 	public MainGUI() {
 		super();
