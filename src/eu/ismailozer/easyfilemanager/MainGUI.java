@@ -6,7 +6,6 @@ import java.io.*;
 //import java.nio.file.Paths;
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.TableModelEvent;
@@ -2532,7 +2531,11 @@ public class MainGUI extends javax.swing.JFrame
 					progressBarValue = (int) HUNDERD;
 					progressBar.setValue(progressBarValue);
 
-					jTabbedPanelForTables.setSelectedIndex(0);
+					//jTabbedPanelForTables.setSelectedIndex(0);
+					if(jTabbedPanelForTables != null){
+						jTabbedPanelForTables.setSelectedIndex(0);	
+					}
+					
 					ProcessTimeController.end();
 					// progress.stop();
 					logTimeStamp();
@@ -3880,7 +3883,7 @@ public class MainGUI extends javax.swing.JFrame
 			pCanRename = true;
 		}
 
-		pTblModel.addRow(new Object[] { new Integer(pTblModel.getRowCount() + 1), pSourceFilename, pTargetFilename,
+		pTblModel.addRow(new Object[] { Integer.valueOf(pTblModel.getRowCount() + 1), pSourceFilename, pTargetFilename,
 				getFileExtension(pSourceFilename),
 				getDateFromat().format(new Date((new File(pSourceFilename).lastModified()))),
 				getFileSize(pSourceFilename), pCanRename, new File(pSourceFilename).isDirectory() });
@@ -4599,7 +4602,7 @@ public class MainGUI extends javax.swing.JFrame
 		String filename = "";
 		JTable tablename = null;
 		int selectedTabIndex = 0;
-		if (jTabbedPanelForTables != null) {
+		if (jTabbedPanelForTables != null && jTabbedPanelForTables.getSelectedIndex() >=0 ) {
 			jTabbedPanelForTables.getSelectedIndex();
 		}
 
@@ -4970,91 +4973,5 @@ public class MainGUI extends javax.swing.JFrame
 		// }
 		// }
 
-	}
-}
-
-@SuppressWarnings("deprecation")
-class ObservingTextField extends JFormattedTextField implements Observer {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	ObservingTextField(DateFormat format) {
-		super(format);
-	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-		Calendar calendar = (Calendar) arg;
-		DatePicker dp = (DatePicker) o;
-		System.out.println("picked=" + dp.formatDate(calendar));
-		setText(dp.formatDate(calendar));
-	}
-}
-
-class JButtonRenderer implements TableCellRenderer {
-
-	JButton button = new JButton();
-
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-			int row, int column) {
-		table.setShowGrid(true);
-		table.setGridColor(Color.LIGHT_GRAY);
-		// table.setGridColor(Color.RED);
-		button.setText(value.toString() + row + ": " + column);
-		button.setToolTipText("Press " + value.toString());
-		return button;
-	}
-}
-
-class JButtonEditor extends AbstractCellEditor implements TableCellEditor {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7756384489136658497L;
-	JButton button;
-	String txt;
-
-	public JButtonEditor() {
-		super();
-		button = new JButton("TEST");
-		button.setOpaque(true);
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Buttontext: " + button.getText());
-			}
-		});
-	}
-
-	public Object getCellEditorValue() {
-		return null;
-	}
-
-	public boolean isCellEditable(EventObject anEvent) {
-		return true;
-	}
-
-	public boolean shouldSelectCell(EventObject anEvent) {
-		return false;
-	}
-
-	public boolean stopCellEditing() {
-		return super.stopCellEditing();
-	}
-
-	public void cancelCellEditing() {
-	}
-
-	public void addCellEditorListener(CellEditorListener l) {
-	}
-
-	public void removeCellEditorListener(CellEditorListener l) {
-	}
-
-	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		txt = (value == null) ? "xxx" : value.toString();
-		button.setText(txt);
-		return button;
 	}
 }
