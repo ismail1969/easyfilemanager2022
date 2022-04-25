@@ -28,18 +28,23 @@ public class MyEventQueue extends EventQueue {
 		super();
 	}
 
-	protected void dispatchEvent(AWTEvent event) throws NullPointerException, java.lang.IndexOutOfBoundsException {
+	protected void dispatchEvent(AWTEvent event) throws NullPointerException, 
+	java.lang.IndexOutOfBoundsException,
+	java.lang.ArrayIndexOutOfBoundsException {
 		if (event == null) {
 			return;
 		}
 
 		if (event != null) {
+			//System.out.println("EVENT == " + event.toString());
 			super.dispatchEvent(event);
 
 			// interested only in mouseevents
 			if (!(event instanceof MouseEvent))
 				return;
 
+			
+			
 			MouseEvent me = (MouseEvent) event;
 
 			// interested only in popuptriggers

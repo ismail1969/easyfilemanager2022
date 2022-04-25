@@ -1,4 +1,4 @@
-package eu.ismailozer.easyfilemanager;
+package eu.ismailozer.easyfilemanager.not_used;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

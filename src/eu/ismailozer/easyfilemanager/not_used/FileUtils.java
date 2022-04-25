@@ -1,4 +1,4 @@
-package eu.ismailozer.easyfilemanager;
+package eu.ismailozer.easyfilemanager.not_used;
 
 /**
  * Copyright (c) 2003 - 2007 OpenSubsystems s.r.o. Slovak Republic. All rights reserved.

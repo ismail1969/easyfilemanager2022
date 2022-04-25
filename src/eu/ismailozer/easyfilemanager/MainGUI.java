@@ -6,7 +6,6 @@ import java.io.*;
 //import java.nio.file.Paths;
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.TableModelEvent;
@@ -32,6 +31,10 @@ import java.util.List;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+//import eu.ismailozer.easyfilemanager.not_used.ProcessTimeController;
+
+//import eu.ismailozer.easyfilemanager.not_used.CompareBinaries;
 
 //import MyEventQueue;
 
@@ -367,19 +370,25 @@ public class MainGUI extends javax.swing.JFrame
 			date_to = getDateFromString(txtCreationDateTo.getText(), getsDateFormt());
 		}
 
-		if (fileSearchParameters == null) {
-			fileSearchParameters = new FileSearchParameters(txtStartsWith.getText(), txtEndsWith.getText(),
-					txtContainStr.getText(), txtSearchPattern.getText(),
-					(int) getSearchedFileSize(txtFileSize.getText()), rbtFileSizeGreater.isSelected(),
-					rbtFileSizeLower.isSelected(), rbtFileSizeEqual.isSelected(), date_from, date_to,
-					cbxSuccessiveUppercaseChars.isSelected());
-		} else {
-			fileSearchParameters.initialize(txtStartsWith.getText(), txtEndsWith.getText(), txtContainStr.getText(),
-					txtSearchPattern.getText(), (int) getSearchedFileSize(txtFileSize.getText()),
-					rbtFileSizeGreater.isSelected(), rbtFileSizeLower.isSelected(), rbtFileSizeEqual.isSelected(),
-					date_from, date_to, cbxSuccessiveUppercaseChars.isSelected());
-		}
-		return fileSearchParameters;
+//		if (fileSearchParameters == null) {
+//			fileSearchParameters = new FileSearchParameters(txtStartsWith.getText(), txtEndsWith.getText(),
+//					txtContainStr.getText(), txtSearchPattern.getText(),
+//					(int) getSearchedFileSize(txtFileSize.getText()), rbtFileSizeGreater.isSelected(),
+//					rbtFileSizeLower.isSelected(), rbtFileSizeEqual.isSelected(), date_from, date_to,
+//					cbxSuccessiveUppercaseChars.isSelected());
+//		} else {
+//			fileSearchParameters.initialize(txtStartsWith.getText(), txtEndsWith.getText(), txtContainStr.getText(),
+//					txtSearchPattern.getText(), (int) getSearchedFileSize(txtFileSize.getText()),
+//					rbtFileSizeGreater.isSelected(), rbtFileSizeLower.isSelected(), rbtFileSizeEqual.isSelected(),
+//					date_from, date_to, cbxSuccessiveUppercaseChars.isSelected());
+//		}
+		
+		return FileSearchParameters.getFileSearchParameters(txtStartsWith.getText(), txtEndsWith.getText(), txtContainStr.getText(),
+				txtSearchPattern.getText(), (int) getSearchedFileSize(txtFileSize.getText()),
+				rbtFileSizeGreater.isSelected(), rbtFileSizeLower.isSelected(), rbtFileSizeEqual.isSelected(),
+				date_from, date_to, cbxSuccessiveUppercaseChars.isSelected());		
+		
+		//return fileSearchParameters;
 	}
 
 	public FileRenamer getFileRenamer() {
@@ -460,7 +469,7 @@ public class MainGUI extends javax.swing.JFrame
 			}
 		}
 	}
-	
+
 	public String getReleaseInfo() {
 		StringBuilder stringBuilder = new StringBuilder(100);
 		stringBuilder.append(FILEMANAGER_LABEL);
@@ -471,7 +480,7 @@ public class MainGUI extends javax.swing.JFrame
 		stringBuilder.append(" ");
 		stringBuilder.append(FILEMANAGER_COPYRIGHT);
 		return stringBuilder.toString();
-		
+
 //List<String> alphabets = Arrays.asList(
 //		FILEMANAGER_LABEL, 
 //		FILEMANAGER_RELEASE,
@@ -506,11 +515,11 @@ public class MainGUI extends javax.swing.JFrame
 			getContentPane().setLayout(null);
 			determinePreferedSizes();
 			loadPropertiesFile(PROPS_FILE);
-			this.setPreferredSize(new java.awt.Dimension(WIDTH_FRM, HEIGHT_FRM));	
-			if(OSValidator.isWindows()) {
-				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");	
+			this.setPreferredSize(new java.awt.Dimension(WIDTH_FRM, HEIGHT_FRM));
+			if (OSValidator.isWindows()) {
+				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 			}
-			
+
 			SwingUtilities.updateComponentTreeUI(this);
 			this.setTitle(this.getReleaseInfo());
 
@@ -1087,7 +1096,7 @@ public class MainGUI extends javax.swing.JFrame
 			btnOpenFileFolder = new JButton("Open File Folder");
 			pnlBottomCmdButton.add(btnOpenFileFolder);
 			btnOpenFileFolder.addActionListener(this);
-			
+
 			btnOpenSelectedFile = new JButton("Open File");
 			pnlBottomCmdButton.add(btnOpenSelectedFile);
 			btnOpenSelectedFile.addActionListener(this);
@@ -1197,49 +1206,48 @@ public class MainGUI extends javax.swing.JFrame
 
 		// pnlSearchOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
 		pnlSearchOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
-		//pnlSearchOptions.setBounds(60, 12, 400, 280);
+		// pnlSearchOptions.setBounds(60, 12, 400, 280);
 
 		jTabbedPaneOptionsTop.addTab("Search Options", null, pnlSearchOptions, null);
 
 		lblStartsWith = new JLabel("Starts With");
-		//lblStartsWith.setBounds(10, 10, 80, 22);
+		// lblStartsWith.setBounds(10, 10, 80, 22);
 		pnlSearchOptions.add(lblStartsWith);
 
 		txtStartsWith = new JTextField("", 10);
 		pnlSearchOptions.add(txtStartsWith);
-		//txtStartsWith.setBounds(90, 10, 200, 22);
+		// txtStartsWith.setBounds(90, 10, 200, 22);
 		txtStartsWith.addKeyListener(this);
 
 		// Ends With
 		lblEndsWith = new JLabel("Ends With");
 		pnlSearchOptions.add(lblEndsWith);
-		//lblEndsWith.setBounds(10, 31, 200, 22);
-		
+		// lblEndsWith.setBounds(10, 31, 200, 22);
+
 		txtEndsWith = new JTextField("", 10);
 		pnlSearchOptions.add(txtEndsWith);
-		//txtEndsWith.setBounds(90, 34, 200, 22);
-		
+		// txtEndsWith.setBounds(90, 34, 200, 22);
+
 		// Reset Search Values
 		btnResetSearchOpt = new JButton("Reset Values");
-		//btnResetSearchOpt.setBounds(380, 10, 120, 22);
+		// btnResetSearchOpt.setBounds(380, 10, 120, 22);
 		pnlSearchOptions.add(btnResetSearchOpt);
 		btnResetSearchOpt.addActionListener(this);
 
-
 		// File extentions
 		cbxFileExtentions = getMyComboBox(fileExtentionList, "");
-		//cbxFileExtentions.setBounds(380, 34, 120, 22);
+		// cbxFileExtentions.setBounds(380, 34, 120, 22);
 		// cbxFileExtentions.setSelectedIndex(fileExtentionList[0]);
 		pnlSearchOptions.add(cbxFileExtentions);
 
 		// Contain String
 		lblContainStr = new JLabel("Contain Str.");
 		pnlSearchOptions.add(lblContainStr);
-		//lblContainStr.setBounds(10, 58, 80, 22);
+		// lblContainStr.setBounds(10, 58, 80, 22);
 
 		txtContainStr = new JTextField("", 10);
 		pnlSearchOptions.add(txtContainStr);
-		//txtContainStr.setBounds(90, 58, 200, 22);
+		// txtContainStr.setBounds(90, 58, 200, 22);
 
 		// Search Include Files
 
@@ -1249,7 +1257,7 @@ public class MainGUI extends javax.swing.JFrame
 		pnlSearchOptions.add(lblRegExp);
 
 		txtSearchPattern = new JTextField("", 10);
-		//txtSearchPattern.setBounds(90, 82, 200, 22);
+		// txtSearchPattern.setBounds(90, 82, 200, 22);
 		pnlSearchOptions.add(txtSearchPattern);
 
 		// File size Panel
@@ -1285,8 +1293,8 @@ public class MainGUI extends javax.swing.JFrame
 		pnlFileSize.add(rbtFileSizeEqual);
 
 		txtFileSize = new JTextField("", 10);
-		//txtFileSize.setPreferredSize(DIMENSION_100_22);
-		//txtFileSize.setPreferredSize(new java.awt.Dimension(100, 22));
+		// txtFileSize.setPreferredSize(DIMENSION_100_22);
+		// txtFileSize.setPreferredSize(new java.awt.Dimension(100, 22));
 
 		pnlFileSize.add(txtFileSize);
 
@@ -1619,21 +1627,21 @@ public class MainGUI extends javax.swing.JFrame
 		}
 
 		lblCompareDir = new JLabel("Compare Path:");
-		//lblCompareDir.setPreferredSize(DIMENSION_100_22);
+		// lblCompareDir.setPreferredSize(DIMENSION_100_22);
 		lblCompareDir.setPreferredSize(new java.awt.Dimension(100, 22));
-		
+
 		pnlCompareDir.add(lblCompareDir);
 
 		txtCompareDir = new JTextField(lComparePath);
-		//txtCompareDir.setPreferredSize(DIMENSION_500_22);
+		// txtCompareDir.setPreferredSize(DIMENSION_500_22);
 		txtCompareDir.setPreferredSize(new java.awt.Dimension(500, 22));
-		
+
 		pnlCompareDir.add(txtCompareDir);
 
 		btnChooseCompareDir = new JButton("Open Compare Dir");
-		//btnChooseCompareDir.setPreferredSize(DIMENSION_140_22);
+		// btnChooseCompareDir.setPreferredSize(DIMENSION_140_22);
 		btnChooseCompareDir.setPreferredSize(new java.awt.Dimension(120, 22));
-		
+
 		pnlCompareDir.add(btnChooseCompareDir);
 		btnChooseCompareDir.addActionListener(this);
 		return pnlCompareDir;
@@ -1649,19 +1657,19 @@ public class MainGUI extends javax.swing.JFrame
 		pnlDirectory.setBounds(20, 10, 760, 30);
 
 		lblSourceDir = new JLabel("Search Path:");
-		//lblSourceDir.setPreferredSize(DIMENSION_100_22);
+		// lblSourceDir.setPreferredSize(DIMENSION_100_22);
 		lblSourceDir.setPreferredSize(new java.awt.Dimension(100, 22));
 
 		pnlDirectory.add(lblSourceDir);
 
 		txtSearchDir = new JTextField(defaultSearchDir);
-		//txtSearchDir.setPreferredSize(DIMENSION_500_22);
+		// txtSearchDir.setPreferredSize(DIMENSION_500_22);
 		txtSearchDir.setPreferredSize(new Dimension(500, 22));
 		txtSearchDir.addFocusListener(this);
 		pnlDirectory.add(txtSearchDir);
 
 		btnChooseDir = new JButton("Open directory");
-		//btnChooseDir.setPreferredSize(DIMENSION_140_22);
+		// btnChooseDir.setPreferredSize(DIMENSION_140_22);
 		btnChooseDir.setPreferredSize(new Dimension(120, 22));
 		pnlDirectory.add(btnChooseDir);
 		btnChooseDir.addActionListener(this);
@@ -2420,7 +2428,11 @@ public class MainGUI extends javax.swing.JFrame
 	public void searchFiles() {
 		try {
 			initProgressBar(progressBar);
-			jTabbedPanelForTables.setSelectedIndex(0);
+			if(jTabbedPanelForTables != null){
+				jTabbedPanelForTables.setSelectedIndex(0);	
+			}
+			
+			
 			DIR_COUNTER = 0;
 			FILE_COUNTER = 0;
 			searchThread = new Thread() {
@@ -2519,7 +2531,11 @@ public class MainGUI extends javax.swing.JFrame
 					progressBarValue = (int) HUNDERD;
 					progressBar.setValue(progressBarValue);
 
-					jTabbedPanelForTables.setSelectedIndex(0);
+					//jTabbedPanelForTables.setSelectedIndex(0);
+					if(jTabbedPanelForTables != null){
+						jTabbedPanelForTables.setSelectedIndex(0);	
+					}
+					
 					ProcessTimeController.end();
 					// progress.stop();
 					logTimeStamp();
@@ -3867,7 +3883,7 @@ public class MainGUI extends javax.swing.JFrame
 			pCanRename = true;
 		}
 
-		pTblModel.addRow(new Object[] { new Integer(pTblModel.getRowCount() + 1), pSourceFilename, pTargetFilename,
+		pTblModel.addRow(new Object[] { Integer.valueOf(pTblModel.getRowCount() + 1), pSourceFilename, pTargetFilename,
 				getFileExtension(pSourceFilename),
 				getDateFromat().format(new Date((new File(pSourceFilename).lastModified()))),
 				getFileSize(pSourceFilename), pCanRename, new File(pSourceFilename).isDirectory() });
@@ -3904,11 +3920,11 @@ public class MainGUI extends javax.swing.JFrame
 		}
 		String fileExtension = getFileExtension(pFile);
 		try {
-			pTblModel.addRow(
-					new Object[] { Integer.valueOf(pTblModel.getRowCount() + 1), pFile.getCanonicalPath(), lTargetFilename,
-							// pFile.getParent() + getFileSeparator() + lTargetFilename,
-							fileExtension, getDateFromat().format(pFile.lastModified()), getFileSize(pFile), pCanRename,
-							pFile.isDirectory() });
+			pTblModel.addRow(new Object[] { Integer.valueOf(pTblModel.getRowCount() + 1), pFile.getCanonicalPath(),
+					lTargetFilename,
+					// pFile.getParent() + getFileSeparator() + lTargetFilename,
+					fileExtension, getDateFromat().format(pFile.lastModified()), getFileSize(pFile), pCanRename,
+					pFile.isDirectory() });
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -4586,7 +4602,7 @@ public class MainGUI extends javax.swing.JFrame
 		String filename = "";
 		JTable tablename = null;
 		int selectedTabIndex = 0;
-		if (jTabbedPanelForTables != null) {
+		if (jTabbedPanelForTables != null && jTabbedPanelForTables.getSelectedIndex() >=0 ) {
 			jTabbedPanelForTables.getSelectedIndex();
 		}
 
@@ -4769,8 +4785,8 @@ public class MainGUI extends javax.swing.JFrame
 		if (isImageFile(pImageFile)) {
 			// preview = new ImageViewerPanel(pImageFile, preview_width, preview_height);
 			// pnlFilePreview.add(preview);
-			ImageViewerPanel_New preview_new = null;
-			preview_new = new ImageViewerPanel_New(new String[] { pImageFile, "C:\\Temp\\IMG_2726.JPG" }, preview_width,
+			ImageViewerPanel preview_new = null;
+			preview_new = new ImageViewerPanel(new String[] { pImageFile, "C:\\Temp\\IMG_2726.JPG" }, preview_width,
 					preview_height);
 			pnlFilePreview.add(preview_new);
 			getContentPane().add(pnlFilePreview);
@@ -4868,7 +4884,11 @@ public class MainGUI extends javax.swing.JFrame
 	}
 
 	private void changeFrameTitle() {
-		this.setTitle(getReleaseInfo() + " - " + getSelectedFilename());
+		if (getSelectedFilename().isEmpty()) {
+			this.setTitle(getReleaseInfo());
+			return;
+		}
+		this.setTitle(getReleaseInfo() + HYPHEN + getSelectedFilename());
 	}
 
 	public int getLeftOffset() {
@@ -4953,91 +4973,5 @@ public class MainGUI extends javax.swing.JFrame
 		// }
 		// }
 
-	}
-}
-
-@SuppressWarnings("deprecation")
-class ObservingTextField extends JFormattedTextField implements Observer {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	ObservingTextField(DateFormat format) {
-		super(format);
-	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-		Calendar calendar = (Calendar) arg;
-		DatePicker dp = (DatePicker) o;
-		System.out.println("picked=" + dp.formatDate(calendar));
-		setText(dp.formatDate(calendar));
-	}
-}
-
-class JButtonRenderer implements TableCellRenderer {
-
-	JButton button = new JButton();
-
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-			int row, int column) {
-		table.setShowGrid(true);
-		table.setGridColor(Color.LIGHT_GRAY);
-		// table.setGridColor(Color.RED);
-		button.setText(value.toString() + row + ": " + column);
-		button.setToolTipText("Press " + value.toString());
-		return button;
-	}
-}
-
-class JButtonEditor extends AbstractCellEditor implements TableCellEditor {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7756384489136658497L;
-	JButton button;
-	String txt;
-
-	public JButtonEditor() {
-		super();
-		button = new JButton("TEST");
-		button.setOpaque(true);
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Buttontext: " + button.getText());
-			}
-		});
-	}
-
-	public Object getCellEditorValue() {
-		return null;
-	}
-
-	public boolean isCellEditable(EventObject anEvent) {
-		return true;
-	}
-
-	public boolean shouldSelectCell(EventObject anEvent) {
-		return false;
-	}
-
-	public boolean stopCellEditing() {
-		return super.stopCellEditing();
-	}
-
-	public void cancelCellEditing() {
-	}
-
-	public void addCellEditorListener(CellEditorListener l) {
-	}
-
-	public void removeCellEditorListener(CellEditorListener l) {
-	}
-
-	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		txt = (value == null) ? "xxx" : value.toString();
-		button.setText(txt);
-		return button;
 	}
 }
