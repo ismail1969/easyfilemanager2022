@@ -1,11 +1,15 @@
 package eu.ismailozer.easyfilemanager;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -15,23 +19,63 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class ImageViewerPanel extends JPanel implements MouseListener, MouseMotionListener {
+public class ImageViewerPanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6637347323459632612L;
 	Image resizedImage;
 	private Image loupe_img = null;
-	String imageFile;
+	// String imageFile;
 	int width;
 	int height;
 
 	private int src_image_w;
 	private int src_image_h;
 
-	public ImageViewerPanel(String pImageFile, int pFitWidth, int pFitHeight) throws InterruptedException {
+	private String[] filenames;
+
+	private int position = 0;
+
+	JPanel pnlImage;
+	JPanel pnlNextPreview;
+	JButton btnPreview;
+	JButton btnNext;
+	// public ImageViewerPanel_New(String pImageFile, int pFitWidth, int
+	// pFitHeight)
+	// throws InterruptedException {
+	// super();
+	// imageFile = pImageFile;
+	// width = pFitWidth;
+	// height = pFitHeight;
+	// scaleImageSize();
+	// addMouseListener(this);
+	// addMouseMotionListener(this);
+	// }
+
+	public ImageViewerPanel(String[] pFilenames, int pFitWidth, int pFitHeight) throws InterruptedException {
 		super();
-		imageFile = pImageFile;
+
+		setLayout(new BorderLayout(0, 0));
+
+		pnlImage = new JPanel();
+		add(pnlImage, BorderLayout.CENTER);
+
+		pnlNextPreview = new JPanel();
+		add(pnlNextPreview, BorderLayout.SOUTH);
+		pnlNextPreview.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		btnPreview = new JButton("Preview");
+		btnPreview.addActionListener(this);
+		pnlNextPreview.add(btnPreview);
+
+		btnNext = new JButton("Next");
+		btnNext.addActionListener(this);
+		pnlNextPreview.add(btnNext);
+
+		pnlNextPreview.setOpaque(false);
+
+		filenames = pFilenames;
 		width = pFitWidth;
 		height = pFitHeight;
 		scaleImageSize();
@@ -39,12 +83,23 @@ public class ImageViewerPanel extends JPanel implements MouseListener, MouseMoti
 		addMouseMotionListener(this);
 	}
 
-	public ImageViewerPanel(String pImageFile) throws InterruptedException {
-		// Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		// int toolkit_w = d.width;
-		// int toolkit_h = d.height;
-		new ImageViewerPanel(pImageFile, getToolkitDimension().width, getToolkitDimension().height);
-	}
+	// public ImageViewerPanel_New(String pImageFile) throws
+	// InterruptedException {
+	// // Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+	// // int toolkit_w = d.width;
+	// // int toolkit_h = d.height;
+	// new ImageViewerPanel_New(pImageFile, getToolkitDimension().width,
+	// getToolkitDimension().height);
+	// }
+
+	// public ImageViewerPanel_New() throws InterruptedException {
+	// // Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+	// // int toolkit_w = d.width;
+	// // int toolkit_h = d.height;
+	// new ImageViewerPanel_New(filenames[position],
+	// getToolkitDimension().width,
+	// getToolkitDimension().height);
+	// }
 
 	public Dimension getToolkitDimension() {
 		return Toolkit.getDefaultToolkit().getScreenSize();
@@ -65,12 +120,12 @@ public class ImageViewerPanel extends JPanel implements MouseListener, MouseMoti
 		// }
 
 		try {
-			source_img = new ImageIcon(ImageIO.read(new File(imageFile))).getImage();
+			source_img = new ImageIcon(ImageIO.read(new File(filenames[position]))).getImage();
 			// System.out.println("test");
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.print("Msg: " + e.getMessage());
-			System.out.print("imageFile: " + imageFile);
+			System.out.print("imageFile: " + filenames[position]);
 		}
 		if (source_img == null) {
 			return;
@@ -111,7 +166,7 @@ public class ImageViewerPanel extends JPanel implements MouseListener, MouseMoti
 		g.drawImage(resizedImage, 0, 0, null);
 		// draw the image dimensions
 		// String dim_Text = src_image_w + " x " + src_image_h;
-		String dim_Text = imageFile + " (" + src_image_w + " x " + src_image_h + ")";
+		String dim_Text = filenames[position] + " (" + src_image_w + " x " + src_image_h + ")";
 		g.setFont(new Font("Serif", Font.BOLD, 16));
 		// g.setColor(Color.black);
 		// g.drawString(dim_Text, 10, 15);
@@ -125,7 +180,7 @@ public class ImageViewerPanel extends JPanel implements MouseListener, MouseMoti
 	public void mouseClicked(MouseEvent event) {
 		if (SwingUtilities.isLeftMouseButton(event) && event.getClickCount() == 1) {
 			try {
-				new FullImageViewer(imageFile, true).toFront();
+				new FullImageViewer(filenames[position], true).toFront();
 
 				// new EasyImageViewer(imageFile, true);
 			} catch (InterruptedException e) {
@@ -163,5 +218,55 @@ public class ImageViewerPanel extends JPanel implements MouseListener, MouseMoti
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		Object source = e.getSource();
+		if (source == btnNext) {
+			showNextPicture();
+			// searchNew();
+		}
+
+		else if (source == btnPreview) {
+			showPreviewPicture();
+			// searchNew();
+		}
+		validate();
+		repaint();
+
+	}
+
+	private void showPreviewPicture() {
+		// TODO Auto-generated method stub
+		position--; // Decrement the index position of the array of filenames by
+		// one on buttonPressed
+		if (!btnNext.isEnabled()) { // if NextButton is
+			btnNext.setEnabled(true); // disabled, enable it
+		}
+		if (position == 0) { // If we are viewing the first Picture in
+			btnPreview.setEnabled(false); // the directory, disable previous
+											// button
+		}
+		repaint();
+	}
+
+	private void showNextPicture() {
+
+		position++; // Increment the index position of array of filenames by one
+		// on buttonPressed
+
+		if (!btnPreview.isEnabled()) {
+			// listFiles(Path);
+			btnPreview.setEnabled(true);
+		}
+		if (position == filenames.length) {
+			btnNext.setEnabled(false);
+			position--;
+			repaint();
+			return;
+		}
+
 	}
 }

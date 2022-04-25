@@ -340,7 +340,7 @@ public class DatePicker extends Observable implements Runnable, WindowFocusListe
 			int y = c.get(Calendar.YEAR);
 			years = new Integer[7];
 			for (int i = y - 3, j = 0; i <= y + 3; i++, j++) {
-				years[j] =  Integer.valueOf(i);
+				years[j] = Integer.valueOf(i);
 			}
 			if (yearBox == null) {
 				yearBox = new JComboBox<>(years);
