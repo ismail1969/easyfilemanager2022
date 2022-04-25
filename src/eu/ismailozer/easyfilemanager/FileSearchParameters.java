@@ -3,6 +3,15 @@ package eu.ismailozer.easyfilemanager;
 import java.util.Date;
 
 public class FileSearchParameters {
+	public static FileSearchParameters getFileSearchParameters(String startsWith, String endsWith, String containStr,
+			String searchPattern, int fileSize, boolean fileSizeGreater, boolean fileSizeLower, boolean fileSizeEqual,
+			Date creationDateFrom, Date creationDateTo, boolean successiveUppercaseChars) {
+		FileSearchParameters searchObject = new FileSearchParameters();
+		searchObject.setParameters(startsWith, endsWith, containStr, searchPattern, fileSize, fileSizeGreater,
+				fileSizeLower, fileSizeEqual, creationDateFrom, creationDateTo, successiveUppercaseChars);
+		return searchObject;
+	}
+
 	public String startsWith;
 	public String endsWith;
 	public String containStr;
@@ -13,11 +22,8 @@ public class FileSearchParameters {
 	public boolean fileSizeEqual;
 	public Date creationDateFrom;
 	public Date creationDateTo;
+
 	public boolean successiveUppercaseChars;
-
-	public FileSearchParameters() {
-
-	}
 
 //	public FileSearchParameters(String startsWith, String endsWith, String containStr, String searchPattern,
 //			int fileSize, boolean fileSizeGreater, boolean fileSizeLower, boolean fileSizeEqual, Date creationDateFrom,
@@ -35,6 +41,10 @@ public class FileSearchParameters {
 //		this.successiveUppercaseChars = successiveUppercaseChars;
 //	}
 
+	public FileSearchParameters() {
+
+	}
+
 	public void setParameters(String startsWith, String endsWith, String containStr, String searchPattern, int fileSize,
 			boolean fileSizeGreater, boolean fileSizeLower, boolean fileSizeEqual, Date creationDateFrom,
 			Date creationDateTo, boolean successiveUppercaseChars) {
@@ -49,14 +59,5 @@ public class FileSearchParameters {
 		this.creationDateFrom = creationDateFrom;
 		this.creationDateTo = creationDateTo;
 		this.successiveUppercaseChars = successiveUppercaseChars;
-	}
-
-	public static FileSearchParameters getFileSearchParameters(String startsWith, String endsWith, String containStr,
-			String searchPattern, int fileSize, boolean fileSizeGreater, boolean fileSizeLower, boolean fileSizeEqual,
-			Date creationDateFrom, Date creationDateTo, boolean successiveUppercaseChars) {
-		FileSearchParameters searchObject = new FileSearchParameters();
-		searchObject.setParameters(startsWith, endsWith, containStr, searchPattern, fileSize, fileSizeGreater,
-				fileSizeLower, fileSizeEqual, creationDateFrom, creationDateTo, successiveUppercaseChars);
-		return searchObject;
 	}
 }

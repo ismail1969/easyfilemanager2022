@@ -6,7 +6,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,9 +13,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -40,14 +36,12 @@ import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 import javax.swing.border.Border;
 import javax.swing.event.MouseInputListener;
 
 @SuppressWarnings({ "unused", "deprecation" })
 public class DatePicker extends Observable implements Runnable, WindowFocusListener {
-	protected static Font plain = new Font("Arial", Font.PLAIN, 10);
-	protected static Font bold = new Font("Arial", Font.BOLD, 10);
-
 	public static class DayLabel extends JLabel implements MouseInputListener, MouseMotionListener {
 		/**
 		 * 
@@ -55,12 +49,52 @@ public class DatePicker extends Observable implements Runnable, WindowFocusListe
 		private static final long serialVersionUID = 3223641721847494457L;
 		private DatePicker parent;
 
+		private Border oldBorder;
+
 		public DayLabel(DatePicker parent, int day) {
 			super(Integer.toString(day));
 			this.parent = parent;
 			setHorizontalAlignment(SwingConstants.CENTER);
 			setFont(plain);
 			this.addMouseListener(this);
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// JOptionPane.showMessageDialog(this,getText());
+			parent.dayPicked(Integer.parseInt(getText()));
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			oldBorder = this.getBorder();
+			Border b = BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED);
+			b = BorderFactory.createEtchedBorder();
+			this.setBorder(b);
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			this.setBorder(oldBorder);
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+
 		}
 
 		public void setCurrentDayStyle() {
@@ -77,39 +111,6 @@ public class DatePicker extends Observable implements Runnable, WindowFocusListe
 		public void setWeekendStyle() {
 			setFont(plain);
 			setForeground(Color.GRAY);
-		}
-
-		public void mouseClicked(MouseEvent e) {
-			// JOptionPane.showMessageDialog(this,getText());
-			parent.dayPicked(Integer.parseInt(getText()));
-		}
-
-		public void mousePressed(MouseEvent e) {
-
-		}
-
-		public void mouseReleased(MouseEvent e) {
-
-		}
-
-		private Border oldBorder;
-
-		public void mouseEntered(MouseEvent e) {
-			oldBorder = this.getBorder();
-			Border b = BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED);
-			b = BorderFactory.createEtchedBorder();
-			this.setBorder(b);
-		}
-
-		public void mouseExited(MouseEvent e) {
-			this.setBorder(oldBorder);
-		}
-
-		public void mouseDragged(MouseEvent e) {
-
-		}
-
-		public void mouseMoved(MouseEvent e) {
 		}
 
 	}
@@ -224,6 +225,15 @@ public class DatePicker extends Observable implements Runnable, WindowFocusListe
 		// }
 		// }
 
+		private JComboBox<String> monthBox;
+
+		private JComboBox<Integer> yearBox;
+		private String[] months;
+		private Integer[] years;
+		private Box box;
+		// final int height=10;
+		final int height = 10;
+
 		public NavigatePanel(DatePicker parent) {
 			this.parent = parent;
 			setLayout(new BorderLayout());
@@ -283,13 +293,35 @@ public class DatePicker extends Observable implements Runnable, WindowFocusListe
 			// setLabel(parent.calendar);
 		}
 
-		private JComboBox<String> monthBox;
-		private JComboBox<Integer> yearBox;
-		private String[] months;
-		private Integer[] years;
-		private Box box;
-		// final int height=10;
-		final int height = 10;
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Object src = e.getSource();
+			Calendar c = new GregorianCalendar();
+			c.setTime(parent.getCalendar().getTime());
+			if (src instanceof JButton) {
+				if (e.getSource() == premon)
+					c.add(Calendar.MONTH, -1);
+				else if (e.getSource() == nextmon)
+					c.add(Calendar.MONTH, 1);
+				else if (e.getSource() == nextyear)
+					c.add(Calendar.YEAR, 1);
+				if (e.getSource() == preyear)
+					c.add(Calendar.YEAR, -1);
+				// System.out.println(c.getTime());
+				parent.updateScreen(c);
+			} else if (src instanceof JComboBox) {
+				@SuppressWarnings("unchecked")
+				JComboBox<Object> jcb = (JComboBox<Object>) src;
+				if (src == monthBox) {
+					c.set(Calendar.MONTH, jcb.getSelectedIndex());
+				} else if (e.getSource() == yearBox) {
+					c.set(Calendar.YEAR, years[jcb.getSelectedIndex()].intValue());
+					setYearComboBox(c);
+				}
+				parent.setMonthPanel(c);
+				parent.screen.pack();
+			}
+		}
 
 		public void setCurrentMonth(Calendar c) {
 			setMonthComboBox(c);
@@ -301,6 +333,15 @@ public class DatePicker extends Observable implements Runnable, WindowFocusListe
 				box.add(yearBox);
 				add(box, BorderLayout.CENTER);
 			}
+
+		}
+
+		public void setLabel(Calendar c) {
+			if (lbl != null)
+				remove(lbl);
+			lbl = new JLabel(parent.getString("month." + c.get(Calendar.MONTH), "") + ", " + c.get(Calendar.YEAR));
+			lbl.setHorizontalAlignment(SwingConstants.CENTER);
+			add(lbl, BorderLayout.CENTER);
 
 		}
 
@@ -353,44 +394,16 @@ public class DatePicker extends Observable implements Runnable, WindowFocusListe
 			yearBox.setSelectedItem(years[3]);
 		}
 
-		public void setLabel(Calendar c) {
-			if (lbl != null)
-				remove(lbl);
-			lbl = new JLabel(parent.getString("month." + c.get(Calendar.MONTH), "") + ", " + c.get(Calendar.YEAR));
-			lbl.setHorizontalAlignment(SwingConstants.CENTER);
-			add(lbl, BorderLayout.CENTER);
+	}
 
-		}
+	protected static Font plain = new Font("Arial", Font.PLAIN, 10);
 
-		public void actionPerformed(ActionEvent e) {
-			Object src = e.getSource();
-			Calendar c = new GregorianCalendar();
-			c.setTime(parent.getCalendar().getTime());
-			if (src instanceof JButton) {
-				if (e.getSource() == premon)
-					c.add(Calendar.MONTH, -1);
-				else if (e.getSource() == nextmon)
-					c.add(Calendar.MONTH, 1);
-				else if (e.getSource() == nextyear)
-					c.add(Calendar.YEAR, 1);
-				if (e.getSource() == preyear)
-					c.add(Calendar.YEAR, -1);
-				// System.out.println(c.getTime());
-				parent.updateScreen(c);
-			} else if (src instanceof JComboBox) {
-				@SuppressWarnings("unchecked")
-				JComboBox<Object> jcb = (JComboBox<Object>) src;
-				if (src == monthBox) {
-					c.set(Calendar.MONTH, jcb.getSelectedIndex());
-				} else if (e.getSource() == yearBox) {
-					c.set(Calendar.YEAR, years[jcb.getSelectedIndex()].intValue());
-					setYearComboBox(c);
-				}
-				parent.setMonthPanel(c);
-				parent.screen.pack();
-			}
-		}
+	protected static Font bold = new Font("Arial", Font.BOLD, 10);
 
+	public static void main(String[] argv) {
+		DatePicker dp = new DatePicker(null);
+
+		dp.start(null);
 	}
 
 	private MonthPanel monthPanel;
@@ -412,6 +425,8 @@ public class DatePicker extends Observable implements Runnable, WindowFocusListe
 
 	private JDialog screen;
 
+	private ResourceBundle i18n;
+
 	public DatePicker(Observer observer) {
 		this(observer, new Date());
 	}
@@ -421,10 +436,6 @@ public class DatePicker extends Observable implements Runnable, WindowFocusListe
 		// this(observer, selecteddate, Locale.getDefault());
 		// this(observer, selecteddate, Locale.getDefault());
 		this(observer, selecteddate, Locale.getDefault());
-	}
-
-	public DatePicker(Observer observer, Locale locale) {
-		this(observer, new Date(), locale);
 	}
 
 	public DatePicker(Observer observer, Date selecteddate, Locale locale) {
@@ -440,7 +451,7 @@ public class DatePicker extends Observable implements Runnable, WindowFocusListe
 		screen.setUndecorated(true);
 		JDialog.setDefaultLookAndFeelDecorated(true);
 		screen.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
-		screen.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		screen.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		screen.getContentPane().setLayout(new BorderLayout());
 		//
 		calendar = new GregorianCalendar();
@@ -455,136 +466,8 @@ public class DatePicker extends Observable implements Runnable, WindowFocusListe
 		screen.setTitle(getString("program.title", "Date Picker"));
 	}
 
-	public void start(Component c) {
-		if (c != null) {
-			Component p = c.getParent();
-			int x = c.getX() + c.getWidth(), y = c.getY() + c.getHeight();
-			while (p != null) {
-				x += p.getX();
-				y += p.getY();
-				p = p.getParent();
-			}
-			// System.out.println("x="+x+ " y="+y);
-			screen.setLocation(x + 50, y + 50);
-		} else {
-			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-			screen.setLocation((int) (dim.getWidth() - screen.getWidth()) / 2,
-					(int) (dim.getHeight() - screen.getHeight()) / 2);
-		}
-		SwingUtilities.invokeLater(this);
-	}
-
-	public void run() {
-		screen.pack();
-
-		screen.setVisible(true);
-
-	}
-
-	public Date parseDate(String date) {
-		if (sdf == null)
-			// EASY
-			sdf = SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM, locale);
-		try {
-			return sdf.parse(date);
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
-	public String formatDate(Date date) {
-		if (date == null)
-			return "";
-		if (sdf == null) {
-			// sdf = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT,
-			// locale);
-			//
-			sdf = SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM, locale);
-
-			sdf = new SimpleDateFormat("dd.MM.yyyy");
-
-		}
-		return sdf.format(date);
-	}
-
-	public String formatDateNew(Date date) {
-		if (date == null)
-			return "";
-		SimpleDateFormat sdf_new = new SimpleDateFormat("dd.MM.yyyy");
-		return sdf_new.format(date);
-	}
-
-	public String formatDate(Date date, String pattern) {
-		if (date == null)
-			return "";
-		return new SimpleDateFormat(pattern).format(date);
-	}
-
-	public String formatDate(Calendar date) {
-		if (date == null)
-			return "";
-		return formatDate(date.getTime());
-	}
-
-	public String formatDate(Calendar date, String pattern) {
-		if (date == null)
-			return "";
-		return new SimpleDateFormat(pattern).format(date.getTime());
-	}
-
-	public void setLocale(Locale l) {
-		this.locale = l;
-	}
-
-	public Locale getLocale() {
-		return this.locale == null ? Locale.getDefault() : locale;
-		// return this.locale == null ? Locale.getDefault() : locale;
-		// return Locale.getDefault();
-	}
-
-	public void register(Observer observer) {
-		if (observer != null)
-			this.addObserver(observer);
-	}
-
-	public void unregister(Observer observer) {
-		if (observer != null)
-			this.deleteObserver(observer);
-	}
-
-	private Calendar getCalendar() {
-		return calendar;
-	}
-
-	private void setCalendar(Calendar c) {
-		this.calendar = c;
-	}
-
-	public void setSelectedDate(Date d) {
-		if (d != null) {
-			if (selectedDate == null)
-				selectedDate = new GregorianCalendar();
-			this.selectedDate.setTime(d);
-			updateScreen(selectedDate);
-		}
-	}
-
-	protected void updateScreen(Calendar c) {
-		if (navPanel == null)
-			navPanel = new NavigatePanel(this);
-		// navPanel.setLabel(c);
-		navPanel.setCurrentMonth(c);
-		setMonthPanel(c);
-		screen.pack();
-	}
-
-	protected void setMonthPanel(Calendar calendar) {
-		if (calendar != null)
-			this.calendar.setTime(calendar.getTime());
-		if (monthPanel != null)
-			screen.getContentPane().remove(monthPanel);
-		monthPanel = new MonthPanel(this, calendar);
-		screen.getContentPane().add(monthPanel, BorderLayout.CENTER);
+	public DatePicker(Observer observer, Locale locale) {
+		this(observer, new Date(), locale);
 	}
 
 	protected void dayPicked(int day) {
@@ -601,7 +484,59 @@ public class DatePicker extends Observable implements Runnable, WindowFocusListe
 		}
 	}
 
-	private ResourceBundle i18n;
+	public String formatDate(Calendar date) {
+		if (date == null)
+			return "";
+		return formatDate(date.getTime());
+	}
+
+	public String formatDate(Calendar date, String pattern) {
+		if (date == null)
+			return "";
+		return new SimpleDateFormat(pattern).format(date.getTime());
+	}
+
+	public String formatDate(Date date) {
+		if (date == null)
+			return "";
+		if (sdf == null) {
+			// sdf = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT,
+			// locale);
+			//
+			sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
+
+			sdf = new SimpleDateFormat("dd.MM.yyyy");
+
+		}
+		return sdf.format(date);
+	}
+
+	public String formatDate(Date date, String pattern) {
+		if (date == null)
+			return "";
+		return new SimpleDateFormat(pattern).format(date);
+	}
+
+	public String formatDateNew(Date date) {
+		if (date == null)
+			return "";
+		SimpleDateFormat sdf_new = new SimpleDateFormat("dd.MM.yyyy");
+		return sdf_new.format(date);
+	}
+
+	private Calendar getCalendar() {
+		return calendar;
+	}
+
+	public Locale getLocale() {
+		return this.locale == null ? Locale.getDefault() : locale;
+		// return this.locale == null ? Locale.getDefault() : locale;
+		// return Locale.getDefault();
+	}
+
+	public JDialog getScreen() {
+		return this.screen;
+	}
 
 	public String getString(String key, String dv) {
 		// String baseName = "resources.i18n";
@@ -625,25 +560,100 @@ public class DatePicker extends Observable implements Runnable, WindowFocusListe
 		return closeOnSelect;
 	}
 
-	public void windowGainedFocus(WindowEvent e) {
+	public Date parseDate(String date) {
+		if (sdf == null)
+			// EASY
+			sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
+		try {
+			return sdf.parse(date);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
-	public void windowLostFocus(WindowEvent e) {
-		screen.toFront();
+	public void register(Observer observer) {
+		if (observer != null)
+			this.addObserver(observer);
 	}
 
-	public JDialog getScreen() {
-		return this.screen;
+	@Override
+	public void run() {
+		screen.pack();
+
+		screen.setVisible(true);
+
+	}
+
+	private void setCalendar(Calendar c) {
+		this.calendar = c;
 	}
 
 	public void setCloseOnSelect(boolean closeOnSelect) {
 		this.closeOnSelect = closeOnSelect;
 	}
 
-	public static void main(String[] argv) {
-		DatePicker dp = new DatePicker(null);
+	public void setLocale(Locale l) {
+		this.locale = l;
+	}
 
-		dp.start(null);
+	protected void setMonthPanel(Calendar calendar) {
+		if (calendar != null)
+			this.calendar.setTime(calendar.getTime());
+		if (monthPanel != null)
+			screen.getContentPane().remove(monthPanel);
+		monthPanel = new MonthPanel(this, calendar);
+		screen.getContentPane().add(monthPanel, BorderLayout.CENTER);
+	}
+
+	public void setSelectedDate(Date d) {
+		if (d != null) {
+			if (selectedDate == null)
+				selectedDate = new GregorianCalendar();
+			this.selectedDate.setTime(d);
+			updateScreen(selectedDate);
+		}
+	}
+
+	public void start(Component c) {
+		if (c != null) {
+			Component p = c.getParent();
+			int x = c.getX() + c.getWidth(), y = c.getY() + c.getHeight();
+			while (p != null) {
+				x += p.getX();
+				y += p.getY();
+				p = p.getParent();
+			}
+			// System.out.println("x="+x+ " y="+y);
+			screen.setLocation(x + 50, y + 50);
+		} else {
+			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+			screen.setLocation((int) (dim.getWidth() - screen.getWidth()) / 2,
+					(int) (dim.getHeight() - screen.getHeight()) / 2);
+		}
+		SwingUtilities.invokeLater(this);
+	}
+
+	public void unregister(Observer observer) {
+		if (observer != null)
+			this.deleteObserver(observer);
+	}
+
+	protected void updateScreen(Calendar c) {
+		if (navPanel == null)
+			navPanel = new NavigatePanel(this);
+		// navPanel.setLabel(c);
+		navPanel.setCurrentMonth(c);
+		setMonthPanel(c);
+		screen.pack();
+	}
+
+	@Override
+	public void windowGainedFocus(WindowEvent e) {
+	}
+
+	@Override
+	public void windowLostFocus(WindowEvent e) {
+		screen.toFront();
 	}
 
 }

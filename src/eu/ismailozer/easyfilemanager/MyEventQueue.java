@@ -23,6 +23,7 @@ public class MyEventQueue extends EventQueue {
 		super();
 	}
 
+	@Override
 	protected void dispatchEvent(AWTEvent event)
 			throws NullPointerException, java.lang.IndexOutOfBoundsException, java.lang.ArrayIndexOutOfBoundsException {
 		if (event == null) {

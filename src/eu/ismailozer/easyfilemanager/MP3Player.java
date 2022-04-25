@@ -22,13 +22,119 @@ import javax.swing.filechooser.FileFilter;
 
 public class MP3Player extends JFrame implements KeyListener, ActionListener {
 
+	class OpenAction extends AbstractAction {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			putValue(Action.NAME, "Open");
+			putValue(Action.LARGE_ICON_KEY, large_open);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			int returnVal = fc.showOpenDialog(MP3Player.this);
+
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				File file = fc.getSelectedFile();
+				fileField.setText(file.getAbsolutePath());
+			}
+
+		}
+	}
+
+	class PlayAction extends AbstractAction {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			putValue(Action.NAME, "Play");
+			putValue(Action.LARGE_ICON_KEY, large_play);
+			putValue(Action.ACCELERATOR_KEY, KeyEvent.VK_P);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+				if (initializePlayer() == false) {
+					JOptionPane.showMessageDialog(MP3Player.this, "Bitte wï¿½hlen Sie eine MP3 Datei aus!",
+							"Fehlermeldung", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+			} catch (HeadlessException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+			new Thread() {
+				@Override
+				public void run() {
+					// try {
+					// player.play();
+					// } catch (JarException e) {
+					// e.printStackTrace();
+					// }
+				}
+			}.start();
+		}
+	}
+
+	class StopAction extends AbstractAction {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			putValue(Action.NAME, "Stop");
+			putValue(Action.LARGE_ICON_KEY, large_stop);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// player.close();
+		}
+	}
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
+		// EasyMP3Player mp3player;
+		new MP3Player("C:\\Temp\\test.mp3", true);
+	}
+
 	// private AdvancedPlayer player;
 	private JFileChooser fc = new JFileChooser();
+
 	private JTextField fileField;
+
+	Icon large_play = createImageIcon("resources/player_play.png");
+
+	Icon large_stop = createImageIcon("resources/player_stop.png");
+
+	Icon large_open = createImageIcon("resources/player_eject.png");
 
 	public MP3Player(String pMP3File, boolean pAutoStart) {
 		super("Easy Simple MP3 Player" + " - " + pMP3File);
@@ -59,6 +165,7 @@ public class MP3Player extends JFrame implements KeyListener, ActionListener {
 		addKeyListener(this);
 
 		this.addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent e) {
 				// if (!(player == null)) {
 				// player.close();
@@ -68,20 +175,25 @@ public class MP3Player extends JFrame implements KeyListener, ActionListener {
 		});
 
 		this.addMouseListener(new MouseListener() {
+			@Override
 			public void mouseClicked(MouseEvent e) {
 				// dispose();
 			}
 
-			public void mousePressed(MouseEvent e) {
-			}
-
-			public void mouseReleased(MouseEvent e) {
-			}
-
+			@Override
 			public void mouseEntered(MouseEvent e) {
 			}
 
+			@Override
 			public void mouseExited(MouseEvent e) {
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
 			}
 		});
 
@@ -90,6 +202,7 @@ public class MP3Player extends JFrame implements KeyListener, ActionListener {
 
 		if (pMP3File.length() > 0 && pAutoStart) {
 			new Thread() {
+				@Override
 				public void run() {
 					try {
 						initializePlayer();
@@ -110,20 +223,20 @@ public class MP3Player extends JFrame implements KeyListener, ActionListener {
 		}
 	}
 
-	public static void main(String[] args) {
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		Object source = event.getSource();
+		System.out.println("actionPerformed source = " + source.toString());
+	}
+
+	protected ImageIcon createImageIcon(String path) {
+		java.net.URL imgURL = getClass().getResource(path);
+		if (imgURL != null) {
+			return new ImageIcon(imgURL);
+		} else {
+			System.err.println("Datei konnte nicht gefunden werden: " + path);
+			return null;
 		}
-		// EasyMP3Player mp3player;
-		new MP3Player("C:\\Temp\\test.mp3", true);
 	}
 
 	@SuppressWarnings("finally")
@@ -148,98 +261,6 @@ public class MP3Player extends JFrame implements KeyListener, ActionListener {
 			System.out.println(e.getMessage());
 		} finally {
 			return false;
-		}
-	}
-
-	class PlayAction extends AbstractAction {
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		{
-			putValue(Action.NAME, "Play");
-			putValue(Action.LARGE_ICON_KEY, large_play);
-			putValue(Action.ACCELERATOR_KEY, KeyEvent.VK_P);
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			try {
-				if (initializePlayer() == false) {
-					JOptionPane.showMessageDialog(MP3Player.this, "Bitte wählen Sie eine MP3 Datei aus!",
-							"Fehlermeldung", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
-			} catch (HeadlessException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
-			new Thread() {
-				public void run() {
-					// try {
-					// player.play();
-					// } catch (JarException e) {
-					// e.printStackTrace();
-					// }
-				}
-			}.start();
-		}
-	}
-
-	class StopAction extends AbstractAction {
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		{
-			putValue(Action.NAME, "Stop");
-			putValue(Action.LARGE_ICON_KEY, large_stop);
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			// player.close();
-		}
-	}
-
-	class OpenAction extends AbstractAction {
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		{
-			putValue(Action.NAME, "Open");
-			putValue(Action.LARGE_ICON_KEY, large_open);
-		}
-
-		public void actionPerformed(ActionEvent e) {
-
-			int returnVal = fc.showOpenDialog(MP3Player.this);
-
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				File file = fc.getSelectedFile();
-				fileField.setText(file.getAbsolutePath());
-			}
-
-		}
-	}
-
-	Icon large_play = createImageIcon("resources/player_play.png");
-	Icon large_stop = createImageIcon("resources/player_stop.png");
-	Icon large_open = createImageIcon("resources/player_eject.png");
-
-	protected ImageIcon createImageIcon(String path) {
-		java.net.URL imgURL = getClass().getResource(path);
-		if (imgURL != null) {
-			return new ImageIcon(imgURL);
-		} else {
-			System.err.println("Datei konnte nicht gefunden werden: " + path);
-			return null;
 		}
 	}
 
@@ -278,11 +299,5 @@ public class MP3Player extends JFrame implements KeyListener, ActionListener {
 			// }
 		}
 
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		Object source = event.getSource();
-		System.out.println("actionPerformed source = " + source.toString());
 	}
 }

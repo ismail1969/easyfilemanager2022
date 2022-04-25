@@ -30,24 +30,13 @@ public class ImageConverterGUI extends javax.swing.JFrame implements ActionListe
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTextField txtSourceDir;
-	private JTextField txtTargetDir;
-	private JButton btnOpenSourceDir;
-	private JButton btnOpenTargetDir;
-	private JButton btnCopyFiles;
-	private JLabel lblInfo;
-
-	private final String extentions[] = { "jpg", "jpeg", "gif", "png", "bmp", "tiff" };
-	private JComboBox<String> cbxTargetFileFormat;
-	private String format;
-	private String targetImage;
-	private String sourceImage;
 
 	/**
 	 * Auto-generated main method to display this JFrame
 	 */
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				new ImageConverterGUI("C:\\Temp\\kizlar\\camilla-belle\\camilla04.jpg",
 						"C:\\Temp\\kizlar\\camilla-belle\\camilla04.png", "png");
@@ -55,12 +44,85 @@ public class ImageConverterGUI extends javax.swing.JFrame implements ActionListe
 		});
 	}
 
+	private JTextField txtSourceDir;
+	private JTextField txtTargetDir;
+	private JButton btnOpenSourceDir;
+	private JButton btnOpenTargetDir;
+	private JButton btnCopyFiles;
+
+	private JLabel lblInfo;
+	private final String extentions[] = { "jpg", "jpeg", "gif", "png", "bmp", "tiff" };
+	private JComboBox<String> cbxTargetFileFormat;
+	private String format;
+	private String targetImage;
+
+	private String sourceImage;
+
 	public ImageConverterGUI(String pSourceImage, String pTargetImage, String pFormat) {
 		super();
 		sourceImage = pSourceImage;
 		targetImage = pTargetImage;
 		format = pFormat;
 		initGUI();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		Object source = event.getSource();
+		if (source == btnOpenSourceDir) {
+			chooseLogDirectory(txtSourceDir);
+			txtTargetDir.setText(
+					getTargetImageName(txtSourceDir.getText(), (String) cbxTargetFileFormat.getSelectedItem()));
+		} else if (source == btnOpenTargetDir) {
+			chooseLogDirectory(txtTargetDir);
+		} else if (source == btnCopyFiles) {
+			startConvertImage();
+		}
+	}
+
+	private void chooseLogDirectory(JTextField pTextField) {
+		JFileChooser jfilechooser = new JFileChooser(new File(pTextField.getText()));
+		jfilechooser.setFileSelectionMode(0);
+		jfilechooser.setCurrentDirectory(new File(pTextField.getText()));
+		jfilechooser.setAcceptAllFileFilterUsed(false);
+		int i = jfilechooser.showOpenDialog(this);
+		if (i == 0) {
+			pTextField.setText(jfilechooser.getSelectedFile().getPath());
+		}
+	}
+
+	private void convertFile(String pSourceImage, String pTargetImage, String pFormat) {
+		String lInfo = "";
+		try {
+			BufferedImage image = ImageIO.read(new File(pSourceImage));
+
+			if (image == null) {
+				lInfo = "Das Bild " + pSourceImage + " konnte nicht dekodiert werden!";
+				System.out.println(lInfo);
+				JOptionPane.showMessageDialog(null, lInfo);
+			} else if (ImageIO.write(image, pFormat, new File(pTargetImage)) == false) {
+				lInfo = "Unbekanntes Zielformat: " + pFormat;
+				System.out.println(lInfo);
+				JOptionPane.showMessageDialog(null, lInfo);
+			} else {
+				lInfo = "New Image was converted successful: " + pTargetImage;
+				System.out.println(lInfo);
+				JOptionPane.showMessageDialog(null, lInfo);
+			}
+		} catch (IOException e) {
+			lInfo = "Fehler beim Laden oder Speichern!";
+			System.out.println(lInfo);
+			JOptionPane.showMessageDialog(null, lInfo);
+		}
+	}
+
+	private String getTargetImageName(String pFileSource, String pTargetFormat) {
+		return pFileSource.substring(0, pFileSource.lastIndexOf('.')) + "."
+				+ (String) cbxTargetFileFormat.getSelectedItem();
+	}
+
+	public long getTimeStampTime() {
+		return System.currentTimeMillis();
 	}
 
 	private void initGUI() {
@@ -124,26 +186,13 @@ public class ImageConverterGUI extends javax.swing.JFrame implements ActionListe
 		}
 	}
 
-	public long getTimeStampTime() {
-		return System.currentTimeMillis();
-	}
-
-	public void actionPerformed(ActionEvent event) {
+	@Override
+	public void itemStateChanged(ItemEvent event) {
 		Object source = event.getSource();
-		if (source == btnOpenSourceDir) {
-			chooseLogDirectory(txtSourceDir);
+		if (source == cbxTargetFileFormat) {
 			txtTargetDir.setText(
-					getTargetImageName(txtSourceDir.getText(), (String) cbxTargetFileFormat.getSelectedItem()));
-		} else if (source == btnOpenTargetDir) {
-			chooseLogDirectory(txtTargetDir);
-		} else if (source == btnCopyFiles) {
-			startConvertImage();
+					getTargetImageName(txtTargetDir.getText(), (String) cbxTargetFileFormat.getSelectedItem()));
 		}
-	}
-
-	private String getTargetImageName(String pFileSource, String pTargetFormat) {
-		return pFileSource.substring(0, pFileSource.lastIndexOf('.')) + "."
-				+ (String) cbxTargetFileFormat.getSelectedItem();
 	}
 
 	private void startConvertImage() {
@@ -165,51 +214,6 @@ public class ImageConverterGUI extends javax.swing.JFrame implements ActionListe
 			// e.printStackTrace();
 			// }
 			convertFile(txtSourceDir.getText(), txtTargetDir.getText(), (String) cbxTargetFileFormat.getSelectedItem());
-		}
-	}
-
-	private void convertFile(String pSourceImage, String pTargetImage, String pFormat) {
-		String lInfo = "";
-		try {
-			BufferedImage image = ImageIO.read(new File(pSourceImage));
-
-			if (image == null) {
-				lInfo = "Das Bild " + pSourceImage + " konnte nicht dekodiert werden!";
-				System.out.println(lInfo);
-				JOptionPane.showMessageDialog(null, lInfo);
-			} else if (ImageIO.write(image, pFormat, new File(pTargetImage)) == false) {
-				lInfo = "Unbekanntes Zielformat: " + pFormat;
-				System.out.println(lInfo);
-				JOptionPane.showMessageDialog(null, lInfo);
-			} else {
-				lInfo = "New Image was converted successful: " + pTargetImage;
-				System.out.println(lInfo);
-				JOptionPane.showMessageDialog(null, lInfo);
-			}
-		} catch (IOException e) {
-			lInfo = "Fehler beim Laden oder Speichern!";
-			System.out.println(lInfo);
-			JOptionPane.showMessageDialog(null, lInfo);
-		}
-	}
-
-	private void chooseLogDirectory(JTextField pTextField) {
-		JFileChooser jfilechooser = new JFileChooser(new File(pTextField.getText()));
-		jfilechooser.setFileSelectionMode(0);
-		jfilechooser.setCurrentDirectory(new File(pTextField.getText()));
-		jfilechooser.setAcceptAllFileFilterUsed(false);
-		int i = jfilechooser.showOpenDialog(this);
-		if (i == 0) {
-			pTextField.setText(jfilechooser.getSelectedFile().getPath());
-		}
-	}
-
-	@Override
-	public void itemStateChanged(ItemEvent event) {
-		Object source = event.getSource();
-		if (source == cbxTargetFileFormat) {
-			txtTargetDir.setText(
-					getTargetImageName(txtTargetDir.getText(), (String) cbxTargetFileFormat.getSelectedItem()));
 		}
 	}
 }

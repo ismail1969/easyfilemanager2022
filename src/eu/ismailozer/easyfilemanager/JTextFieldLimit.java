@@ -20,6 +20,7 @@ public class JTextFieldLimit extends javax.swing.text.PlainDocument {
 		toUppercase = upper;
 	}
 
+	@Override
 	public void insertString(int offset, String str, javax.swing.text.AttributeSet attr)
 			throws javax.swing.text.BadLocationException {
 		if (str == null)

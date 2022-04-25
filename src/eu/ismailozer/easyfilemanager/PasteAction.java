@@ -19,10 +19,12 @@ class PasteAction extends AbstractAction {
 		this.comp = comp;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		comp.paste();
 	}
 
+	@Override
 	public boolean isEnabled() {
 		if (comp.isEditable() && comp.isEnabled()) {
 			Transferable contents = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(this);

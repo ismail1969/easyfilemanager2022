@@ -24,41 +24,50 @@ class JButtonEditor extends AbstractCellEditor implements TableCellEditor {
 		button = new JButton("TEST");
 		button.setOpaque(true);
 		button.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Buttontext: " + button.getText());
 			}
 		});
 	}
 
+	@Override
+	public void addCellEditorListener(CellEditorListener l) {
+	}
+
+	@Override
+	public void cancelCellEditing() {
+	}
+
+	@Override
 	public Object getCellEditorValue() {
 		return null;
 	}
 
-	public boolean isCellEditable(EventObject anEvent) {
-		return true;
-	}
-
-	public boolean shouldSelectCell(EventObject anEvent) {
-		return false;
-	}
-
-	public boolean stopCellEditing() {
-		return super.stopCellEditing();
-	}
-
-	public void cancelCellEditing() {
-	}
-
-	public void addCellEditorListener(CellEditorListener l) {
-	}
-
-	public void removeCellEditorListener(CellEditorListener l) {
-	}
-
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		txt = (value == null) ? "xxx" : value.toString();
 		button.setText(txt);
 		return button;
+	}
+
+	@Override
+	public boolean isCellEditable(EventObject anEvent) {
+		return true;
+	}
+
+	@Override
+	public void removeCellEditorListener(CellEditorListener l) {
+	}
+
+	@Override
+	public boolean shouldSelectCell(EventObject anEvent) {
+		return false;
+	}
+
+	@Override
+	public boolean stopCellEditing() {
+		return super.stopCellEditing();
 	}
 
 //	@Override

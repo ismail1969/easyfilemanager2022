@@ -16,10 +16,12 @@ class CopyAction extends AbstractAction {
 		this.comp = comp;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		comp.copy();
 	}
 
+	@Override
 	public boolean isEnabled() {
 		return comp.isEnabled() && comp.getSelectedText() != null;
 	}

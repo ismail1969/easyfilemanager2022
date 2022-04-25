@@ -31,6 +31,55 @@ public class FileMatchChecker {
 		this.parameterObject = parameterObject;
 	}
 
+	public boolean containString(File pFilename) {
+		if (pFilename == null) {
+			return true;
+		}
+		if (parameterObject != null && !parameterObject.containStr.isEmpty() && !pFilename.getName()
+				.toLowerCase(LOCALE_TR).contains(parameterObject.containStr.toLowerCase(LOCALE_TR))) {
+			return false;
+		}
+		return true;
+	}
+
+	public int getFileSize(File pFile) {
+		return (int) Math.ceil(pFile.length() / (float) 1024);
+	}
+
+	public SimpleDateFormat getsDateFormt() {
+		return sDateFormt;
+	}
+
+	public boolean isSuccessiveUppercaseChars(File pFilename) {
+		if (pFilename == null) {
+			return true;
+		}
+		if (!parameterObject.successiveUppercaseChars) {
+			return true; // no check
+		}
+		if (pFilename.getName().length() <= 1) {
+			return false;
+		}
+
+		int preview_value = 0;
+		int current_value = 0;
+		for (int i = 0; i < pFilename.getName().length(); i++) {
+			// char c = pText.charAt(i);
+			current_value = pFilename.getName().codePointAt(i);
+			if (preview_value > 0) {
+				if (Character.isUpperCase(preview_value) && Character.isUpperCase(current_value)) {
+					return true;
+				}
+			}
+			preview_value = current_value;
+			// if(c >= 97 && c <= 122) {
+			// return false;
+			// }
+		}
+		// str.charAt(index)
+		return false;
+	}
+
 	public boolean matchAllParameter(File pFilename) {
 		if (this.parameterObject == null || pFilename == null) {
 			return true;
@@ -71,114 +120,6 @@ public class FileMatchChecker {
 		}
 
 		return true;
-	}
-
-	public boolean matchEndsWith(File pFilename) {
-		if (pFilename == null) {
-			return true;
-		}
-		if (parameterObject != null && !parameterObject.endsWith.isEmpty() && !pFilename.getName()
-				.toLowerCase(LOCALE_TR).endsWith(parameterObject.endsWith.toLowerCase(LOCALE_TR))) {
-			return false;
-		}
-		return true;
-	}
-
-	public boolean matchStartsWith(File pFilename) {
-		if (pFilename == null) {
-			return true;
-		}
-		if (parameterObject != null && !parameterObject.startsWith.isEmpty() && !pFilename.getName()
-				.toLowerCase(LOCALE_TR).startsWith(parameterObject.startsWith.toLowerCase(LOCALE_TR))) {
-			return false;
-		}
-		return true;
-	}
-
-	public boolean containString(File pFilename) {
-		if (pFilename == null) {
-			return true;
-		}
-		if (parameterObject != null && !parameterObject.containStr.isEmpty() && !pFilename.getName()
-				.toLowerCase(LOCALE_TR).contains(parameterObject.containStr.toLowerCase(LOCALE_TR))) {
-			return false;
-		}
-		return true;
-	}
-
-	public boolean matchPattern(File pFilename) {
-		if (pFilename == null) {
-			return true;
-		}
-		if (parameterObject != null && !parameterObject.searchPattern.isEmpty()) {
-			Pattern pattern = Pattern.compile(parameterObject.searchPattern);
-			Matcher matcher = pattern.matcher(pFilename.getName());
-			return matcher.find();
-		}
-		return true;
-	}
-
-	public boolean isSuccessiveUppercaseChars(File pFilename) {
-		if (pFilename == null) {
-			return true;
-		}
-		if (!parameterObject.successiveUppercaseChars) {
-			return true; // no check
-		}
-		if (pFilename.getName().length() <= 1) {
-			return false;
-		}
-
-		int preview_value = 0;
-		int current_value = 0;
-		for (int i = 0; i < pFilename.getName().length(); i++) {
-			// char c = pText.charAt(i);
-			current_value = pFilename.getName().codePointAt(i);
-			if (preview_value > 0) {
-				if (Character.isUpperCase(preview_value) && Character.isUpperCase(current_value)) {
-					return true;
-				}
-			}
-			preview_value = current_value;
-			// if(c >= 97 && c <= 122) {
-			// return false;
-			// }
-		}
-		// str.charAt(index)
-		return false;
-	}
-
-	public boolean matchFileSizeAttribute(File pFilename) {
-		if (pFilename == null || parameterObject.fileSize <= 0) {
-			return true; // no check
-		}
-		if (parameterObject.fileSize >= 0) {
-			float searched_filesize = parameterObject.fileSize; // Float.parseFloat(pFileSize.toString());
-
-			// float lfloat_1024 = 1024;
-			float filesize = getFileSize((pFilename));
-			if (parameterObject.fileSizeGreater) {
-				if (filesize < searched_filesize) {
-					return false;
-				}
-
-			} else if (parameterObject.fileSizeLower) {
-				if (filesize > searched_filesize) {
-					return false;
-				}
-				// return !(filesize < searched_filesize);
-			} else if (parameterObject.fileSizeEqual) {
-				return (filesize == searched_filesize);
-
-			} else {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public int getFileSize(File pFile) {
-		return (int) Math.ceil(pFile.length() / (float) 1024);
 	}
 
 	public boolean matchCreationDate(File pFilename) {
@@ -226,7 +167,66 @@ public class FileMatchChecker {
 		return true;
 	}
 
-	public SimpleDateFormat getsDateFormt() {
-		return sDateFormt;
+	public boolean matchEndsWith(File pFilename) {
+		if (pFilename == null) {
+			return true;
+		}
+		if (parameterObject != null && !parameterObject.endsWith.isEmpty() && !pFilename.getName()
+				.toLowerCase(LOCALE_TR).endsWith(parameterObject.endsWith.toLowerCase(LOCALE_TR))) {
+			return false;
+		}
+		return true;
+	}
+
+	public boolean matchFileSizeAttribute(File pFilename) {
+		if (pFilename == null || parameterObject.fileSize <= 0) {
+			return true; // no check
+		}
+		if (parameterObject.fileSize >= 0) {
+			float searched_filesize = parameterObject.fileSize; // Float.parseFloat(pFileSize.toString());
+
+			// float lfloat_1024 = 1024;
+			float filesize = getFileSize((pFilename));
+			if (parameterObject.fileSizeGreater) {
+				if (filesize < searched_filesize) {
+					return false;
+				}
+
+			} else if (parameterObject.fileSizeLower) {
+				if (filesize > searched_filesize) {
+					return false;
+				}
+				// return !(filesize < searched_filesize);
+			} else if (parameterObject.fileSizeEqual) {
+				return (filesize == searched_filesize);
+
+			} else {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean matchPattern(File pFilename) {
+		if (pFilename == null) {
+			return true;
+		}
+		if (parameterObject != null && !parameterObject.searchPattern.isEmpty()) {
+			Pattern pattern = Pattern.compile(parameterObject.searchPattern);
+			Matcher matcher = pattern.matcher(pFilename.getName());
+			return matcher.find();
+		}
+		return true;
+	}
+
+	public boolean matchStartsWith(File pFilename) {
+		if (pFilename == null) {
+			return true;
+		}
+		if (parameterObject != null && !parameterObject.startsWith.isEmpty() && !pFilename.getName()
+				.toLowerCase(LOCALE_TR).startsWith(parameterObject.startsWith.toLowerCase(LOCALE_TR))) {
+			return false;
+		}
+		return true;
 	}
 }

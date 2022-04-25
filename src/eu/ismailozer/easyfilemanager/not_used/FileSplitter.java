@@ -72,7 +72,8 @@ public class FileSplitter {
 	}
 
 	public static String getSplittFileName(File pFile, int pFilenumber) {
-		return getFileNameWithoutExtension(pFile) + "_" + Integer.valueOf(pFilenumber).toString() + getFileExtension(pFile);
+		return getFileNameWithoutExtension(pFile) + "_" + Integer.valueOf(pFilenumber).toString()
+				+ getFileExtension(pFile);
 		// "C:\\downloads\\splitt_" + new Integer(pFilenumber).toString()+".csv"
 		// return "";
 	}

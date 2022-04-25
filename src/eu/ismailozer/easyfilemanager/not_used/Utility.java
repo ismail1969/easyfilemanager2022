@@ -234,7 +234,7 @@ public class Utility {
 	}
 
 	public static String getTimestamp() {
-		return (String) new java.text.SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(new java.util.Date()).toString();
+		return new java.text.SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(new java.util.Date()).toString();
 	}
 
 	public static void writeToLogFile(String pLogFilename, StringBuffer pStrBuffer, String pCarSet) {

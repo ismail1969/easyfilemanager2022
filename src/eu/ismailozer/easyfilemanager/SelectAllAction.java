@@ -16,10 +16,12 @@ class SelectAllAction extends AbstractAction {
 		this.comp = comp;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		comp.selectAll();
 	}
 
+	@Override
 	public boolean isEnabled() {
 		return comp.isEnabled() && comp.getText().length() > 0;
 	}

@@ -101,8 +101,85 @@ public class ImageViewerPanel extends JPanel implements MouseListener, MouseMoti
 	// getToolkitDimension().height);
 	// }
 
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		Object source = e.getSource();
+		if (source == btnNext) {
+			showNextPicture();
+			// searchNew();
+		}
+
+		else if (source == btnPreview) {
+			showPreviewPicture();
+			// searchNew();
+		}
+		validate();
+		repaint();
+
+	}
+
 	public Dimension getToolkitDimension() {
 		return Toolkit.getDefaultToolkit().getScreenSize();
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent event) {
+		if (SwingUtilities.isLeftMouseButton(event) && event.getClickCount() == 1) {
+			try {
+				new FullImageViewer(filenames[position], true).toFront();
+
+				// new EasyImageViewer(imageFile, true);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		this.getGraphics().drawImage(loupe_img, getWidth() / 2, getHeight() / 2, this);
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void paint(Graphics g) {
+		g.drawImage(resizedImage, 0, 0, null);
+		// draw the image dimensions
+		// String dim_Text = src_image_w + " x " + src_image_h;
+		String dim_Text = filenames[position] + " (" + src_image_w + " x " + src_image_h + ")";
+		g.setFont(new Font("Serif", Font.BOLD, 16));
+		// g.setColor(Color.black);
+		// g.drawString(dim_Text, 10, 15);
+		g.setColor(Color.white);
+		g.drawString(dim_Text, 10, 20);
+
+		// g.drawString(imageFile, this.height-20 ,/*this.width*/ 20);
 	}
 
 	public void scaleImageSize() {
@@ -145,8 +222,8 @@ public class ImageViewerPanel extends JPanel implements MouseListener, MouseMoti
 		int scaled_height;
 
 		if (max_rate > 1) {
-			scaled_width = (int) ((double) src_image_w / max_rate);
-			scaled_height = (int) ((double) src_image_h / max_rate);
+			scaled_width = (int) (src_image_w / max_rate);
+			scaled_height = (int) (src_image_h / max_rate);
 			resizedImage = source_img.getScaledInstance(scaled_width, scaled_height, Image.SCALE_SMOOTH);
 
 		} else {
@@ -160,96 +237,6 @@ public class ImageViewerPanel extends JPanel implements MouseListener, MouseMoti
 		}
 
 		setPreferredSize(new Dimension(scaled_width, scaled_height));
-	}
-
-	public void paint(Graphics g) {
-		g.drawImage(resizedImage, 0, 0, null);
-		// draw the image dimensions
-		// String dim_Text = src_image_w + " x " + src_image_h;
-		String dim_Text = filenames[position] + " (" + src_image_w + " x " + src_image_h + ")";
-		g.setFont(new Font("Serif", Font.BOLD, 16));
-		// g.setColor(Color.black);
-		// g.drawString(dim_Text, 10, 15);
-		g.setColor(Color.white);
-		g.drawString(dim_Text, 10, 20);
-
-		// g.drawString(imageFile, this.height-20 ,/*this.width*/ 20);
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent event) {
-		if (SwingUtilities.isLeftMouseButton(event) && event.getClickCount() == 1) {
-			try {
-				new FullImageViewer(filenames[position], true).toFront();
-
-				// new EasyImageViewer(imageFile, true);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		this.getGraphics().drawImage(loupe_img, getWidth() / 2, getHeight() / 2, this);
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		Object source = e.getSource();
-		if (source == btnNext) {
-			showNextPicture();
-			// searchNew();
-		}
-
-		else if (source == btnPreview) {
-			showPreviewPicture();
-			// searchNew();
-		}
-		validate();
-		repaint();
-
-	}
-
-	private void showPreviewPicture() {
-		// TODO Auto-generated method stub
-		position--; // Decrement the index position of the array of filenames by
-		// one on buttonPressed
-		if (!btnNext.isEnabled()) { // if NextButton is
-			btnNext.setEnabled(true); // disabled, enable it
-		}
-		if (position == 0) { // If we are viewing the first Picture in
-			btnPreview.setEnabled(false); // the directory, disable previous
-											// button
-		}
-		repaint();
 	}
 
 	private void showNextPicture() {
@@ -268,5 +255,19 @@ public class ImageViewerPanel extends JPanel implements MouseListener, MouseMoti
 			return;
 		}
 
+	}
+
+	private void showPreviewPicture() {
+		// TODO Auto-generated method stub
+		position--; // Decrement the index position of the array of filenames by
+		// one on buttonPressed
+		if (!btnNext.isEnabled()) { // if NextButton is
+			btnNext.setEnabled(true); // disabled, enable it
+		}
+		if (position == 0) { // If we are viewing the first Picture in
+			btnPreview.setEnabled(false); // the directory, disable previous
+											// button
+		}
+		repaint();
 	}
 }

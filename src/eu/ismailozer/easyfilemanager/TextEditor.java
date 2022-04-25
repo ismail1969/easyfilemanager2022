@@ -15,56 +15,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.WindowConstants;
 import javax.swing.text.Document;
-
-/**
- * A class illustrating running line number count on JTextPane. Nothing is
- * painted on the pane itself, but a separate JPanel handles painting the line
- * numbers.<br>
- * 
- * @author Daniel Sj�blom<br>
- *         Created on Mar 3, 2004<br>
- *         Copyright (c) 2004<br>
- * @version 1.0<br>
- */
-public class TextEditor extends JFrame {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	// for this simple experiment, we keep the pane + scrollpane as members.
-	JTextPane pane;
-	JScrollPane scrollPane;
-	private JButton btnClose;
-
-	public TextEditor(String pFilename) {
-		super();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("EasyEditor : " + pFilename);
-		getContentPane().setLayout(new BorderLayout());
-		EasyTextEditorPanel linePanel = new EasyTextEditorPanel(pFilename);
-		getContentPane().add(linePanel, BorderLayout.WEST);
-		getContentPane().add(linePanel.scrollPane, BorderLayout.CENTER);
-		btnClose = new JButton();
-		add(btnClose, BorderLayout.SOUTH);
-		btnClose.setText("Close");
-		btnClose.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
-		setPreferredSize(new Dimension(800, 600));
-		setLocation(50, 50);
-		pack();
-		setSize(new Dimension(800, 600));
-		setVisible(true);
-	}
-
-	// test main
-	public static void main(String[] args) {
-		new TextEditor("C:\\Temp\\my.log");
-	}
-}
 
 class EasyTextEditorPanel extends JPanel {
 	/**
@@ -87,6 +39,7 @@ class EasyTextEditorPanel extends JPanel {
 		pane = new JTextPane() {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void paint(Graphics g) {
 				super.paint(g);
 				EasyTextEditorPanel.this.repaint();
@@ -108,6 +61,7 @@ class EasyTextEditorPanel extends JPanel {
 		}
 	}
 
+	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
 		@SuppressWarnings("deprecation")
@@ -125,5 +79,57 @@ class EasyTextEditorPanel extends JPanel {
 		for (int line = startline, y = 0; line <= endline; line++, y += fontHeight) {
 			g.drawString(Integer.toString(line), 0, y);
 		}
+	}
+}
+
+/**
+ * A class illustrating running line number count on JTextPane. Nothing is
+ * painted on the pane itself, but a separate JPanel handles painting the line
+ * numbers.<br>
+ * 
+ * @author Daniel Sj�blom<br>
+ *         Created on Mar 3, 2004<br>
+ *         Copyright (c) 2004<br>
+ * @version 1.0<br>
+ */
+public class TextEditor extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	// test main
+	public static void main(String[] args) {
+		new TextEditor("C:\\Temp\\my.log");
+	}
+
+	// for this simple experiment, we keep the pane + scrollpane as members.
+	JTextPane pane;
+	JScrollPane scrollPane;
+
+	private JButton btnClose;
+
+	public TextEditor(String pFilename) {
+		super();
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		setTitle("EasyEditor : " + pFilename);
+		getContentPane().setLayout(new BorderLayout());
+		EasyTextEditorPanel linePanel = new EasyTextEditorPanel(pFilename);
+		getContentPane().add(linePanel, BorderLayout.WEST);
+		getContentPane().add(linePanel.scrollPane, BorderLayout.CENTER);
+		btnClose = new JButton();
+		add(btnClose, BorderLayout.SOUTH);
+		btnClose.setText("Close");
+		btnClose.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		setPreferredSize(new Dimension(800, 600));
+		setLocation(50, 50);
+		pack();
+		setSize(new Dimension(800, 600));
+		setVisible(true);
 	}
 }
