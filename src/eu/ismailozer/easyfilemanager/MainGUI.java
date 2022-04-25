@@ -2620,6 +2620,7 @@ public class MainGUI extends javax.swing.JFrame
 		// end: panel options
 	}
 
+	@SuppressWarnings("unused")
 	private JPanel getPanelSearchArea() {
 		// search area
 		pnlDirectory = new JPanel();
@@ -2879,86 +2880,89 @@ public class MainGUI extends javax.swing.JFrame
 			SwingUtilities.updateComponentTreeUI(this);
 			this.setTitle(this.getReleaseInfo());
 
-			pnlDirectory = new JPanel();
-			FlowLayout pnlDirectoryLayout = new FlowLayout();
-			pnlDirectoryLayout.setAlignment(FlowLayout.LEFT);
-			pnlDirectory.setLayout(pnlDirectoryLayout);
-			pnlDirectory.setBounds(20, 10, 760, 30);
+//			pnlDirectory = new JPanel();
+//			FlowLayout pnlDirectoryLayout = new FlowLayout();
+//			pnlDirectoryLayout.setAlignment(FlowLayout.LEFT);
+//			getPanelDirectory().setLayout(pnlDirectoryLayout);
+//			getPanelDirectory().setBounds(20, 10, 760, 30);
+//
+//			lblSourceDir = new JLabel("Search Path:");
+//			lblSourceDir.setPreferredSize(DIMENSION_100_22);
+//			getPanelDirectory().add(lblSourceDir);
+//
+//			txtSearchDir = new JTextField(defaultSearchDir);
+//			txtSearchDir.setPreferredSize(DIMENSION_500_22);
+//			txtSearchDir.addFocusListener(this);
+//			getPanelDirectory().add(txtSearchDir);
+//
+//			btnChooseDir = new JButton("Open directory");
+//			btnChooseDir.setPreferredSize(DIMENSION_140_22);
+//			getPanelDirectory().add(btnChooseDir);
+//			btnChooseDir.addActionListener(this);
 
-			lblSourceDir = new JLabel("Search Path:");
-			lblSourceDir.setPreferredSize(DIMENSION_100_22);
-			pnlDirectory.add(lblSourceDir);
-
-			txtSearchDir = new JTextField(defaultSearchDir);
-			txtSearchDir.setPreferredSize(DIMENSION_500_22);
-			txtSearchDir.addFocusListener(this);
-			pnlDirectory.add(txtSearchDir);
-
-			btnChooseDir = new JButton("Open directory");
-			btnChooseDir.setPreferredSize(DIMENSION_140_22);
-			pnlDirectory.add(btnChooseDir);
-			btnChooseDir.addActionListener(this);
-
-			getContentPane().add(pnlDirectory);
+			getContentPane().add(getPanelDirectory());
 
 			// begin: compare path
-
-			pnlCompareDir = new JPanel();
-			FlowLayout pnlCompareDirLayout = new FlowLayout();
-			pnlCompareDirLayout.setAlignment(FlowLayout.LEFT);
-			pnlCompareDir.setLayout(pnlCompareDirLayout);
-			pnlCompareDir.setBounds(20, 40, 760, 30);
-			String lComparePath = "";
-			if (defaultCompareDir != null && !defaultCompareDir.isEmpty()) {
-				lComparePath = defaultCompareDir;
-			}
-			lblCompareDir = new JLabel("Compare Path:");
-			lblCompareDir.setPreferredSize(DIMENSION_100_22);
-			pnlCompareDir.add(lblCompareDir);
-			txtCompareDir = new JTextField(lComparePath);
-			txtCompareDir.setPreferredSize(DIMENSION_500_22);
-			pnlCompareDir.add(txtCompareDir);
-			btnChooseCompareDir = new JButton("Open Compare Dir");
-			btnChooseCompareDir.setPreferredSize(DIMENSION_140_22);
-			pnlCompareDir.add(btnChooseCompareDir);
-			btnChooseCompareDir.addActionListener(this);
-			getContentPane().add(pnlCompareDir);
+			// pnlCompareDir
+//			pnlCompareDir = new JPanel();
+//			FlowLayout pnlCompareDirLayout = new FlowLayout();
+//			pnlCompareDirLayout.setAlignment(FlowLayout.LEFT);
+//			pnlCompareDir.setLayout(pnlCompareDirLayout);
+//			pnlCompareDir.setBounds(20, 40, 760, 30);
+//			String lComparePath = "";
+//			if (defaultCompareDir != null && !defaultCompareDir.isEmpty()) {
+//				lComparePath = defaultCompareDir;
+//			}
+//			lblCompareDir = new JLabel("Compare Path:");
+//			lblCompareDir.setPreferredSize(DIMENSION_100_22);
+//			pnlCompareDir.add(lblCompareDir);
+//			txtCompareDir = new JTextField(lComparePath);
+//			txtCompareDir.setPreferredSize(DIMENSION_500_22);
+//			pnlCompareDir.add(txtCompareDir);
+//			btnChooseCompareDir = new JButton("Open Compare Dir");
+//			btnChooseCompareDir.setPreferredSize(DIMENSION_140_22);
+//			pnlCompareDir.add(btnChooseCompareDir);
+//			btnChooseCompareDir.addActionListener(this);
+			getContentPane().add(getPanelCompareDir());
+			
+			// pnlCompareDir
 
 			getContentPane().add(getPanelOptions());
 			// begin: panel options
-			pnlOptions = new JPanel();
-			FlowLayout pnlOptionsLayout = new FlowLayout();
-			pnlOptionsLayout.setAlignment(FlowLayout.LEFT);
-			pnlOptions.setLayout(pnlOptionsLayout);
-			pnlOptions.setBounds(100, 80, 730, 30);
-			getContentPane().add(pnlOptions);
-			cbxIncludeFiles = new JCheckBox("Include Files");
-			cbxIncludeFiles.setSelected(true);
-			pnlOptions.add(cbxIncludeFiles);
-			cbxIncludeDirectories = new JCheckBox("Include Directories");
-			// cbxIncludeDirectories.setSelected(true);
-			pnlOptions.add(cbxIncludeDirectories);
-			cbxLoggingInFile = new JCheckBox("Logging in file");
-			cbxLoggingInFile.setSelected(false);
-			pnlOptions.add(cbxLoggingInFile);
-			cbxLoggingCommandLine = new JCheckBox("Commandline logging");
-			cbxLoggingCommandLine.setSelected(false);
-			pnlOptions.add(cbxLoggingCommandLine);
-			cbxRecursiveMode = new JCheckBox("Include Subfolders");
-			cbxRecursiveMode.setSelected(true);
-			pnlOptions.add(cbxRecursiveMode);
-			cbxSearchLimits = getMyComboBox(searchLimitList, "");
-			pnlOptions.add(cbxSearchLimits);
+//			pnlOptions = new JPanel();
+//			FlowLayout pnlOptionsLayout = new FlowLayout();
+//			pnlOptionsLayout.setAlignment(FlowLayout.LEFT);
+//			pnlOptions.setLayout(pnlOptionsLayout);
+//			pnlOptions.setBounds(100, 80, 730, 30);
+//			getContentPane().add(pnlOptions);
+//			cbxIncludeFiles = new JCheckBox("Include Files");
+//			cbxIncludeFiles.setSelected(true);
+//			pnlOptions.add(cbxIncludeFiles);
+//			cbxIncludeDirectories = new JCheckBox("Include Directories");
+//			// cbxIncludeDirectories.setSelected(true);
+//			pnlOptions.add(cbxIncludeDirectories);
+//			cbxLoggingInFile = new JCheckBox("Logging in file");
+//			cbxLoggingInFile.setSelected(false);
+//			pnlOptions.add(cbxLoggingInFile);
+//			cbxLoggingCommandLine = new JCheckBox("Commandline logging");
+//			cbxLoggingCommandLine.setSelected(false);
+//			pnlOptions.add(cbxLoggingCommandLine);
+//			cbxRecursiveMode = new JCheckBox("Include Subfolders");
+//			cbxRecursiveMode.setSelected(true);
+//			pnlOptions.add(cbxRecursiveMode);
+//			cbxSearchLimits = getMyComboBox(searchLimitList, "");
+//			pnlOptions.add(cbxSearchLimits);
 			// end: panel options
+			
 			// Start With
-			jTabbedPaneOptionsTop = new JTabbedPane();
-			getContentPane().add(jTabbedPaneOptionsTop);
-			// jTabbedPane1.setBounds(60, 120, 720, 200);
-			jTabbedPaneOptionsTop.setBounds(20, 110, 760, 230);
+
+			
 			pnlSearchOptions = new JPanel();
 			pnlSearchOptions.setLayout(null);
 			pnlSearchOptions.setBounds(60, 12, 400, 280);
-			jTabbedPaneOptionsTop.addTab("Search Options", null, pnlSearchOptions, null);
+			
+
+			
 			lblStartsWith = new JLabel("Starts With");
 			lblStartsWith.setBounds(10, 10, 80, 22);
 			pnlSearchOptions.add(lblStartsWith);
@@ -3070,7 +3074,7 @@ public class MainGUI extends javax.swing.JFrame
 			// pnlSearchOptions.add(pnlSearchOptionAdditional);
 			// <-- SearchOpion Additionala
 			pnlRenameOptions = new JPanel();
-			jTabbedPaneOptionsTop.addTab("Rename Options", null, pnlRenameOptions, null);
+
 			pnlRenameOptions.setLayout(null);
 			pnlRenameOptions.setRequestFocusEnabled(false);
 			pnlRenameOptions.setPreferredSize(new java.awt.Dimension(660, 230));
@@ -3168,7 +3172,7 @@ public class MainGUI extends javax.swing.JFrame
 			pnlTransformOpt.add(rbtParentAsFilename);
 			// >> New Tab for CompareOptions
 			pnlCompareFileOptions = new JPanel();
-			jTabbedPaneOptionsTop.addTab("Compare Options", null, pnlCompareFileOptions, null);
+
 			pnlCompareFileOptions.setLayout(null);
 			pnlCompareFileOptions.setRequestFocusEnabled(false);
 			pnlCompareFileOptions.setPreferredSize(new java.awt.Dimension(660, 230));
@@ -3239,6 +3243,14 @@ public class MainGUI extends javax.swing.JFrame
 			cbxBufferSizeFactor = getMyComboBox(this.bufferSizeFactorList, "1");
 			cbxBufferSizeFactor.setBounds(520, 70, 60, 22);
 			pnlCompareFileOptions.add(cbxBufferSizeFactor);
+			
+			jTabbedPaneOptionsTop = new JTabbedPane();
+			getContentPane().add(jTabbedPaneOptionsTop);
+			// jTabbedPane1.setBounds(60, 120, 720, 200);
+			jTabbedPaneOptionsTop.setBounds(20, 110, 760, 230);
+			jTabbedPaneOptionsTop.addTab("Search Options", null, pnlSearchOptions, null);
+			jTabbedPaneOptionsTop.addTab("Rename Options", null, pnlRenameOptions, null);
+			jTabbedPaneOptionsTop.addTab("Compare Options", null, pnlCompareFileOptions, null);
 
 			// << blocksize
 
@@ -3546,6 +3558,29 @@ public class MainGUI extends javax.swing.JFrame
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public JPanel getPanelDirectory() {
+		pnlDirectory = new JPanel();
+		FlowLayout pnlDirectoryLayout = new FlowLayout();
+		pnlDirectoryLayout.setAlignment(FlowLayout.LEFT);
+		pnlDirectory.setLayout(pnlDirectoryLayout);
+		pnlDirectory.setBounds(20, 10, 760, 30);
+
+		lblSourceDir = new JLabel("Search Path:");
+		lblSourceDir.setPreferredSize(DIMENSION_100_22);
+		pnlDirectory.add(lblSourceDir);
+
+		txtSearchDir = new JTextField(defaultSearchDir);
+		txtSearchDir.setPreferredSize(DIMENSION_500_22);
+		txtSearchDir.addFocusListener(this);
+		pnlDirectory.add(txtSearchDir);
+
+		btnChooseDir = new JButton("Open directory");
+		btnChooseDir.setPreferredSize(DIMENSION_140_22);
+		pnlDirectory.add(btnChooseDir);
+		btnChooseDir.addActionListener(this);		
+		return pnlDirectory;
 	}
 
 	public void initProgressBar(JProgressBar pProgressBar) {
