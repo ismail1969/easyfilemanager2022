@@ -366,7 +366,7 @@ public class MainGUI extends javax.swing.JFrame
 	private String HYPHEN = " - ";
 	private String FILEMANAGER_LABEL = "Easy File Manager";
 
-	private String FILEMANAGER_RELEASE = "2022.4";
+	private String FILEMANAGER_RELEASE = "2022.4.0";
 
 	private String FILEMANAGER_RELEASE_DATE = "26.04.2022";
 	private String FILEMANAGER_COPYRIGHT = "(c) www.ismailozer.eu";
