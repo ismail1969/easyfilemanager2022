@@ -375,6 +375,10 @@ public class MainGUI extends javax.swing.JFrame
 	private JScrollPane scrollPaneForRenameFiles;
 	private SimpleDateFormat sDateFormt = new SimpleDateFormat(DATEFORMATPATTERN);
 
+	private String FILEMANAGER_RELEASE = "2022.4.0";
+
+	private String FILEMANAGER_RELEASE_DATE = "26.04.2022";
+	private String FILEMANAGER_COPYRIGHT = "(c) www.ismailozer.eu";
 	Thread searchDublicateThread;
 
 	private final String searchLimitList[] = { "All", "10", "50", "100", "200", "500", "1000", "2000", "5000", "10000",
@@ -1945,386 +1949,405 @@ public class MainGUI extends javax.swing.JFrame
 		return getFileSize(new File(pFile));
 	}
 
+	@SuppressWarnings("unused")
 	private JTabbedPane getJTabbbedPaneOptionsTop() {
-		// Start With
-		jTabbedPaneOptionsTop = new JTabbedPane();
-		// jTabbedPane1.setBounds(60, 120, 720, 200);
+		return new JTabbedPane();
+//		// Start With
+//		jTabbedPaneOptionsTop = new JTabbedPane();
+//		// jTabbedPane1.setBounds(60, 120, 720, 200);
+//
+//		// The following line enables to use scrolling tabs.
+//		// jTabbedPaneOptionsTop.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+//
+//		jTabbedPaneOptionsTop.setBounds(20, 110, 760, 230);
+//
+//		pnlSearchOptions = new JPanel();
+//
+//		// pnlSearchOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
+//		pnlSearchOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
+//		// pnlSearchOptions.setBounds(60, 12, 400, 280);
+//
+//		jTabbedPaneOptionsTop.addTab("Search Options", null, pnlSearchOptions, null);
+//
+//		lblStartsWith = new JLabel("Starts With");
+//		// lblStartsWith.setBounds(10, 10, 80, 22);
+//		pnlSearchOptions.add(lblStartsWith);
+//
+//		txtStartsWith = new JTextField("", 10);
+//		pnlSearchOptions.add(txtStartsWith);
+//		// txtStartsWith.setBounds(90, 10, 200, 22);
+//		txtStartsWith.addKeyListener(this);
+//
+//		// Ends With
+//		lblEndsWith = new JLabel("Ends With");
+//		pnlSearchOptions.add(lblEndsWith);
+//		// lblEndsWith.setBounds(10, 31, 200, 22);
+//
+//		txtEndsWith = new JTextField("", 10);
+//		pnlSearchOptions.add(txtEndsWith);
+//		// txtEndsWith.setBounds(90, 34, 200, 22);
+//
+//		// Reset Search Values
+//		btnResetSearchOpt = new JButton("Reset Values");
+//		// btnResetSearchOpt.setBounds(380, 10, 120, 22);
+//		pnlSearchOptions.add(btnResetSearchOpt);
+//		btnResetSearchOpt.addActionListener(this);
+//
+//		// File extentions
+//		cbxFileExtentions = getMyComboBox(fileExtentionList, "");
+//		// cbxFileExtentions.setBounds(380, 34, 120, 22);
+//		// cbxFileExtentions.setSelectedIndex(fileExtentionList[0]);
+//		pnlSearchOptions.add(cbxFileExtentions);
+//
+//		// Contain String
+//		lblContainStr = new JLabel("Contain Str.");
+//		pnlSearchOptions.add(lblContainStr);
+//		// lblContainStr.setBounds(10, 58, 80, 22);
+//
+//		txtContainStr = new JTextField("", 10);
+//		pnlSearchOptions.add(txtContainStr);
+//		// txtContainStr.setBounds(90, 58, 200, 22);
+//
+//		// Search Include Files
+//
+//		// Regular Expression
+//		lblRegExp = new JLabel("Regul. Expr.");
+//		lblRegExp.setBounds(10, 82, 80, 22);
+//		pnlSearchOptions.add(lblRegExp);
+//
+//		txtSearchPattern = new JTextField("", 10);
+//		// txtSearchPattern.setBounds(90, 82, 200, 22);
+//		pnlSearchOptions.add(txtSearchPattern);
+//
+//		// File size Panel
+//		JPanel pnlFileSize = new JPanel();
+//		FlowLayout pnlFileSizeLayout = new FlowLayout();
+//		pnlFileSizeLayout.setAlignment(FlowLayout.LEFT);
+//		pnlFileSize.setLayout(pnlFileSizeLayout);
+//		pnlFileSize.setBounds(80, 106, 400, 30);
+//
+//		lblFileSize = new JLabel("File size [KB]");
+//		lblFileSize.setBounds(10, 106, 80, 22);
+//		pnlSearchOptions.add(lblFileSize);
+//
+//		rbtAllSize = new JRadioButton("All", true);
+//		rbtFileSizeGreater = new JRadioButton(">> (GT)");
+//		rbtFileSizeLower = new JRadioButton("<< (LT)");
+//		rbtFileSizeEqual = new JRadioButton("= (EQ)");
+//		btnGrpFileSize = new ButtonGroup();
+//
+//		btnGrpFileSize.add(rbtAllSize);
+//		btnGrpFileSize.add(rbtFileSizeGreater);
+//		btnGrpFileSize.add(rbtFileSizeLower);
+//		btnGrpFileSize.add(rbtFileSizeEqual);
+//
+//		rbtAllSize.addItemListener(this);
+//		rbtFileSizeGreater.addItemListener(this);
+//		rbtFileSizeLower.addItemListener(this);
+//		rbtFileSizeEqual.addItemListener(this);
+//
+//		pnlFileSize.add(rbtAllSize);
+//		pnlFileSize.add(rbtFileSizeGreater);
+//		pnlFileSize.add(rbtFileSizeLower);
+//		pnlFileSize.add(rbtFileSizeEqual);
+//
+//		txtFileSize = new JTextField("", 10);
+//		// txtFileSize.setPreferredSize(DIMENSION_100_22);
+//		// txtFileSize.setPreferredSize(new java.awt.Dimension(100, 22));
+//
+//		pnlFileSize.add(txtFileSize);
+//
+//		JLabel lblKByte = new JLabel("KByte");
+//		pnlFileSize.add(lblKByte);
+//
+//		pnlSearchOptions.add(pnlFileSize);
+//
+//		// Date interval
+//		JLabel lblCreationFrom = new JLabel("Date From");
+//		lblCreationFrom.setBounds(10, 138, 60, 22);
+//		pnlSearchOptions.add(lblCreationFrom);
+//
+//		txtCreationDateFrom = new ObservingTextField(getsDateFormt());
+//		txtCreationDateFrom.setBounds(90, 138, 100, 22);
+//		pnlSearchOptions.add(txtCreationDateFrom);
+//
+//		ImageIcon icon = new ImageIcon(getClass().getResource("resources/JDateChooserIcon.gif"));
+//		btnCreationFrom = new JButton(icon);
+//		// btnCreationFrom = new JButton("Select..");
+//		btnCreationFrom.setBounds(200, 138, 50, 22);
+//		pnlSearchOptions.add(btnCreationFrom);
+//		btnCreationFrom.addActionListener(this);
+//
+//		JLabel lblCreationTo = new JLabel("To");
+//		lblCreationTo.setBounds(250, 138, 30, 22);
+//		pnlSearchOptions.add(lblCreationTo);
+//
+//		txtCreationDateTo = new ObservingTextField(getsDateFormt());
+//		txtCreationDateTo.setBounds(300, 138, 100, 22);
+//		pnlSearchOptions.add(txtCreationDateTo);
+//
+//		// btnCreationTo = new JButton(icon);
+//		btnCreationTo = new JButton(icon);
+//		btnCreationTo.setBounds(410, 138, 50, 22);
+//		pnlSearchOptions.add(btnCreationTo);
+//		btnCreationTo.addActionListener(this);
+//
+//		// --> SearchOpion Additionala
+//		//
+//		JPanel pnlSearchOptionAdditional = new JPanel();
+//		FlowLayout pnlSearchOptionAdditionalLayout = new FlowLayout();
+//		pnlSearchOptionAdditionalLayout.setAlignment(FlowLayout.LEFT);
+//		pnlSearchOptionAdditional.setLayout(pnlSearchOptionAdditionalLayout);
+//		pnlSearchOptionAdditional.setBounds(80, 160, 400, 30);
+//
+//		cbxSuccessiveUppercaseChars = new JCheckBox("Successive Uppercase Chars");
+//		cbxSuccessiveUppercaseChars.setSelected(false);
+//		pnlSearchOptionAdditional.add(cbxSuccessiveUppercaseChars);
+//
+//		pnlSearchOptions.add(pnlSearchOptionAdditional);
+//
+//		// pnlSearchOptionAdditional.add(rbtSuccessiveUppercaseChars);
+//		// pnlSearchOptions.add(pnlSearchOptionAdditional);
+//
+//		// <-- SearchOpion Additionala
+//
+//		pnlRenameOptions = new JPanel();
+//		jTabbedPaneOptionsTop.addTab("Rename Options", null, pnlRenameOptions, null);
+//		pnlRenameOptions.setLayout(null);
+//		pnlRenameOptions.setRequestFocusEnabled(false);
+//		pnlRenameOptions.setPreferredSize(new java.awt.Dimension(660, 230));
+//
+//		lblPrefix = new JLabel("Prefix");
+//		pnlRenameOptions.add(lblPrefix);
+//		lblPrefix.setBounds(10, 10, 60, 22);
+//
+//		txtPrefix = new JTextField();
+//		pnlRenameOptions.add(txtPrefix);
+//		txtPrefix.setBounds(90, 10, 200, 22);
+//
+//		btnResetRenameOpt = new JButton("Reset Values");
+//		pnlRenameOptions.add(btnResetRenameOpt);
+//		btnResetRenameOpt.setBounds(380, 10, 120, 22);
+//		btnResetRenameOpt.addActionListener(this);
+//
+//		lblReplaceAll = new JLabel("Replace All");
+//		pnlRenameOptions.add(lblReplaceAll);
+//		lblReplaceAll.setBounds(10, 34, 80, 22);
+//
+//		txtReplaceAll = new JTextField();
+//		pnlRenameOptions.add(txtReplaceAll);
+//		txtReplaceAll.setBounds(90, 34, 200, 22);
+//
+//		lblReplace = new JLabel("Replace");
+//		pnlRenameOptions.add(lblReplace);
+//		lblReplace.setBounds(10, 58, 80, 22);
+//
+//		txtReplaceOld = new JTextField();
+//		pnlRenameOptions.add(txtReplaceOld);
+//		txtReplaceOld.setBounds(90, 58, 200, 22);
+//
+//		lblReplWith = new JLabel("With");
+//		pnlRenameOptions.add(lblReplWith);
+//		lblReplWith.setBounds(310, 58, 60, 22);
+//
+//		txtReplaceNew = new JTextField();
+//		pnlRenameOptions.add(txtReplaceNew);
+//		txtReplaceNew.setBounds(380, 58, 200, 22);
+//
+//		lblSuffix = new JLabel("Suffix");
+//		pnlRenameOptions.add(lblSuffix);
+//		lblSuffix.setBounds(10, 82, 60, 22);
+//
+//		txtSuffix = new JTextField();
+//		pnlRenameOptions.add(txtSuffix);
+//		txtSuffix.setBounds(90, 82, 200, 22);
+//
+//		// Replace Regexp
+//		lblRegexpReplaceOld = new JLabel("Regexp Repl.");
+//		pnlRenameOptions.add(lblRegexpReplaceOld);
+//		lblRegexpReplaceOld.setBounds(10, 106, 80, 22);
+//
+//		txtRegexpReplaceOld = new JTextField();
+//		pnlRenameOptions.add(txtRegexpReplaceOld);
+//		txtRegexpReplaceOld.setBounds(90, 106, 200, 22);
+//
+//		lblRegexpReplaceNew = new JLabel("With");
+//		pnlRenameOptions.add(lblRegexpReplaceNew);
+//		lblRegexpReplaceNew.setBounds(310, 106, 60, 22);
+//
+//		txtRegexpReplaceNew = new JTextField();
+//		pnlRenameOptions.add(txtRegexpReplaceNew);
+//		txtRegexpReplaceNew.setBounds(380, 106, 200, 22);
+//
+//		// Replace Regexp
+//
+//		// Sequence
+//		lblSequence = new JLabel("Sequence");
+//		pnlRenameOptions.add(lblSequence);
+//		lblSequence.setBounds(10, 130, 60, 22);
+//
+//		txtSequence = new JTextField();
+//		pnlRenameOptions.add(txtSequence);
+//		txtSequence.setBounds(90, 130, 80, 22);
+//		txtSequence.setEditable(false);
+//		// Sequence
+//
+//		cbxLeadingZeros = getMyComboBox(sequences, "");
+//		cbxLeadingZeros.addActionListener(this);
+//
+//		cbxLeadingZeros.setBounds(190, 130, 80, 22);
+//
+//		pnlRenameOptions.add(cbxLeadingZeros);
+//
+//		cbxResetCounter = new JCheckBox("Reset sequence each directory");
+//		cbxResetCounter.setSelected(true);
+//		pnlRenameOptions.add(cbxResetCounter);
+//		cbxResetCounter.setBounds(330, 130, 240, 22);
+//
+////		pnlTransformOpt = new JPanel();
+////		FlowLayout pnlOptLayout = new FlowLayout();
+////		pnlOptLayout.setAlignment(FlowLayout.LEFT);
+////		pnlTransformOpt.setBounds(80, 150, 600, 30);
+////		pnlTransformOpt.setLayout(pnlOptLayout);
+//		
+//		//pnlRenameOptions.add(pnlTransformOpt);
+//		pnlTransformOpt = getPanelTransformOpt();
+//		pnlRenameOptions.add(pnlTransformOpt);
+//
+//		
+//		rbtNormal = new JRadioButton("Normal1", true);
+//		rbtLowerCase = new JRadioButton("To Lowercase");
+//		rbtUpperCase = new JRadioButton("To Uppercase");
+//		rbtCapitalize = new JRadioButton("To Capitalize");
+//		rbtParentAsFilename = new JRadioButton("Filename from parent dir");
+//
+//		btnGrpTransform = new ButtonGroup();
+//
+//		btnGrpTransform.add(rbtNormal);
+//		btnGrpTransform.add(rbtLowerCase);
+//		btnGrpTransform.add(rbtUpperCase);
+//		btnGrpTransform.add(rbtCapitalize);
+//		btnGrpTransform.add(rbtParentAsFilename);
+//
+//		rbtNormal.addItemListener(this);
+//		rbtLowerCase.addItemListener(this);
+//		rbtUpperCase.addItemListener(this);
+//		rbtCapitalize.addItemListener(this);
+//
+//		rbtParentAsFilename.addItemListener(this);
+//		
+//		
+//
+////		pnlTransformOpt.add(rbtNormal);
+////		pnlTransformOpt.add(rbtLowerCase);
+////		pnlTransformOpt.add(rbtUpperCase);
+////		pnlTransformOpt.add(rbtCapitalize);
+////		pnlTransformOpt.add(rbtParentAsFilename);
+//
+//		// >> New Tab for CompareOptions
+//		pnlCompareFileOptions = new JPanel();
+//		jTabbedPaneOptionsTop.addTab("Compare Options", null, pnlCompareFileOptions, null);
+//		pnlCompareFileOptions.setLayout(null);
+//		pnlCompareFileOptions.setRequestFocusEnabled(false);
+//		pnlCompareFileOptions.setPreferredSize(new java.awt.Dimension(660, 230));
+//
+//		lblLeftOffset = new JLabel("Left offset");
+//		pnlCompareFileOptions.add(lblLeftOffset);
+//		lblLeftOffset.setBounds(10, 10, 100, 22);
+//
+//		txtLeftOffset = new JTextField("1");
+//		pnlCompareFileOptions.add(txtLeftOffset);
+//		txtLeftOffset.setBounds(90, 10, 100, 22);
+//		// txtLeftStart.addKeyListener(this);
+//		addMyKeyListener(txtLeftOffset);
+//
+//		cbxLefOffset = getMyComboBox(this.compareLimitList, "1");
+//		cbxLefOffset.setBounds(220, 10, 60, 22);
+//		pnlCompareFileOptions.add(cbxLefOffset);
+//
+//		lblItemsLeft = new JLabel("Items left");
+//		pnlCompareFileOptions.add(lblItemsLeft);
+//		lblItemsLeft.setBounds(300, 10, 80, 22);
+//
+//		txtItemsLeft = new JTextField("99999");
+//		pnlCompareFileOptions.add(txtItemsLeft);
+//		txtItemsLeft.setBounds(400, 10, 100, 22);
+//		addMyKeyListener(txtItemsLeft);
+//
+//		cbxItemsLeft = getMyComboBox(this.compareLimitList, "1");
+//		cbxItemsLeft.setBounds(520, 10, 60, 22);
+//		pnlCompareFileOptions.add(cbxItemsLeft);
+//		// Rights >>
+//		lblRightStart = new JLabel("Right offset");
+//		pnlCompareFileOptions.add(lblRightStart);
+//		lblRightStart.setBounds(10, 40, 100, 22);
+//
+//		txtRightOffset = new JTextField("1");
+//		pnlCompareFileOptions.add(txtRightOffset);
+//		txtRightOffset.setBounds(90, 40, 100, 22);
+//		// txtRightStart.addKeyListener(this);
+//		addMyKeyListener(txtRightOffset);
+//
+//		cbxRightOffset = getMyComboBox(this.compareLimitList, "1");
+//		cbxRightOffset.setBounds(220, 40, 60, 22);
+//		pnlCompareFileOptions.add(cbxRightOffset);
+//
+//		lblItemsRight = new JLabel("Items right");
+//		pnlCompareFileOptions.add(lblItemsRight);
+//		lblItemsRight.setBounds(300, 40, 80, 22);
+//
+//		txtItemsRight = new JTextField("99999");
+//		pnlCompareFileOptions.add(txtItemsRight);
+//		txtItemsRight.setBounds(400, 40, 100, 22);
+//		addMyKeyListener(txtItemsRight);
+//
+//		cbxItemsRight = getMyComboBox(this.compareLimitList, "1");
+//		cbxItemsRight.setBounds(520, 40, 60, 22);
+//		pnlCompareFileOptions.add(cbxItemsRight);
+//		// Rights <<
+//
+//		// blocksize
+//
+//		lblBufferSize = new JLabel("Buffer size");
+//		pnlCompareFileOptions.add(lblBufferSize);
+//		lblBufferSize.setBounds(10, 70, 100, 22);
+//
+//		txtBufferSize = new JTextField(bufferSizeList[4]);
+//		pnlCompareFileOptions.add(txtBufferSize);
+//		txtBufferSize.setBounds(90, 70, 100, 22);
+//		// txtRightStart.addKeyListener(this);
+//		addMyKeyListener(txtBufferSize);
+//
+//		cbxBufferSize = getMyComboBox(this.bufferSizeList, "1");
+//		cbxBufferSize.setBounds(220, 70, 60, 22);
+//		cbxBufferSize.setSelectedIndex(4);
+//		pnlCompareFileOptions.add(cbxBufferSize);
+//
+//		lblBufferSizeFactor = new JLabel("Buffer factor");
+//		pnlCompareFileOptions.add(lblBufferSizeFactor);
+//		lblBufferSizeFactor.setBounds(300, 70, 100, 22);
+//
+//		txtBufferSizeFactor = new JTextField(bufferSizeFactorList[5]);
+//		pnlCompareFileOptions.add(txtBufferSizeFactor);
+//		txtBufferSizeFactor.setBounds(400, 70, 100, 22);
+//		addMyKeyListener(txtBufferSizeFactor);
+//
+//		cbxBufferSizeFactor = getMyComboBox(this.bufferSizeFactorList, "1");
+//		cbxBufferSizeFactor.setBounds(520, 70, 60, 22);
+//		pnlCompareFileOptions.add(cbxBufferSizeFactor);
+//
+//		return jTabbedPaneOptionsTop;
+	}
 
-		// The following line enables to use scrolling tabs.
-		// jTabbedPaneOptionsTop.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-
-		jTabbedPaneOptionsTop.setBounds(20, 110, 760, 230);
-
-		pnlSearchOptions = new JPanel();
-
-		// pnlSearchOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
-		pnlSearchOptions.setLayout(new FlowLayout(FlowLayout.LEFT));
-		// pnlSearchOptions.setBounds(60, 12, 400, 280);
-
-		jTabbedPaneOptionsTop.addTab("Search Options", null, pnlSearchOptions, null);
-
-		lblStartsWith = new JLabel("Starts With");
-		// lblStartsWith.setBounds(10, 10, 80, 22);
-		pnlSearchOptions.add(lblStartsWith);
-
-		txtStartsWith = new JTextField("", 10);
-		pnlSearchOptions.add(txtStartsWith);
-		// txtStartsWith.setBounds(90, 10, 200, 22);
-		txtStartsWith.addKeyListener(this);
-
-		// Ends With
-		lblEndsWith = new JLabel("Ends With");
-		pnlSearchOptions.add(lblEndsWith);
-		// lblEndsWith.setBounds(10, 31, 200, 22);
-
-		txtEndsWith = new JTextField("", 10);
-		pnlSearchOptions.add(txtEndsWith);
-		// txtEndsWith.setBounds(90, 34, 200, 22);
-
-		// Reset Search Values
-		btnResetSearchOpt = new JButton("Reset Values");
-		// btnResetSearchOpt.setBounds(380, 10, 120, 22);
-		pnlSearchOptions.add(btnResetSearchOpt);
-		btnResetSearchOpt.addActionListener(this);
-
-		// File extentions
-		cbxFileExtentions = getMyComboBox(fileExtentionList, "");
-		// cbxFileExtentions.setBounds(380, 34, 120, 22);
-		// cbxFileExtentions.setSelectedIndex(fileExtentionList[0]);
-		pnlSearchOptions.add(cbxFileExtentions);
-
-		// Contain String
-		lblContainStr = new JLabel("Contain Str.");
-		pnlSearchOptions.add(lblContainStr);
-		// lblContainStr.setBounds(10, 58, 80, 22);
-
-		txtContainStr = new JTextField("", 10);
-		pnlSearchOptions.add(txtContainStr);
-		// txtContainStr.setBounds(90, 58, 200, 22);
-
-		// Search Include Files
-
-		// Regular Expression
-		lblRegExp = new JLabel("Regul. Expr.");
-		lblRegExp.setBounds(10, 82, 80, 22);
-		pnlSearchOptions.add(lblRegExp);
-
-		txtSearchPattern = new JTextField("", 10);
-		// txtSearchPattern.setBounds(90, 82, 200, 22);
-		pnlSearchOptions.add(txtSearchPattern);
-
-		// File size Panel
-		JPanel pnlFileSize = new JPanel();
-		FlowLayout pnlFileSizeLayout = new FlowLayout();
-		pnlFileSizeLayout.setAlignment(FlowLayout.LEFT);
-		pnlFileSize.setLayout(pnlFileSizeLayout);
-		pnlFileSize.setBounds(80, 106, 400, 30);
-
-		lblFileSize = new JLabel("File size [KB]");
-		lblFileSize.setBounds(10, 106, 80, 22);
-		pnlSearchOptions.add(lblFileSize);
-
-		rbtAllSize = new JRadioButton("All", true);
-		rbtFileSizeGreater = new JRadioButton(">> (GT)");
-		rbtFileSizeLower = new JRadioButton("<< (LT)");
-		rbtFileSizeEqual = new JRadioButton("= (EQ)");
-		btnGrpFileSize = new ButtonGroup();
-
-		btnGrpFileSize.add(rbtAllSize);
-		btnGrpFileSize.add(rbtFileSizeGreater);
-		btnGrpFileSize.add(rbtFileSizeLower);
-		btnGrpFileSize.add(rbtFileSizeEqual);
-
-		rbtAllSize.addItemListener(this);
-		rbtFileSizeGreater.addItemListener(this);
-		rbtFileSizeLower.addItemListener(this);
-		rbtFileSizeEqual.addItemListener(this);
-
-		pnlFileSize.add(rbtAllSize);
-		pnlFileSize.add(rbtFileSizeGreater);
-		pnlFileSize.add(rbtFileSizeLower);
-		pnlFileSize.add(rbtFileSizeEqual);
-
-		txtFileSize = new JTextField("", 10);
-		// txtFileSize.setPreferredSize(DIMENSION_100_22);
-		// txtFileSize.setPreferredSize(new java.awt.Dimension(100, 22));
-
-		pnlFileSize.add(txtFileSize);
-
-		JLabel lblKByte = new JLabel("KByte");
-		pnlFileSize.add(lblKByte);
-
-		pnlSearchOptions.add(pnlFileSize);
-
-		// Date interval
-		JLabel lblCreationFrom = new JLabel("Date From");
-		lblCreationFrom.setBounds(10, 138, 60, 22);
-		pnlSearchOptions.add(lblCreationFrom);
-
-		txtCreationDateFrom = new ObservingTextField(getsDateFormt());
-		txtCreationDateFrom.setBounds(90, 138, 100, 22);
-		pnlSearchOptions.add(txtCreationDateFrom);
-
-		ImageIcon icon = new ImageIcon(getClass().getResource("resources/JDateChooserIcon.gif"));
-		btnCreationFrom = new JButton(icon);
-		// btnCreationFrom = new JButton("Select..");
-		btnCreationFrom.setBounds(200, 138, 50, 22);
-		pnlSearchOptions.add(btnCreationFrom);
-		btnCreationFrom.addActionListener(this);
-
-		JLabel lblCreationTo = new JLabel("To");
-		lblCreationTo.setBounds(250, 138, 30, 22);
-		pnlSearchOptions.add(lblCreationTo);
-
-		txtCreationDateTo = new ObservingTextField(getsDateFormt());
-		txtCreationDateTo.setBounds(300, 138, 100, 22);
-		pnlSearchOptions.add(txtCreationDateTo);
-
-		// btnCreationTo = new JButton(icon);
-		btnCreationTo = new JButton(icon);
-		btnCreationTo.setBounds(410, 138, 50, 22);
-		pnlSearchOptions.add(btnCreationTo);
-		btnCreationTo.addActionListener(this);
-
-		// --> SearchOpion Additionala
-		//
-		JPanel pnlSearchOptionAdditional = new JPanel();
-		FlowLayout pnlSearchOptionAdditionalLayout = new FlowLayout();
-		pnlSearchOptionAdditionalLayout.setAlignment(FlowLayout.LEFT);
-		pnlSearchOptionAdditional.setLayout(pnlSearchOptionAdditionalLayout);
-		pnlSearchOptionAdditional.setBounds(80, 160, 400, 30);
-
-		cbxSuccessiveUppercaseChars = new JCheckBox("Successive Uppercase Chars");
-		cbxSuccessiveUppercaseChars.setSelected(false);
-		pnlSearchOptionAdditional.add(cbxSuccessiveUppercaseChars);
-
-		pnlSearchOptions.add(pnlSearchOptionAdditional);
-
-		// pnlSearchOptionAdditional.add(rbtSuccessiveUppercaseChars);
-		// pnlSearchOptions.add(pnlSearchOptionAdditional);
-
-		// <-- SearchOpion Additionala
-
-		pnlRenameOptions = new JPanel();
-		jTabbedPaneOptionsTop.addTab("Rename Options", null, pnlRenameOptions, null);
-		pnlRenameOptions.setLayout(null);
-		pnlRenameOptions.setRequestFocusEnabled(false);
-		pnlRenameOptions.setPreferredSize(new java.awt.Dimension(660, 230));
-
-		lblPrefix = new JLabel("Prefix");
-		pnlRenameOptions.add(lblPrefix);
-		lblPrefix.setBounds(10, 10, 60, 22);
-
-		txtPrefix = new JTextField();
-		pnlRenameOptions.add(txtPrefix);
-		txtPrefix.setBounds(90, 10, 200, 22);
-
-		btnResetRenameOpt = new JButton("Reset Values");
-		pnlRenameOptions.add(btnResetRenameOpt);
-		btnResetRenameOpt.setBounds(380, 10, 120, 22);
-		btnResetRenameOpt.addActionListener(this);
-
-		lblReplaceAll = new JLabel("Replace All");
-		pnlRenameOptions.add(lblReplaceAll);
-		lblReplaceAll.setBounds(10, 34, 80, 22);
-
-		txtReplaceAll = new JTextField();
-		pnlRenameOptions.add(txtReplaceAll);
-		txtReplaceAll.setBounds(90, 34, 200, 22);
-
-		lblReplace = new JLabel("Replace");
-		pnlRenameOptions.add(lblReplace);
-		lblReplace.setBounds(10, 58, 80, 22);
-
-		txtReplaceOld = new JTextField();
-		pnlRenameOptions.add(txtReplaceOld);
-		txtReplaceOld.setBounds(90, 58, 200, 22);
-
-		lblReplWith = new JLabel("With");
-		pnlRenameOptions.add(lblReplWith);
-		lblReplWith.setBounds(310, 58, 60, 22);
-
-		txtReplaceNew = new JTextField();
-		pnlRenameOptions.add(txtReplaceNew);
-		txtReplaceNew.setBounds(380, 58, 200, 22);
-
-		lblSuffix = new JLabel("Suffix");
-		pnlRenameOptions.add(lblSuffix);
-		lblSuffix.setBounds(10, 82, 60, 22);
-
-		txtSuffix = new JTextField();
-		pnlRenameOptions.add(txtSuffix);
-		txtSuffix.setBounds(90, 82, 200, 22);
-
-		// Replace Regexp
-		lblRegexpReplaceOld = new JLabel("Regexp Repl.");
-		pnlRenameOptions.add(lblRegexpReplaceOld);
-		lblRegexpReplaceOld.setBounds(10, 106, 80, 22);
-
-		txtRegexpReplaceOld = new JTextField();
-		pnlRenameOptions.add(txtRegexpReplaceOld);
-		txtRegexpReplaceOld.setBounds(90, 106, 200, 22);
-
-		lblRegexpReplaceNew = new JLabel("With");
-		pnlRenameOptions.add(lblRegexpReplaceNew);
-		lblRegexpReplaceNew.setBounds(310, 106, 60, 22);
-
-		txtRegexpReplaceNew = new JTextField();
-		pnlRenameOptions.add(txtRegexpReplaceNew);
-		txtRegexpReplaceNew.setBounds(380, 106, 200, 22);
-
-		// Replace Regexp
-
-		// Sequence
-		lblSequence = new JLabel("Sequence");
-		pnlRenameOptions.add(lblSequence);
-		lblSequence.setBounds(10, 130, 60, 22);
-
-		txtSequence = new JTextField();
-		pnlRenameOptions.add(txtSequence);
-		txtSequence.setBounds(90, 130, 80, 22);
-		txtSequence.setEditable(false);
-		// Sequence
-
-		cbxLeadingZeros = getMyComboBox(sequences, "");
-		cbxLeadingZeros.addActionListener(this);
-
-		cbxLeadingZeros.setBounds(190, 130, 80, 22);
-
-		pnlRenameOptions.add(cbxLeadingZeros);
-
-		cbxResetCounter = new JCheckBox("Reset sequence each directory");
-		cbxResetCounter.setSelected(true);
-		pnlRenameOptions.add(cbxResetCounter);
-		cbxResetCounter.setBounds(330, 130, 240, 22);
-
+	private JPanel getPanelTransformOpt() {
+		// TODO Auto-generated method stub
 		pnlTransformOpt = new JPanel();
 		FlowLayout pnlOptLayout = new FlowLayout();
 		pnlOptLayout.setAlignment(FlowLayout.LEFT);
-		pnlTransformOpt.setLayout(pnlOptLayout);
-		pnlRenameOptions.add(pnlTransformOpt);
-
 		pnlTransformOpt.setBounds(80, 150, 600, 30);
-		rbtNormal = new JRadioButton("Normal", true);
-		rbtLowerCase = new JRadioButton("To Lowercase");
-		rbtUpperCase = new JRadioButton("To Uppercase");
-		rbtCapitalize = new JRadioButton("To Capitalize");
-		rbtParentAsFilename = new JRadioButton("Filename from parent dir");
-
-		btnGrpTransform = new ButtonGroup();
-
-		btnGrpTransform.add(rbtNormal);
-		btnGrpTransform.add(rbtLowerCase);
-		btnGrpTransform.add(rbtUpperCase);
-		btnGrpTransform.add(rbtCapitalize);
-		btnGrpTransform.add(rbtParentAsFilename);
-
-		rbtNormal.addItemListener(this);
-		rbtLowerCase.addItemListener(this);
-		rbtUpperCase.addItemListener(this);
-		rbtCapitalize.addItemListener(this);
-
-		rbtParentAsFilename.addItemListener(this);
-
-		pnlTransformOpt.add(rbtNormal);
-		pnlTransformOpt.add(rbtLowerCase);
-		pnlTransformOpt.add(rbtUpperCase);
-		pnlTransformOpt.add(rbtCapitalize);
-		pnlTransformOpt.add(rbtParentAsFilename);
-
-		// >> New Tab for CompareOptions
-		pnlCompareFileOptions = new JPanel();
-		jTabbedPaneOptionsTop.addTab("Compare Options", null, pnlCompareFileOptions, null);
-		pnlCompareFileOptions.setLayout(null);
-		pnlCompareFileOptions.setRequestFocusEnabled(false);
-		pnlCompareFileOptions.setPreferredSize(new java.awt.Dimension(660, 230));
-
-		lblLeftOffset = new JLabel("Left offset");
-		pnlCompareFileOptions.add(lblLeftOffset);
-		lblLeftOffset.setBounds(10, 10, 100, 22);
-
-		txtLeftOffset = new JTextField("1");
-		pnlCompareFileOptions.add(txtLeftOffset);
-		txtLeftOffset.setBounds(90, 10, 100, 22);
-		// txtLeftStart.addKeyListener(this);
-		addMyKeyListener(txtLeftOffset);
-
-		cbxLefOffset = getMyComboBox(this.compareLimitList, "1");
-		cbxLefOffset.setBounds(220, 10, 60, 22);
-		pnlCompareFileOptions.add(cbxLefOffset);
-
-		lblItemsLeft = new JLabel("Items left");
-		pnlCompareFileOptions.add(lblItemsLeft);
-		lblItemsLeft.setBounds(300, 10, 80, 22);
-
-		txtItemsLeft = new JTextField("99999");
-		pnlCompareFileOptions.add(txtItemsLeft);
-		txtItemsLeft.setBounds(400, 10, 100, 22);
-		addMyKeyListener(txtItemsLeft);
-
-		cbxItemsLeft = getMyComboBox(this.compareLimitList, "1");
-		cbxItemsLeft.setBounds(520, 10, 60, 22);
-		pnlCompareFileOptions.add(cbxItemsLeft);
-		// Rights >>
-		lblRightStart = new JLabel("Right offset");
-		pnlCompareFileOptions.add(lblRightStart);
-		lblRightStart.setBounds(10, 40, 100, 22);
-
-		txtRightOffset = new JTextField("1");
-		pnlCompareFileOptions.add(txtRightOffset);
-		txtRightOffset.setBounds(90, 40, 100, 22);
-		// txtRightStart.addKeyListener(this);
-		addMyKeyListener(txtRightOffset);
-
-		cbxRightOffset = getMyComboBox(this.compareLimitList, "1");
-		cbxRightOffset.setBounds(220, 40, 60, 22);
-		pnlCompareFileOptions.add(cbxRightOffset);
-
-		lblItemsRight = new JLabel("Items right");
-		pnlCompareFileOptions.add(lblItemsRight);
-		lblItemsRight.setBounds(300, 40, 80, 22);
-
-		txtItemsRight = new JTextField("99999");
-		pnlCompareFileOptions.add(txtItemsRight);
-		txtItemsRight.setBounds(400, 40, 100, 22);
-		addMyKeyListener(txtItemsRight);
-
-		cbxItemsRight = getMyComboBox(this.compareLimitList, "1");
-		cbxItemsRight.setBounds(520, 40, 60, 22);
-		pnlCompareFileOptions.add(cbxItemsRight);
-		// Rights <<
-
-		// blocksize
-
-		lblBufferSize = new JLabel("Buffer size");
-		pnlCompareFileOptions.add(lblBufferSize);
-		lblBufferSize.setBounds(10, 70, 100, 22);
-
-		txtBufferSize = new JTextField(bufferSizeList[4]);
-		pnlCompareFileOptions.add(txtBufferSize);
-		txtBufferSize.setBounds(90, 70, 100, 22);
-		// txtRightStart.addKeyListener(this);
-		addMyKeyListener(txtBufferSize);
-
-		cbxBufferSize = getMyComboBox(this.bufferSizeList, "1");
-		cbxBufferSize.setBounds(220, 70, 60, 22);
-		cbxBufferSize.setSelectedIndex(4);
-		pnlCompareFileOptions.add(cbxBufferSize);
-
-		lblBufferSizeFactor = new JLabel("Buffer factor");
-		pnlCompareFileOptions.add(lblBufferSizeFactor);
-		lblBufferSizeFactor.setBounds(300, 70, 100, 22);
-
-		txtBufferSizeFactor = new JTextField(bufferSizeFactorList[5]);
-		pnlCompareFileOptions.add(txtBufferSizeFactor);
-		txtBufferSizeFactor.setBounds(400, 70, 100, 22);
-		addMyKeyListener(txtBufferSizeFactor);
-
-		cbxBufferSizeFactor = getMyComboBox(this.bufferSizeFactorList, "1");
-		cbxBufferSizeFactor.setBounds(520, 70, 60, 22);
-		pnlCompareFileOptions.add(cbxBufferSizeFactor);
-
-		return jTabbedPaneOptionsTop;
+		pnlTransformOpt.setLayout(pnlOptLayout);
+		return pnlTransformOpt;
+		
 	}
 
 	public int getLeftItems() {
@@ -3002,38 +3025,51 @@ public class MainGUI extends javax.swing.JFrame
 			txtSearchPattern = new JTextField();
 			txtSearchPattern.setBounds(90, 82, 200, 22);
 			pnlSearchOptions.add(txtSearchPattern);
+			
+			
 			// File size Panel
 			JPanel pnlFileSize = new JPanel();
 			FlowLayout pnlFileSizeLayout = new FlowLayout();
 			pnlFileSizeLayout.setAlignment(FlowLayout.LEFT);
 			pnlFileSize.setLayout(pnlFileSizeLayout);
 			pnlFileSize.setBounds(80, 106, 400, 30);
-			lblFileSize = new JLabel("File size [KB]");
-			lblFileSize.setBounds(10, 106, 80, 22);
-			pnlSearchOptions.add(lblFileSize);
+			
 			rbtAllSize = new JRadioButton("All", true);
 			rbtFileSizeGreater = new JRadioButton(">> (GT)");
 			rbtFileSizeLower = new JRadioButton("<< (LT)");
 			rbtFileSizeEqual = new JRadioButton("= (EQ)");
+			
 			btnGrpFileSize = new ButtonGroup();
-			btnGrpFileSize.add(rbtAllSize);
-			btnGrpFileSize.add(rbtFileSizeGreater);
-			btnGrpFileSize.add(rbtFileSizeLower);
-			btnGrpFileSize.add(rbtFileSizeEqual);
-			rbtAllSize.addItemListener(this);
-			rbtFileSizeGreater.addItemListener(this);
-			rbtFileSizeLower.addItemListener(this);
-			rbtFileSizeEqual.addItemListener(this);
+			
 			pnlFileSize.add(rbtAllSize);
 			pnlFileSize.add(rbtFileSizeGreater);
 			pnlFileSize.add(rbtFileSizeLower);
 			pnlFileSize.add(rbtFileSizeEqual);
+			
+			rbtAllSize.addItemListener(this);
+			rbtFileSizeGreater.addItemListener(this);
+			rbtFileSizeLower.addItemListener(this);
+			rbtFileSizeEqual.addItemListener(this);
+			
+			btnGrpFileSize.add(rbtAllSize);
+			btnGrpFileSize.add(rbtFileSizeGreater);
+			btnGrpFileSize.add(rbtFileSizeLower);
+			btnGrpFileSize.add(rbtFileSizeEqual);
+			
+			//FlowLayout pnlFileSizeLayout = new FlowLayout();
+
+			lblFileSize = new JLabel("File size [KB]");
+			lblFileSize.setBounds(10, 106, 80, 22);
+			pnlSearchOptions.add(lblFileSize);
+			
+
 			txtFileSize = new JTextField();
 			txtFileSize.setPreferredSize(DIMENSION_100_22);
 			pnlFileSize.add(txtFileSize);
 			JLabel lblKByte = new JLabel("KByte");
 			pnlFileSize.add(lblKByte);
 			pnlSearchOptions.add(pnlFileSize);
+			
 			// Date interval
 			JLabel lblCreationFrom = new JLabel("Date From");
 			lblCreationFrom.setBounds(10, 138, 60, 22);

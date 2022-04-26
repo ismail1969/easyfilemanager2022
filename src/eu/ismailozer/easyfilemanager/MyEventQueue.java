@@ -26,49 +26,54 @@ public class MyEventQueue extends EventQueue {
 	@Override
 	protected void dispatchEvent(AWTEvent event)
 			throws NullPointerException, java.lang.IndexOutOfBoundsException, java.lang.ArrayIndexOutOfBoundsException {
-		if (event == null) {
-			return;
+		try {
+			if (event == null) {
+				return;
+			}
+
+			if (event != null) {
+				//System.out.println("EVENT == " + event.toString());
+				super.dispatchEvent(event);
+
+				// interested only in mouseevents
+				if (!(event instanceof MouseEvent))
+					return;
+
+				MouseEvent me = (MouseEvent) event;
+
+				// interested only in popuptriggers
+				if (!me.isPopupTrigger())
+					return;
+
+				// me.getComponent(...) retunrs the heavy weight component on which
+				// event occured
+				Component comp = SwingUtilities.getDeepestComponentAt(me.getComponent(), me.getX(), me.getY());
+
+				// interested only in textcomponents
+				if (!(comp instanceof JTextComponent))
+					return;
+
+				// no popup shown by user code
+				if (MenuSelectionManager.defaultManager().getSelectedPath().length > 0)
+					return;
+
+				// create popup menu and show
+				JTextComponent tc = (JTextComponent) comp;
+				JPopupMenu menu = new JPopupMenu();
+				menu.add(new CutAction(tc));
+				menu.add(new CopyAction(tc));
+				menu.add(new PasteAction(tc));
+				menu.add(new DeleteAction(tc));
+				menu.addSeparator();
+				menu.add(new SelectAllAction(tc));
+
+				Point pt = SwingUtilities.convertPoint(me.getComponent(), me.getPoint(), tc);
+				menu.show(tc, pt.x, pt.y);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
-		if (event != null) {
-			// System.out.println("EVENT == " + event.toString());
-			super.dispatchEvent(event);
-
-			// interested only in mouseevents
-			if (!(event instanceof MouseEvent))
-				return;
-
-			MouseEvent me = (MouseEvent) event;
-
-			// interested only in popuptriggers
-			if (!me.isPopupTrigger())
-				return;
-
-			// me.getComponent(...) retunrs the heavy weight component on which
-			// event occured
-			Component comp = SwingUtilities.getDeepestComponentAt(me.getComponent(), me.getX(), me.getY());
-
-			// interested only in textcomponents
-			if (!(comp instanceof JTextComponent))
-				return;
-
-			// no popup shown by user code
-			if (MenuSelectionManager.defaultManager().getSelectedPath().length > 0)
-				return;
-
-			// create popup menu and show
-			JTextComponent tc = (JTextComponent) comp;
-			JPopupMenu menu = new JPopupMenu();
-			menu.add(new CutAction(tc));
-			menu.add(new CopyAction(tc));
-			menu.add(new PasteAction(tc));
-			menu.add(new DeleteAction(tc));
-			menu.addSeparator();
-			menu.add(new SelectAllAction(tc));
-
-			Point pt = SwingUtilities.convertPoint(me.getComponent(), me.getPoint(), tc);
-			menu.show(tc, pt.x, pt.y);
-		}
 	}
 }
 
