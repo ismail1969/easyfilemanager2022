@@ -4339,7 +4339,7 @@ public class MainGUI extends javax.swing.JFrame
 					// lblFileInfo.setText(lText);
 
 					setFileInfoText(lblFileInfo, lText);
-					FileUtilityHelper.logOnTitle(lText, cbxLoggingCommandLine.isSelected(), null);
+					FileUtilityHelper.logOnTitle(lText, cbxLoggingCommandLine.isSelected(), new JFrame());
 
 					if (foundFileAsDublicate.contains(leftFile)) {
 						continue; // for actuall file we have a entry
@@ -4501,7 +4501,7 @@ public class MainGUI extends javax.swing.JFrame
 						String lText = "Process file:..." + f.getFile().getAbsoluteFile();
 
 						setFileInfoText(lblFileInfo, lText);
-						FileUtilityHelper.logOnTitle(lText, cbxLoggingCommandLine.isSelected(), null);
+						FileUtilityHelper.logOnTitle(lText, cbxLoggingCommandLine.isSelected(), new JFrame());
 
 						int currentProcentValue = getCurrentProcessedProcent((i + 1));
 						if (currentProcentValue > progressBarValue && currentProcentValue % ConstantsGlobal.TEN == 0) {
@@ -4825,7 +4825,7 @@ public class MainGUI extends javax.swing.JFrame
 			checkToWriteLogFile();
 		}
 		lblFileInfo.setText(lInfoTxt);
-		FileUtilityHelper.logOnTitle(lInfoTxt, cbxLoggingCommandLine.isSelected(), null);
+		FileUtilityHelper.logOnTitle(lInfoTxt, cbxLoggingCommandLine.isSelected(), new JFrame());
 		lblFileInfo.setBackground(Color.GREEN);
 		FileUtilityHelper.log(lInfoTxt, cbxLoggingCommandLine.isSelected());
 		showMessage(lInfoTxt);
