@@ -32,7 +32,7 @@ public class MyEventQueue extends EventQueue {
 			}
 
 			if (event != null) {
-				//System.out.println("EVENT == " + event.toString());
+				// System.out.println("EVENT == " + event.toString());
 				super.dispatchEvent(event);
 
 				// interested only in mouseevents

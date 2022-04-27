@@ -13,7 +13,8 @@ public class EasyFileWalker {
 		System.out.println("Stating....");
 
 		HashMap<Integer, DublicateFiles> map = new HashMap<Integer, DublicateFiles>();
-		map = new MainGUI().getDublicateFileList("C:\\POP", "C:\\Musik");
+		map = new MainGUI().getDublicateFileList_XXX("C:\\POP", "C:\\Musik");
+
 		// map = new MainGUI().getDublicateFileList("C:\\Musik",
 		// "C:\\Temp\\dublicates");
 
