@@ -54,81 +54,81 @@ public class MainGUI extends javax.swing.JFrame
 	 */
 	private static final long serialVersionUID = -7272088068571396768L;
 
-	private static String DEFAULT_COMPARE_DIR = "defaultCompareDir";
-	private static String DEFAULT_SEARCH_DIR = "defaultSearchDir";
-//	private static int BUFFSIZE = 0x2000; // 8192
-//	private static int BUFFSIZE_MULTIPLE = 1;
-	private static final java.util.Locale LOCALE_TR = new java.util.Locale("tr");
-	private static final double HUNDERD = 100;
-	private static final double TEN = 10;
-	private static int TOTAL_FOUND_ENTRIES;
-	private static double NUMBER_ENTRIES_PER_PORCENT;
+//	private static String DEFAULT_COMPARE_DIR = "defaultCompareDir";
+//	private static String DEFAULT_SEARCH_DIR = "defaultSearchDir";
+////	private static int BUFFSIZE = 0x2000; // 8192
+////	private static int BUFFSIZE_MULTIPLE = 1;
+//	//private static final java.util.Locale LOCALE_TR = new java.util.Locale("tr");
+//	private static final double HUNDERD = 100;
+//	private static final double TEN = 10;
+//	private static int TOTAL_FOUND_ENTRIES;
+//	private static double NUMBER_ENTRIES_PER_PORCENT;
 
-	public static String capitalizeString(String string) {
-		char[] chars = string.toLowerCase(LOCALE_TR).toCharArray();
-		boolean found = false;
-		for (int i = 0; i < chars.length; i++) {
-			if (!found && Character.isLetter(chars[i])) {
-				// chars[i] = Character.toUpperCase(chars[i]);
-				// tr I dont work otherwise
-				chars[i] = Character.toString(chars[i]).toUpperCase(LOCALE_TR).charAt(0);
-				// chars[i] = lStr.charAt(0);
-				found = true;
-			} else if (Character.isWhitespace(chars[i]) || chars[i] == '.' || chars[i] == '\''
-					|| !Character.isLetter(chars[i])) {
-				found = false;
-			}
-		}
-		return String.valueOf(chars);
-	}
+//	public static String capitalizeString(String string) {
+//		char[] chars = string.toLowerCase(LOCALE_TR).toCharArray();
+//		boolean found = false;
+//		for (int i = 0; i < chars.length; i++) {
+//			if (!found && Character.isLetter(chars[i])) {
+//				// chars[i] = Character.toUpperCase(chars[i]);
+//				// tr I dont work otherwise
+//				chars[i] = Character.toString(chars[i]).toUpperCase(LOCALE_TR).charAt(0);
+//				// chars[i] = lStr.charAt(0);
+//				found = true;
+//			} else if (Character.isWhitespace(chars[i]) || chars[i] == '.' || chars[i] == '\''
+//					|| !Character.isLetter(chars[i])) {
+//				found = false;
+//			}
+//		}
+//		return String.valueOf(chars);
+//	}
 
-	public static String getFileExtension(File f) {
-		if (f == null || f.isDirectory()) {
-			return "";
-		}
-		String ext = "";
-		int i = f.getName().lastIndexOf('.');
+//	public static String getFileExtension(File f) {
+//		if (f == null || f.isDirectory()) {
+//			return "";
+//		}
+//		String ext = "";
+//		int i = f.getName().lastIndexOf('.');
+//
+//		if (i > 0) {
+//			ext = f.getName().substring(i + 1);
+//		}
+//		return ext;
+//	}
 
-		if (i > 0) {
-			ext = f.getName().substring(i + 1);
-		}
-		return ext;
-	}
+//	public static String getFileExtension(String file) {
+//		return getFileExtension(new File(file));
+//	}
 
-	public static String getFileExtension(String file) {
-		return getFileExtension(new File(file));
-	}
+//	public static String getFilenameWithoutExtentionTest_XXX(File f) {
+//		if (f == null) {
+//			return null;
+//		}
+//		String lFilenameWihtoutExt = "";
+//		// String lFilenameWihtoutExt = "";
+//		int i = f.getName().lastIndexOf('.');
+//
+//		if (i > 0) {
+//			lFilenameWihtoutExt = f.getName().substring(0, i);
+//		} else {
+//			lFilenameWihtoutExt = f.getName();
+//		}
+//
+//		return lFilenameWihtoutExt;
+//	}
 
-	public static String getFilenameWithoutExtentionTest(File f) {
-		if (f == null) {
-			return null;
-		}
-		String lFilenameWihtoutExt = "";
-		// String lFilenameWihtoutExt = "";
-		int i = f.getName().lastIndexOf('.');
-
-		if (i > 0) {
-			lFilenameWihtoutExt = f.getName().substring(0, i);
-		} else {
-			lFilenameWihtoutExt = f.getName();
-		}
-
-		return lFilenameWihtoutExt;
-	}
-
-	public static String getOnlyFilenameFromPath(String f) {
-		String filename = null;
-		File file = new File(f);
-		String s = file.getName();
-		// int i = s.lastIndexOf(File.separator);
-		//
-		if (file.isDirectory()) {
-			filename = null;
-		} else {
-			filename = s;
-		}
-		return filename;
-	}
+//	public static String getOnlyFilenameFromPath_XXX(String f) {
+//		String filename = null;
+//		File file = new File(f);
+//		String s = file.getName();
+//		// int i = s.lastIndexOf(File.separator);
+//		//
+//		if (file.isDirectory()) {
+//			filename = null;
+//		} else {
+//			filename = s;
+//		}
+//		return filename;
+//	}
 
 	public static String getTimestamp() {
 		return new java.text.SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(new java.util.Date()).toString();
@@ -198,24 +198,24 @@ public class MainGUI extends javax.swing.JFrame
 		JOptionPane.showMessageDialog(null, pMsg, pTitle, JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	public static void writeToLogFile(String pLogFilename, StringBuffer pStrBuffer, String pCarSet) {
-		if (pCarSet.isEmpty())
-			pCarSet = "UTF-8";
-		try {
-			java.io.BufferedWriter out = new java.io.BufferedWriter(
-					new java.io.OutputStreamWriter(new java.io.FileOutputStream(pLogFilename), pCarSet));
-			out.write(pStrBuffer.toString());
-			out.close();
-			if (pStrBuffer.length() > 0) {
-				System.out.println("File created succesful ... ");
-				System.out.println("File = " + pLogFilename);
-			} else {
-				System.out.println("No files found !");
-			}
-		} catch (java.io.IOException exp) {
-			exp.printStackTrace();
-		}
-	}
+//	public static void writeToLogFile(String pLogFilename, StringBuffer pStrBuffer, String pCarSet) {
+//		if (pCarSet.isEmpty())
+//			pCarSet = "UTF-8";
+//		try {
+//			java.io.BufferedWriter out = new java.io.BufferedWriter(
+//					new java.io.OutputStreamWriter(new java.io.FileOutputStream(pLogFilename), pCarSet));
+//			out.write(pStrBuffer.toString());
+//			out.close();
+//			if (pStrBuffer.length() > 0) {
+//				System.out.println("File created succesful ... ");
+//				System.out.println("File = " + pLogFilename);
+//			} else {
+//				System.out.println("No files found !");
+//			}
+//		} catch (java.io.IOException exp) {
+//			exp.printStackTrace();
+//		}
+//	}
 
 	/**
 	 * Auto-generated main method to display this JFrame
@@ -480,10 +480,10 @@ public class MainGUI extends javax.swing.JFrame
 			// openLogFile();
 		} else if (source == btnChooseDir) {
 			// chooseDirectory(event);
-			setPath(txtSearchDir);
+			FileUtilityHelper.setPath(txtSearchDir, this);
 			// defaultDir = txtDirectory.getText();
 		} else if (source == btnChooseCompareDir) {
-			setPath(txtCompareDir);
+			FileUtilityHelper.setPath(txtCompareDir, this);
 		} else if (source == btnViewLogFiles) {
 			viewLogFiles();
 		} else if (source == txtContainStr) {
@@ -575,9 +575,9 @@ public class MainGUI extends javax.swing.JFrame
 		}
 		try {
 			pDublicateTblModel.addRow(new Object[] { Integer.valueOf(pDublicateTblModel.getRowCount() + 1),
-					pSourceFile.getCanonicalPath(), getFileExtension(pSourceFile),
+					pSourceFile.getCanonicalPath(), FileUtilityHelper.getFileExtension(pSourceFile),
 					getDateFromat().format(new Date((pSourceFile.lastModified()))), getFileSize(pSourceFile),
-					pDublicateFile.getCanonicalPath(), getFileExtension(pDublicateFile),
+					pDublicateFile.getCanonicalPath(), FileUtilityHelper.getFileExtension(pDublicateFile),
 					getDateFromat().format(new Date((pDublicateFile.lastModified()))), getFileSize(pDublicateFile),
 					pSourceFile.isDirectory(), "Switch"
 
@@ -605,14 +605,14 @@ public class MainGUI extends javax.swing.JFrame
 		// System.out.println("addItemToDuplicateTable ");
 
 		try {
-			pDublicateTblModel.addRow(
-					new Object[] { Integer.valueOf(pDublicateTblModel.getRowCount() + 1), pLeftFile.getCanonicalPath(),
-							getFileExtension(pLeftFile), getDateFromat().format(pLeftFile.lastModified()),
-							getFileSize(pLeftFile), pRightFile.getCanonicalPath(), getFileExtension(pRightFile),
-							getDateFromat().format(pRightFile.lastModified()), getFileSize(pRightFile),
-							pLeftFile.isDirectory(), "Switch"
+			pDublicateTblModel.addRow(new Object[] { Integer.valueOf(pDublicateTblModel.getRowCount() + 1),
+					pLeftFile.getCanonicalPath(), FileUtilityHelper.getFileExtension(pLeftFile),
+					getDateFromat().format(pLeftFile.lastModified()), getFileSize(pLeftFile),
+					pRightFile.getCanonicalPath(), FileUtilityHelper.getFileExtension(pRightFile),
+					getDateFromat().format(pRightFile.lastModified()), getFileSize(pRightFile), pLeftFile.isDirectory(),
+					"Switch"
 
-					});
+			});
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -648,7 +648,7 @@ public class MainGUI extends javax.swing.JFrame
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		String fileExtension = getFileExtension(pFile);
+		String fileExtension = FileUtilityHelper.getFileExtension(pFile);
 		try {
 			pTblModel.addRow(new Object[] { Integer.valueOf(pTblModel.getRowCount() + 1), pFile.getCanonicalPath(),
 					lTargetFilename,
@@ -674,7 +674,7 @@ public class MainGUI extends javax.swing.JFrame
 		}
 
 		pTblModel.addRow(new Object[] { Integer.valueOf(pTblModel.getRowCount() + 1), pSourceFilename, pTargetFilename,
-				getFileExtension(pSourceFilename),
+				FileUtilityHelper.getFileExtension(pSourceFilename),
 				getDateFromat().format(new Date((new File(pSourceFilename).lastModified()))),
 				getFileSize(pSourceFilename), pCanRename, new File(pSourceFilename).isDirectory() });
 	}
@@ -720,7 +720,7 @@ public class MainGUI extends javax.swing.JFrame
 	private void checkToWriteLogFile() {
 		if (cbxLoggingInFile.isSelected()) {
 			if (STR_BUFFER.length() > 0 && STR_BUFFER != null) {
-				writeToLogFile(getLogFilename(LOG_FILE, "log"), STR_BUFFER, "UTF-8");
+				FileUtilityHelper.writeToLogFile(getLogFilename(LOG_FILE, "log"), STR_BUFFER, "UTF-8");
 			}
 		}
 	}
@@ -742,11 +742,11 @@ public class MainGUI extends javax.swing.JFrame
 
 	}
 
-	private void cmdLineLogging(Object pObject) {
-		if (pObject != null && cbxLoggingCommandLine.isSelected()) {
-			System.out.println(pObject.toString());
-		}
-	}
+//	private void cmdLineLogging(Object pObject) {
+//		if (pObject != null && cbxLoggingCommandLine.isSelected()) {
+//			System.out.println(pObject.toString());
+//		}
+//	}
 
 	// private double getNumberFilesPerProcent(int pAllFiles) {
 	// return (double) pAllFiles / (double) 100;
@@ -797,7 +797,9 @@ public class MainGUI extends javax.swing.JFrame
 				fout.write(buffer, 0, bytesRead);
 			}
 			if (cbxLoggingCommandLine.isSelected()) {
-				log("Copy file successfull : " + pSource.getAbsolutePath() + " -> " + pTarget.getAbsolutePath());
+				FileUtilityHelper.log(
+						"Copy file successfull : " + pSource.getAbsolutePath() + " -> " + pTarget.getAbsolutePath(),
+						cbxLoggingCommandLine.isSelected());
 			}
 			ret_code = true;
 
@@ -860,7 +862,7 @@ public class MainGUI extends javax.swing.JFrame
 				for (int i = intselected.length - 1; i >= 0; i--) {
 					String sourceFile = (String) tableSearchResult.getValueAt(i, 1);
 					File source = new File(sourceFile);
-					String lOnlyFilename = getOnlyFilenameFromPath(sourceFile);
+					String lOnlyFilename = FileUtilityHelper.getOnlyFilenameFromPath(sourceFile);
 
 					File target = null;
 					if (bRecursive) {
@@ -903,9 +905,9 @@ public class MainGUI extends javax.swing.JFrame
 		int total_rows = pTable.getRowCount();
 		int rows_in_file = (int) java.lang.Math.ceil((float) total_rows / anzahl_files);
 
-		log("anzahl_files = " + anzahl_files);
+		FileUtilityHelper.log("anzahl_files = " + anzahl_files, cbxLoggingCommandLine.isSelected());
 
-		log("rows_in_file = " + rows_in_file);
+		FileUtilityHelper.log("rows_in_file = " + rows_in_file, cbxLoggingCommandLine.isSelected());
 
 		String out_file = getLogFilename("turku_listesi_", "");
 
@@ -925,9 +927,9 @@ public class MainGUI extends javax.swing.JFrame
 		int total_rows = pTable.getRowCount();
 		int rows_in_file = (int) java.lang.Math.ceil((float) total_rows / anzahl_files);
 
-		log("anzahl_files = " + anzahl_files);
+		FileUtilityHelper.log("anzahl_files = " + anzahl_files, cbxLoggingCommandLine.isSelected());
 
-		log("rows_in_file = " + rows_in_file);
+		FileUtilityHelper.log("rows_in_file = " + rows_in_file, cbxLoggingCommandLine.isSelected());
 
 		String out_file = getLogFilename("turku_listesi_", "");
 
@@ -972,7 +974,7 @@ public class MainGUI extends javax.swing.JFrame
 		}
 	}
 
-	public boolean deleteFile(File pFile, boolean pMoveToTrash) {
+	public boolean deleteFile_XXX(File pFile, boolean pMoveToTrash) {
 		return pFile.delete();
 	}
 
@@ -992,12 +994,12 @@ public class MainGUI extends javax.swing.JFrame
 	// cbxSuccessiveUppercaseChars.isSelected());
 	// }
 
-	public boolean deleteFile(String pFilename) throws IOException {
+	public boolean deleteFile_XXX(String pFilename) throws IOException {
 		File f = new File(pFilename);
 		// Make sure the file or directory exists and isn't write protected
 		if (!f.exists()) {
 			String lInfo = "Delete: no such file or directory: " + pFilename;
-			log(lInfo);
+			FileUtilityHelper.log(lInfo, cbxLoggingCommandLine.isSelected());
 			// EasyUtility.showInfoMsg(lInfo, "Delete Files");
 			return false;
 			// If it is a directory, make sure it is empty
@@ -1005,28 +1007,32 @@ public class MainGUI extends javax.swing.JFrame
 			String[] files = f.list();
 			if (files.length > 0) {
 				String lInfo = "Delete: directory not empty: " + pFilename;
-				log(lInfo);
+				FileUtilityHelper.log(lInfo, cbxLoggingCommandLine.isSelected());
 				showInfoMsg(lInfo, "Directory not empty");
 				return false;
 			} else {
 
-				if (!this.deleteFile(f, false)/* !f.delete() */) {
-					log("Delete=>: deletion failed for : " + pFilename);
+				if (!this.deleteFile_XXX(f, false)/* !f.delete() */) {
+					FileUtilityHelper.log("Delete=>: deletion failed for : " + pFilename,
+							cbxLoggingCommandLine.isSelected());
 					return false;
 				} else {
 					if (cbxLoggingCommandLine.isSelected()) {
-						log("Delete=>: deletion succesful : " + pFilename);
+						FileUtilityHelper.log("Delete=>: deletion succesful : " + pFilename,
+								cbxLoggingCommandLine.isSelected());
 					}
 					return true;
 				}
 			}
 		} else {
 
-			if (!this.deleteFile(f, true)/* !f.delete() */) {
-				log("Delete=>: deletion failed for : " + pFilename);
+			if (!this.deleteFile_XXX(f, true)/* !f.delete() */) {
+				FileUtilityHelper.log("Delete=>: deletion failed for : " + pFilename,
+						cbxLoggingCommandLine.isSelected());
 				return false;
 			} else {
-				log("Delete=>: deletion succesful : " + pFilename);
+				FileUtilityHelper.log("Delete=>: deletion succesful : " + pFilename,
+						cbxLoggingCommandLine.isSelected());
 				return true;
 			}
 		}
@@ -1051,7 +1057,7 @@ public class MainGUI extends javax.swing.JFrame
 			DefaultTableModel defModel = (DefaultTableModel) pTable.getModel();
 			for (int i = intselected.length - 1; i >= 0; i--) {
 				try {
-					if (deleteFile((String) pTable.getValueAt(intselected[i], pColumnIndex))) {
+					if (deleteFile_XXX((String) pTable.getValueAt(intselected[i], pColumnIndex))) {
 						defModel.removeRow(intselected[i]);
 						// repaint(); // 2017.02.10??
 						counter++;
@@ -1106,14 +1112,14 @@ public class MainGUI extends javax.swing.JFrame
 		HEIGHT_FRM = HEIGHT_FRM > HEIGHT_SCR ? HEIGHT_SCR : HEIGHT_FRM;
 	}
 
-	private boolean dirExist(String pDirectory) {
-		// TODO Auto-generated method stub
-		if (new File(pDirectory).exists() == false) {
-			showMessage("No directory found: [" + pDirectory + "]!");
-			return false;
-		}
-		return true;
-	}
+//	private boolean dirExist(String pDirectory) {
+//		// TODO Auto-generated method stub
+//		if (new File(pDirectory).exists() == false) {
+//			showMessage("No directory found: [" + pDirectory + "]!");
+//			return false;
+//		}
+//		return true;
+//	}
 
 	public void exportJTable(JTable table, File file, String pSeparator) {
 		try {
@@ -1659,9 +1665,9 @@ public class MainGUI extends javax.swing.JFrame
 	}
 
 	public int getCurrentProcessedProcent(int currentItemIndex) {
-		double quota = (currentItemIndex / NUMBER_ENTRIES_PER_PORCENT);
+		double quota = (currentItemIndex / ConstantsGlobal.NUMBER_ENTRIES_PER_PORCENT);
 		// System.out.println("quota ---" +quota);
-		return (int) (quota / TEN) * ((int) TEN);
+		return (int) (quota / ConstantsGlobal.TEN) * ((int) ConstantsGlobal.TEN);
 	}
 
 	public DateFormat getDateFromat() {
@@ -1680,7 +1686,7 @@ public class MainGUI extends javax.swing.JFrame
 		}
 	}
 
-	public HashMap<Integer, DublicateFiles> getDublicateFileList(String pLeftPath, String pRightPath) {
+	public HashMap<Integer, DublicateFiles> getDublicateFileList_XXX(String pLeftPath, String pRightPath) {
 		HashMap<Integer, DublicateFiles> map = new HashMap<Integer, DublicateFiles>();
 
 		ArrayList<File> foundFileAsDublicate = new ArrayList<File>();
@@ -1715,9 +1721,10 @@ public class MainGUI extends javax.swing.JFrame
 		for (int i = 0; i < leftFileArrayList.size(); i++) {
 
 			int currentProcentValue = getCurrentProcessedProcent(i + 1);
-			if (currentProcentValue > currentProcentValue && currentProcentValue % TEN == 0) {
-				lInfo = "[" + currentProcentValue + "] % / " + "Process: " + (i + 1) + " / " + TOTAL_FOUND_ENTRIES
-						+ " elapsed time " + ProcessTimeController.getElapsedTime() + " [s]";
+			if (currentProcentValue > currentProcentValue && currentProcentValue % ConstantsGlobal.TEN == 0) {
+				lInfo = "[" + currentProcentValue + "] % / " + "Process: " + (i + 1) + " / "
+						+ ConstantsGlobal.TOTAL_FOUND_ENTRIES + " elapsed time "
+						+ ProcessTimeController.getElapsedTime() + " [s]";
 				// progressBarValue = (int) currentProcentValue;
 				System.out.println(lInfo);
 			}
@@ -1797,7 +1804,7 @@ public class MainGUI extends javax.swing.JFrame
 		return fw.getFileList(pSortFileSize);
 	}
 
-	public String getFileFromFileChooser(String pParentPath, int pFileSelectionMode) {
+	public String getFileFromFileChooser_XXX(String pParentPath, int pFileSelectionMode) {
 		JFileChooser jfilechooser = new JFileChooser();
 		jfilechooser.setFileSelectionMode(pFileSelectionMode);
 		jfilechooser.setCurrentDirectory(new File(pParentPath));
@@ -1881,16 +1888,16 @@ public class MainGUI extends javax.swing.JFrame
 		return pFileLists;
 	}
 
-	public int getFileNumberInDir(File pPath) {
-		int fileSize = 0;
-		File[] files = pPath.listFiles();
-		for (int i = 0; i < files.length; i++) {
-			if (files[i].isFile()) {
-				fileSize++;
-			}
-		}
-		return fileSize;
-	}
+//	public int getFileNumberInDir(File pPath) {
+//		int fileSize = 0;
+//		File[] files = pPath.listFiles();
+//		for (int i = 0; i < files.length; i++) {
+//			if (files[i].isFile()) {
+//				fileSize++;
+//			}
+//		}
+//		return fileSize;
+//	}
 
 	public FileRenamer getFileRenamer() {
 		if (filerenamer == null) {
@@ -1926,14 +1933,14 @@ public class MainGUI extends javax.swing.JFrame
 //		}
 
 		return FileSearchParameters.getFileSearchParameters(txtStartsWith.getText(), txtEndsWith.getText(),
-				txtContainStr.getText(), txtSearchPattern.getText(), (int) getSearchedFileSize(txtFileSize.getText()),
+				txtContainStr.getText(), txtSearchPattern.getText(), ConverterUtilityHelper.getIntValue(txtFileSize.getText()),
 				rbtFileSizeGreater.isSelected(), rbtFileSizeLower.isSelected(), rbtFileSizeEqual.isSelected(),
 				date_from, date_to, cbxSuccessiveUppercaseChars.isSelected());
 
 		// return fileSearchParameters;
 	}
 
-	private String getFileSeparator() {
+	private String XXX_getFileSeparator() {
 		return System.getProperty("file.separator");
 	}
 
@@ -2343,7 +2350,7 @@ public class MainGUI extends javax.swing.JFrame
 		pnlTransformOpt.setBounds(80, 150, 600, 30);
 		pnlTransformOpt.setLayout(pnlOptLayout);
 		return pnlTransformOpt;
-		
+
 	}
 
 	public int getLeftItems() {
@@ -2511,7 +2518,7 @@ public class MainGUI extends javax.swing.JFrame
 
 	public String getNewFilenameFromParent(String pParent, String lNewFile, String pOldFilename) {
 		// C:\Temp\subdir1\subdir2\myfile3.txt -> filename =C subdir2
-		int ind = pParent.lastIndexOf(getFileSeparator());
+		int ind = pParent.lastIndexOf(FileUtilityHelper.getFileSeparator());
 		if (ind == -1) {
 			return lNewFile;
 		}
@@ -2519,36 +2526,36 @@ public class MainGUI extends javax.swing.JFrame
 		return replaceFirst(lNewFile, pOldFilename, lParentName);
 	}
 
-	public String getNewFilenameFromRegExpReplacement(String pSearchedRegExpress, String pReplaceRegExpress,
-			String pStringToChange) {
-		if (pSearchedRegExpress == null || pStringToChange == null) {
-			return null;
-		}
-		Pattern pattern = Pattern.compile(pSearchedRegExpress);
-		Matcher matcher = pattern.matcher(pStringToChange);
-		return matcher.replaceAll(pReplaceRegExpress);
-	}
+//	public String XXX_getNewFilenameFromRegExpReplacement(String pSearchedRegExpress, String pReplaceRegExpress,
+//			String pStringToChange) {
+//		if (pSearchedRegExpress == null || pStringToChange == null) {
+//			return null;
+//		}
+//		Pattern pattern = Pattern.compile(pSearchedRegExpress);
+//		Matcher matcher = pattern.matcher(pStringToChange);
+//		return matcher.replaceAll(pReplaceRegExpress);
+//	}
 
-	public java.util.List<File> getOnlyDirsFromPath(File pRootDir) {
-
-		if (pRootDir == null) {
-			return null;
-		}
-		java.util.List<File> returnDirs = new ArrayList<File>();
-
-		java.util.List<File> subDirs = new ArrayList<File>();
-
-		File[] list = pRootDir.listFiles();
-
-		for (int i = 0; i < list.length; i++) {
-			if (list[i].isDirectory()) {
-				returnDirs.add(list[i]);
-				subDirs = getOnlyDirsFromPath(list[i]);
-				returnDirs.addAll(subDirs);
-			}
-		}
-		return returnDirs;
-	}
+//	public java.util.List<File> getOnlyDirsFromPath(File pRootDir) {
+//
+//		if (pRootDir == null) {
+//			return null;
+//		}
+//		java.util.List<File> returnDirs = new ArrayList<File>();
+//
+//		java.util.List<File> subDirs = new ArrayList<File>();
+//
+//		File[] list = pRootDir.listFiles();
+//
+//		for (int i = 0; i < list.length; i++) {
+//			if (list[i].isDirectory()) {
+//				returnDirs.add(list[i]);
+//				subDirs = getOnlyDirsFromPath(list[i]);
+//				returnDirs.addAll(subDirs);
+//			}
+//		}
+//		return returnDirs;
+//	}
 
 	private JPanel getPanelCompareDir() {
 		// begin: compare path
@@ -2790,7 +2797,7 @@ public class MainGUI extends javax.swing.JFrame
 		return fileList;
 	}
 
-	public float getSearchedFileSize(String pFileSize) {
+	public float getSearchedFileSize_XXX(String pFileSize) {
 		if (pFileSize.isEmpty()) {
 			return 0;
 		}
@@ -2847,7 +2854,8 @@ public class MainGUI extends javax.swing.JFrame
 	}
 
 	public void importToJTable(JTable pTablename) {
-		String lFilename = getFileFromFileChooser(txtSearchDir.getText(), JFileChooser.FILES_ONLY);
+		String lFilename = FileUtilityHelper.getFileFromFileChooser(txtSearchDir.getText(), JFileChooser.FILES_ONLY,
+				this);
 		DefaultTableModel model = (DuplicateTableModel) pTablename.getModel();
 		pTablename.removeAll();
 		try {
@@ -2943,7 +2951,7 @@ public class MainGUI extends javax.swing.JFrame
 //			pnlCompareDir.add(btnChooseCompareDir);
 //			btnChooseCompareDir.addActionListener(this);
 			getContentPane().add(getPanelCompareDir());
-			
+
 			// pnlCompareDir
 
 			getContentPane().add(getPanelOptions());
@@ -2972,16 +2980,13 @@ public class MainGUI extends javax.swing.JFrame
 //			cbxSearchLimits = getMyComboBox(searchLimitList, "");
 //			pnlOptions.add(cbxSearchLimits);
 			// end: panel options
-			
+
 			// Start With
 
-			
 			pnlSearchOptions = new JPanel();
 			pnlSearchOptions.setLayout(null);
 			pnlSearchOptions.setBounds(60, 12, 400, 280);
-			
 
-			
 			lblStartsWith = new JLabel("Starts With");
 			lblStartsWith.setBounds(10, 10, 80, 22);
 			pnlSearchOptions.add(lblStartsWith);
@@ -3021,43 +3026,41 @@ public class MainGUI extends javax.swing.JFrame
 			txtSearchPattern = new JTextField();
 			txtSearchPattern.setBounds(90, 82, 200, 22);
 			pnlSearchOptions.add(txtSearchPattern);
-			
-			
+
 			// File size Panel
 			JPanel pnlFileSize = new JPanel();
 			FlowLayout pnlFileSizeLayout = new FlowLayout();
 			pnlFileSizeLayout.setAlignment(FlowLayout.LEFT);
 			pnlFileSize.setLayout(pnlFileSizeLayout);
 			pnlFileSize.setBounds(80, 106, 400, 30);
-			
+
 			rbtAllSize = new JRadioButton("All", true);
 			rbtFileSizeGreater = new JRadioButton(">> (GT)");
 			rbtFileSizeLower = new JRadioButton("<< (LT)");
 			rbtFileSizeEqual = new JRadioButton("= (EQ)");
-			
+
 			btnGrpFileSize = new ButtonGroup();
-			
+
 			pnlFileSize.add(rbtAllSize);
 			pnlFileSize.add(rbtFileSizeGreater);
 			pnlFileSize.add(rbtFileSizeLower);
 			pnlFileSize.add(rbtFileSizeEqual);
-			
+
 			rbtAllSize.addItemListener(this);
 			rbtFileSizeGreater.addItemListener(this);
 			rbtFileSizeLower.addItemListener(this);
 			rbtFileSizeEqual.addItemListener(this);
-			
+
 			btnGrpFileSize.add(rbtAllSize);
 			btnGrpFileSize.add(rbtFileSizeGreater);
 			btnGrpFileSize.add(rbtFileSizeLower);
 			btnGrpFileSize.add(rbtFileSizeEqual);
-			
-			//FlowLayout pnlFileSizeLayout = new FlowLayout();
+
+			// FlowLayout pnlFileSizeLayout = new FlowLayout();
 
 			lblFileSize = new JLabel("File size [KB]");
 			lblFileSize.setBounds(10, 106, 80, 22);
 			pnlSearchOptions.add(lblFileSize);
-			
 
 			txtFileSize = new JTextField();
 			txtFileSize.setPreferredSize(DIMENSION_100_22);
@@ -3065,7 +3068,7 @@ public class MainGUI extends javax.swing.JFrame
 			JLabel lblKByte = new JLabel("KByte");
 			pnlFileSize.add(lblKByte);
 			pnlSearchOptions.add(pnlFileSize);
-			
+
 			// Date interval
 			JLabel lblCreationFrom = new JLabel("Date From");
 			lblCreationFrom.setBounds(10, 138, 60, 22);
@@ -3275,7 +3278,7 @@ public class MainGUI extends javax.swing.JFrame
 			cbxBufferSizeFactor = getMyComboBox(this.bufferSizeFactorList, "1");
 			cbxBufferSizeFactor.setBounds(520, 70, 60, 22);
 			pnlCompareFileOptions.add(cbxBufferSizeFactor);
-			
+
 			jTabbedPaneOptionsTop = new JTabbedPane();
 			getContentPane().add(jTabbedPaneOptionsTop);
 			// jTabbedPane1.setBounds(60, 120, 720, 200);
@@ -3611,7 +3614,7 @@ public class MainGUI extends javax.swing.JFrame
 		btnChooseDir = new JButton("Open directory");
 		btnChooseDir.setPreferredSize(DIMENSION_140_22);
 		pnlDirectory.add(btnChooseDir);
-		btnChooseDir.addActionListener(this);		
+		btnChooseDir.addActionListener(this);
 		return pnlDirectory;
 	}
 
@@ -3733,10 +3736,14 @@ public class MainGUI extends javax.swing.JFrame
 		if (pImage.length() == 0) {
 			return false;
 		}
-		return new File(pImage).isFile()
-				&& (pImage.toLowerCase(LOCALE_TR).endsWith("jpeg") || pImage.toLowerCase(LOCALE_TR).endsWith("jpg")
-						|| pImage.endsWith("gif") || pImage.toLowerCase(LOCALE_TR).endsWith("tif")
-						|| pImage.endsWith("bmp") || pImage.toLowerCase(LOCALE_TR).endsWith("png"));
+		return new File(pImage).isFile() && (pImage.toLowerCase(getDefaultLocaleLanguage()).endsWith("jpeg")
+				|| pImage.toLowerCase(getDefaultLocaleLanguage()).endsWith("jpg") || pImage.endsWith("gif")
+				|| pImage.toLowerCase(getDefaultLocaleLanguage()).endsWith("tif") || pImage.endsWith("bmp")
+				|| pImage.toLowerCase(getDefaultLocaleLanguage()).endsWith("png"));
+	}
+
+	public Locale getDefaultLocaleLanguage() {
+		return ConstantsGlobal.LOCALE_TR;
 	}
 
 	private boolean isSearchLimitReached(int pSearchLimit) {
@@ -3777,11 +3784,12 @@ public class MainGUI extends javax.swing.JFrame
 		if (new File(pFilename).length() >= Runtime.getRuntime().maxMemory()) {
 			return false;
 		}
-		return pFilename.toLowerCase(LOCALE_TR).endsWith("txt") || pFilename.toLowerCase(LOCALE_TR).endsWith("log")
-				|| pFilename.endsWith("xml") || pFilename.toLowerCase(LOCALE_TR).endsWith("html")
-				|| pFilename.toLowerCase(LOCALE_TR).endsWith("ini") || pFilename.toLowerCase(LOCALE_TR).endsWith("csv")
-				|| pFilename.endsWith("java") || pFilename.endsWith("css")
-				|| pFilename.toLowerCase(LOCALE_TR).endsWith("php");
+		return pFilename.toLowerCase(getDefaultLocaleLanguage()).endsWith("txt")
+				|| pFilename.toLowerCase(getDefaultLocaleLanguage()).endsWith("log") || pFilename.endsWith("xml")
+				|| pFilename.toLowerCase(getDefaultLocaleLanguage()).endsWith("html")
+				|| pFilename.toLowerCase(getDefaultLocaleLanguage()).endsWith("ini")
+				|| pFilename.toLowerCase(getDefaultLocaleLanguage()).endsWith("csv") || pFilename.endsWith("java")
+				|| pFilename.endsWith("css") || pFilename.toLowerCase(getDefaultLocaleLanguage()).endsWith("php");
 	}
 
 	@Override
@@ -3899,11 +3907,11 @@ public class MainGUI extends javax.swing.JFrame
 				// fis = new java.io.FileInputStream(getClass().getResource(
 				// "resources/"+PROPS_FILE).getPath());
 				this.prop.load(fis);
-				defaultSearchDir = prop.getProperty(DEFAULT_SEARCH_DIR);
+				defaultSearchDir = prop.getProperty(ConstantsGlobal.DEFAULT_SEARCH_DIR);
 				if (defaultSearchDir == null && defaultSearchDir.length() == 0) {
 					defaultSearchDir = System.getProperty("user.dir");
 				}
-				defaultCompareDir = prop.getProperty(DEFAULT_COMPARE_DIR);
+				defaultCompareDir = prop.getProperty(ConstantsGlobal.DEFAULT_COMPARE_DIR);
 				fis.close();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -3921,33 +3929,33 @@ public class MainGUI extends javax.swing.JFrame
 		}
 	}
 
-	private void log(Object pObject) {
-		if (pObject != null && cbxLoggingCommandLine.isSelected()) {
-			cmdLineLogging(pObject.toString());
-			// System.out.println(pObject.toString());
-		}
-	}
-
-	public void logOnGUI(Object pObject) {
-		if (pObject != null && cbxLoggingCommandLine.isSelected()) {
-			lblFileInfo.setText((String) pObject);
-		}
-	}
-
-	public void logOnTitle(Object pObject) {
-		if (pObject != null && cbxLoggingCommandLine.isSelected()) {
-			setTitle((String) pObject);
-		}
-	}
-
-	private void logTimeStamp() {
-		if (cbxLoggingCommandLine.isSelected()) {
-			SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");// dd/MM/yyyy
-			// Date now = new Date();
-			// String strDate = sdfDate.format(new Date());
-			System.out.println(">>> Time: " + sdfDate.format(new Date()));
-		}
-	}
+//	private void log(Object pObject) {
+//		if (pObject != null && cbxLoggingCommandLine.isSelected()) {
+//			FileUtilityHelper.cmdLineLogging(pObject.toString(), cbxLoggingCommandLine.isSelected());
+//			// System.out.println(pObject.toString());
+//		}
+//	}
+//
+//	public void logOnGUI(Object pObject) {
+//		if (pObject != null && cbxLoggingCommandLine.isSelected()) {
+//			lblFileInfo.setText((String) pObject);
+//		}
+//	}
+//
+//	public void logOnTitle(Object pObject) {
+//		if (pObject != null && cbxLoggingCommandLine.isSelected()) {
+//			setTitle((String) pObject);
+//		}
+//	}
+//
+//	private void logTimeStamp() {
+//		if (cbxLoggingCommandLine.isSelected()) {
+//			SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");// dd/MM/yyyy
+//			// Date now = new Date();
+//			// String strDate = sdfDate.format(new Date());
+//			System.out.println(">>> Time: " + sdfDate.format(new Date()));
+//		}
+//	}
 
 	private boolean matchCreationDate(File pSearchedFile, String pCreationDateFrom, String pCreationDateTo) {
 
@@ -3986,8 +3994,8 @@ public class MainGUI extends javax.swing.JFrame
 	}
 
 	private boolean matchEndsWith(String pEndsWith, String searchedFileName) {
-		if (!pEndsWith.isEmpty()
-				&& !searchedFileName.toLowerCase(LOCALE_TR).endsWith(pEndsWith.toLowerCase(LOCALE_TR))) {
+		if (!pEndsWith.isEmpty() && !searchedFileName.toLowerCase(getDefaultLocaleLanguage())
+				.endsWith(pEndsWith.toLowerCase(getDefaultLocaleLanguage()))) {
 			return false;
 		}
 		return true;
@@ -4007,8 +4015,8 @@ public class MainGUI extends javax.swing.JFrame
 			return false;
 		}
 
-		if (!pContainStr.isEmpty()
-				&& !searchedFileName.toLowerCase(LOCALE_TR).contains(pContainStr.toLowerCase(LOCALE_TR))) {
+		if (!pContainStr.isEmpty() && !searchedFileName.toLowerCase(getDefaultLocaleLanguage())
+				.contains(pContainStr.toLowerCase(getDefaultLocaleLanguage()))) {
 			return false;
 		}
 		if (!matchPattern(pSearchPattern, searchedFileName)) {
@@ -4070,8 +4078,8 @@ public class MainGUI extends javax.swing.JFrame
 	}
 
 	private boolean matchStartsWith(String pStartsWith, String searchedFileName) {
-		if (!pStartsWith.isEmpty()
-				&& !searchedFileName.toLowerCase(LOCALE_TR).startsWith(pStartsWith.toLowerCase(LOCALE_TR))) {
+		if (!pStartsWith.isEmpty() && !searchedFileName.toLowerCase(getDefaultLocaleLanguage())
+				.startsWith(pStartsWith.toLowerCase(getDefaultLocaleLanguage()))) {
 			return false;
 		}
 		return true;
@@ -4136,7 +4144,8 @@ public class MainGUI extends javax.swing.JFrame
 
 	private void openSelectedFile(JTable pTable, DefaultTableModel pMyTblModel) {
 		try {
-			log("Open file...." + pMyTblModel.getValueAt(pTable.getSelectedRow(), 1).toString());
+			FileUtilityHelper.log("Open file...." + pMyTblModel.getValueAt(pTable.getSelectedRow(), 1).toString(),
+					cbxLoggingCommandLine.isSelected());
 			Runtime.getRuntime().exec("cmd.exe /c " + pMyTblModel.getValueAt(pTable.getSelectedRow(), 1).toString());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -4198,7 +4207,7 @@ public class MainGUI extends javax.swing.JFrame
 						exp.printStackTrace();
 						lLogText = "Can't rename " + oldfile + " --> " + newfile + " !";
 					}
-					log(lLogText);
+					FileUtilityHelper.log(lLogText, cbxLoggingCommandLine.isSelected());
 				}
 			}
 
@@ -4252,7 +4261,7 @@ public class MainGUI extends javax.swing.JFrame
 
 				ArrayList<File> foundFileAsDublicate = new ArrayList<File>();
 
-				log(getTimeStamp());
+				FileUtilityHelper.log(getTimeStamp(), cbxLoggingCommandLine.isSelected());
 				initStringBuffer();
 				// BUFFSIZE = getTextFieldValueAsInteger(txtBufferSize);
 				// BUFFSIZE_MULTIPLE = getTextFieldValueAsInteger(txtBufferSizeFactor);
@@ -4261,19 +4270,20 @@ public class MainGUI extends javax.swing.JFrame
 
 				String leftPath = txtSearchDir.getText();
 				String rightPath = txtCompareDir.getText();
-				if (!dirExist(leftPath)) {
+				
+				if (!FileUtilityHelper.dirExistWithMessage(leftPath, new JFrame())) {
 					return;
 				}
-				if (rightPath.length() > 0 && !dirExist(rightPath)) {
+				if (rightPath.length() > 0 && FileUtilityHelper.dirExistWithMessage(rightPath, new JFrame())) {
 					return;
 				}
 
 				String statText = ">>>> Compare file content";
 				String waitingText = "Please waiting ....";
-				log(statText);
-				log(waitingText);
-				cmdLineLogging(statText);
-				cmdLineLogging(waitingText);
+				FileUtilityHelper.log(statText, cbxLoggingCommandLine.isSelected());
+				FileUtilityHelper.log(waitingText, cbxLoggingCommandLine.isSelected());
+				FileUtilityHelper.cmdLineLogging(statText, cbxLoggingCommandLine.isSelected());
+				FileUtilityHelper.cmdLineLogging(waitingText, cbxLoggingCommandLine.isSelected());
 
 				ProcessTimeController.start();
 				getLeftItems();
@@ -4307,9 +4317,9 @@ public class MainGUI extends javax.swing.JFrame
 				for (int i = 0; i < leftFileArrayList.size(); i++) {
 
 					int currentProcentValue = getCurrentProcessedProcent(i + 1);
-					if (currentProcentValue > progressBarValue && currentProcentValue % TEN == 0) {
-						lblFileInfo.setText("Process: " + (i + 1) + " / " + TOTAL_FOUND_ENTRIES + " elapsed time "
-								+ ProcessTimeController.getElapsedTime() + " [s]");
+					if (currentProcentValue > progressBarValue && currentProcentValue % ConstantsGlobal.TEN == 0) {
+						lblFileInfo.setText("Process: " + (i + 1) + " / " + ConstantsGlobal.TOTAL_FOUND_ENTRIES
+								+ " elapsed time " + ProcessTimeController.getElapsedTime() + " [s]");
 						progressBarValue = currentProcentValue;
 					}
 
@@ -4325,11 +4335,11 @@ public class MainGUI extends javax.swing.JFrame
 					leftFile = leftFileCollector.getFile();
 
 					String lText = "Process file:..." + leftFileCollector.getFile().getAbsoluteFile();
-					// logOnGUI(lText);
+					FileUtilityHelper.logOnGUI(lText, cbxLoggingCommandLine.isSelected() ,lblFileInfo);
 					// lblFileInfo.setText(lText);
 
 					setFileInfoText(lblFileInfo, lText);
-					logOnTitle(lText);
+					FileUtilityHelper.logOnTitle(lText, cbxLoggingCommandLine.isSelected(), null);
 
 					if (foundFileAsDublicate.contains(leftFile)) {
 						continue; // for actuall file we have a entry
@@ -4380,7 +4390,7 @@ public class MainGUI extends javax.swing.JFrame
 				}
 
 				String lInfoTxt = "";
-				progressBarValue = (int) HUNDERD;
+				progressBarValue = (int) ConstantsGlobal.HUNDERD;
 				progressBar.setValue(progressBarValue);
 				if (jTabbedPanelForTables != null) {
 					jTabbedPanelForTables.setSelectedIndex(1);
@@ -4400,16 +4410,16 @@ public class MainGUI extends javax.swing.JFrame
 						}
 						lInfoTxt += "Found total dublicate files: " + found_duplicate_entry + "! Processtime: "
 								+ ProcessTimeController.getProzessTime() + " [s]";
-						log(lInfoTxt);
+						FileUtilityHelper.log(lInfoTxt, cbxLoggingCommandLine.isSelected());
 						addToLogBuffer(lInfoTxt);
 					}
 				}
 
-				log(lInfoTxt);
+				FileUtilityHelper.log(lInfoTxt, cbxLoggingCommandLine.isSelected());
 				setFileInfoText(lblFileInfo, lInfoTxt);
-				logOnTitle(lInfoTxt);
-				logTimeStamp();
-				log("<<< Compare file content");
+				FileUtilityHelper.logOnTitle(lInfoTxt, cbxLoggingCommandLine.isSelected(), null);
+				FileUtilityHelper.logTimeStamp(cbxLoggingCommandLine.isSelected());
+				FileUtilityHelper.log("<<< Compare file content", cbxLoggingCommandLine.isSelected());
 				showMessage(lInfoTxt);
 				checkToWriteLogFile();
 			}
@@ -4429,15 +4439,15 @@ public class MainGUI extends javax.swing.JFrame
 			searchThread = new Thread() {
 				@Override
 				public void run() {
-					log(getTimeStamp());
+					FileUtilityHelper.log(getTimeStamp(), cbxLoggingCommandLine.isSelected());
 					initStringBuffer();
-					if (!dirExist(txtSearchDir.getText())) {
+					if (!FileUtilityHelper.dirExistWithMessage(txtSearchDir.getText(), new JFrame())) {
 						return;
 					}
 
-					log(">>>> Search files");
-					log("Please waiting ....");
-					logOnGUI("Please waiting ....");
+					FileUtilityHelper.log(">>>> Search files", cbxLoggingCommandLine.isSelected());
+					FileUtilityHelper.log("Please waiting ....", cbxLoggingCommandLine.isSelected());
+					FileUtilityHelper.logOnGUI("Please waiting ....", cbxLoggingCommandLine.isSelected(), lblFileInfo);
 
 					ProcessTimeController.start();
 					clearRows(searchTableModel);
@@ -4491,12 +4501,12 @@ public class MainGUI extends javax.swing.JFrame
 						String lText = "Process file:..." + f.getFile().getAbsoluteFile();
 
 						setFileInfoText(lblFileInfo, lText);
-						logOnTitle(lText);
+						FileUtilityHelper.logOnTitle(lText, cbxLoggingCommandLine.isSelected(), null);
 
 						int currentProcentValue = getCurrentProcessedProcent((i + 1));
-						if (currentProcentValue > progressBarValue && currentProcentValue % TEN == 0) {
-							lblFileInfo.setText("Process: " + (i + 1) + " / " + TOTAL_FOUND_ENTRIES + " elapsed time "
-									+ ProcessTimeController.getElapsedTime() + " [s]");
+						if (currentProcentValue > progressBarValue && currentProcentValue % ConstantsGlobal.TEN == 0) {
+							lblFileInfo.setText("Process: " + (i + 1) + " / " + ConstantsGlobal.TOTAL_FOUND_ENTRIES
+									+ " elapsed time " + ProcessTimeController.getElapsedTime() + " [s]");
 							progressBarValue = currentProcentValue;
 						}
 						// laufendNr++;
@@ -4521,7 +4531,7 @@ public class MainGUI extends javax.swing.JFrame
 						// lIndex);
 
 					}
-					progressBarValue = (int) HUNDERD;
+					progressBarValue = (int) ConstantsGlobal.HUNDERD;
 					progressBar.setValue(progressBarValue);
 
 					// jTabbedPanelForTables.setSelectedIndex(0);
@@ -4531,7 +4541,7 @@ public class MainGUI extends javax.swing.JFrame
 
 					ProcessTimeController.end();
 					// progress.stop();
-					logTimeStamp();
+					FileUtilityHelper.logTimeStamp(cbxLoggingCommandLine.isSelected());
 					// checkButtonStatus();
 					try {
 						showResult();
@@ -4579,11 +4589,11 @@ public class MainGUI extends javax.swing.JFrame
 				String curr_Filename = list.get(i);
 				setTitle("Please waiting... Process files: " + curr_Filename);
 				if (new File(curr_Filename).isDirectory()) {
-					int findFiles = getFileNumberInDir(new File(curr_Filename));
+					int findFiles = FileUtilityHelper.getFileNumberInDir(new File(curr_Filename));
 					if (findFiles >= file_items) {
 						File files[] = new File(curr_Filename).listFiles();
 						String lInfo = "Current Dir: " + curr_Filename;
-						log(lInfo);
+						FileUtilityHelper.log(lInfo, cbxLoggingCommandLine.isSelected());
 						try {
 							addItemToRenameTable(searchTableModel, new File(curr_Filename).getCanonicalPath(),
 									new File(curr_Filename).getCanonicalPath(), 1);
@@ -4677,19 +4687,19 @@ public class MainGUI extends javax.swing.JFrame
 	}
 
 	public void setNumberEntriesPerProcent() {
-		NUMBER_ENTRIES_PER_PORCENT = (double) TOTAL_FOUND_ENTRIES / (double) 100;
+		ConstantsGlobal.NUMBER_ENTRIES_PER_PORCENT = (double) ConstantsGlobal.TOTAL_FOUND_ENTRIES / (double) 100;
 	}
 
-	private void setPath(JTextField pTextField) {
-		JFileChooser jfilechooser = new JFileChooser();
-		jfilechooser.setFileSelectionMode(1);
-		jfilechooser.setCurrentDirectory(new File(pTextField.getText()));
-		jfilechooser.setAcceptAllFileFilterUsed(false);
-		int i = jfilechooser.showOpenDialog(this);
-		if (i == 0) {
-			pTextField.setText(jfilechooser.getSelectedFile().getPath());
-		}
-	}
+//	private void setPath(JTextField pTextField) {
+//		JFileChooser jfilechooser = new JFileChooser();
+//		jfilechooser.setFileSelectionMode(1);
+//		jfilechooser.setCurrentDirectory(new File(pTextField.getText()));
+//		jfilechooser.setAcceptAllFileFilterUsed(false);
+//		int i = jfilechooser.showOpenDialog(this);
+//		if (i == 0) {
+//			pTextField.setText(jfilechooser.getSelectedFile().getPath());
+//		}
+//	}
 
 	public void setRightItems(int pRightItems) {
 	}
@@ -4702,7 +4712,7 @@ public class MainGUI extends javax.swing.JFrame
 	}
 
 	public void setTotalFoundEntries(int size) {
-		TOTAL_FOUND_ENTRIES = size;
+		ConstantsGlobal.TOTAL_FOUND_ENTRIES = size;
 	}
 
 	private void showFile(String pImagefile) {
@@ -4714,7 +4724,7 @@ public class MainGUI extends javax.swing.JFrame
 				e.printStackTrace();
 			}
 
-		} else if (pImagefile.toLowerCase(LOCALE_TR).endsWith("mp3")) {
+		} else if (pImagefile.toLowerCase(getDefaultLocaleLanguage()).endsWith("mp3")) {
 			// new EasyMP3Player(pImagefile, true);
 		}
 	}
@@ -4815,9 +4825,9 @@ public class MainGUI extends javax.swing.JFrame
 			checkToWriteLogFile();
 		}
 		lblFileInfo.setText(lInfoTxt);
-		logOnTitle(lInfoTxt);
+		FileUtilityHelper.logOnTitle(lInfoTxt, cbxLoggingCommandLine.isSelected(), null);
 		lblFileInfo.setBackground(Color.GREEN);
-		log(lInfoTxt);
+		FileUtilityHelper.log(lInfoTxt, cbxLoggingCommandLine.isSelected());
 		showMessage(lInfoTxt);
 		// fillFileExtentions();
 		repaint();
@@ -4844,10 +4854,10 @@ public class MainGUI extends javax.swing.JFrame
 	private void storeProperties() {
 		try {
 			FileOutputStream fos;
-			prop.setProperty(DEFAULT_SEARCH_DIR, txtSearchDir.getText());
-			prop.setProperty(DEFAULT_COMPARE_DIR, txtCompareDir.getText());
-			prop.store((fos = new FileOutputStream(PROPS_FILE)),
-					DEFAULT_SEARCH_DIR + ":" + prop.getProperty(DEFAULT_SEARCH_DIR) + "");
+			prop.setProperty(ConstantsGlobal.DEFAULT_SEARCH_DIR, txtSearchDir.getText());
+			prop.setProperty(ConstantsGlobal.DEFAULT_COMPARE_DIR, txtCompareDir.getText());
+			prop.store((fos = new FileOutputStream(PROPS_FILE)), ConstantsGlobal.DEFAULT_SEARCH_DIR + ":"
+					+ prop.getProperty(ConstantsGlobal.DEFAULT_SEARCH_DIR) + "");
 			fos.close();
 		} catch (java.io.IOException e) {
 			e.printStackTrace();
@@ -5023,7 +5033,7 @@ public class MainGUI extends javax.swing.JFrame
 
 			transformer.transform(source, result);
 
-			log("File saved in path: " + pXMLFile);
+			FileUtilityHelper.log("File saved in path: " + pXMLFile, cbxLoggingCommandLine.isSelected());
 			return true;
 
 		} catch (ParserConfigurationException pce) {
@@ -5045,7 +5055,8 @@ public class MainGUI extends javax.swing.JFrame
 					String[] piece = filename.trim().split("[\\\\]");
 					out.write(piece[piece.length - 3] + ";" + piece[piece.length - 2] + ";" + piece[piece.length - 1]
 							+ System.getProperty("line.separator"));
-					log("GetValueAt : " + (String) tableSearchResult.getValueAt(i, 1));
+					FileUtilityHelper.log("GetValueAt : " + (String) tableSearchResult.getValueAt(i, 1),
+							cbxLoggingCommandLine.isSelected());
 				} else {
 					break;
 				}
