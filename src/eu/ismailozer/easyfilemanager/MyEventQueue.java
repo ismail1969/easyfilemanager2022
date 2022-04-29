@@ -71,6 +71,7 @@ public class MyEventQueue extends EventQueue {
 				menu.show(tc, pt.x, pt.y);
 			}
 		} catch (Exception e) {
+			System.out.println("EXP = " + e.getMessage() + e.getSuppressed().toString());
 			e.printStackTrace();
 		}
 

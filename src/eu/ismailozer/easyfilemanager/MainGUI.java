@@ -2637,7 +2637,7 @@ public class MainGUI extends javax.swing.JFrame
 		FlowLayout pnlOptionsLayout = new FlowLayout();
 		pnlOptionsLayout.setAlignment(FlowLayout.LEFT);
 		pnlOptions.setLayout(pnlOptionsLayout);
-		pnlOptions.setBounds(100, 80, 730, 30);
+		pnlOptions.setBounds(100, 80, 850, 30);
 		getContentPane().add(pnlOptions);
 
 		cbxIncludeFiles = new JCheckBox("Include Files");
@@ -3506,7 +3506,7 @@ public class MainGUI extends javax.swing.JFrame
 			// table for Comparison
 
 			pnlFilePreview = new JPanel();
-			pnlFilePreview.setLocation(830, 10);
+			pnlFilePreview.setLocation(960, 10);
 			pnlFilePreview.setSize(dimensionPreview);
 
 			pnlBottomCmdButton = new JPanel();
