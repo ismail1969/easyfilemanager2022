@@ -169,7 +169,8 @@ public class EasyFileWalker {
 		File root = new File(pPath);
 		File[] list = root.listFiles();
 
-		if (searchLimitReached()) {
+		System.out.println("searchLimitReached() = " + searchLimitReached());
+		if (list == null || list.length <= 0 || searchLimitReached()) {
 			return;
 		}
 
