@@ -84,17 +84,28 @@ public class FileUtilityHelper {
 	}
 
 	public static String getOnlyFilenameFromPath(String f) {
-		String filename = null;
-		File file = new File(f);
-		String s = file.getName();
+//		String filename = null;
+//		File file = new File(f);
+//		String s = file.getName();
+//		// int i = s.lastIndexOf(File.separator);
+//		//
+//		if (file.isDirectory()) {
+//			filename = null;
+//		} else {
+//			filename = s;
+//		}
+
+//		String filename = null;
+//		File file = new File(f);
+//		String s = file.getName();
 		// int i = s.lastIndexOf(File.separator);
 		//
-		if (file.isDirectory()) {
-			filename = null;
-		} else {
-			filename = s;
+		if (new File(f).isFile()) {
+			return new File(f).getName();
 		}
-		return filename;
+
+		return null;
+
 	}
 
 	public static boolean dirExist(String pDirectory) {
@@ -154,7 +165,7 @@ public class FileUtilityHelper {
 			}
 		}
 	}
-	
+
 	public static String getNewFilenameFromRegExpReplacement(String pSearchedRegExpress, String pReplaceRegExpress,
 			String pStringToChange) {
 		if (pSearchedRegExpress == null || pStringToChange == null) {
@@ -163,8 +174,8 @@ public class FileUtilityHelper {
 		Pattern pattern = Pattern.compile(pSearchedRegExpress);
 		Matcher matcher = pattern.matcher(pStringToChange);
 		return matcher.replaceAll(pReplaceRegExpress);
-	}	
-	
+	}
+
 	public java.util.List<File> getOnlyDirsFromPath(File pRootDir) {
 
 		if (pRootDir == null) {
@@ -184,8 +195,8 @@ public class FileUtilityHelper {
 			}
 		}
 		return returnDirs;
-	}	
-	
+	}
+
 	public static String getFileSeparator() {
 		return System.getProperty("file.separator");
 	}

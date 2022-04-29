@@ -376,11 +376,11 @@ public class MainGUI extends javax.swing.JFrame
 	private int DIR_COUNTER;
 
 	private int FILE_COUNTER;
-	private int HEIGHT_FRM;
-	private int HEIGHT_SCR;
-	private int WIDTH_FRM;
-	private int WIDTH_SCR;
-	private int ZOOM_FACTOR = 100;
+//	private int HEIGHT_FRM;
+//	private int HEIGHT_SCR;
+//	private int WIDTH_FRM;
+//	private int WIDTH_SCR;
+//	private int ZOOM_FACTOR = 100;
 
 	private int preview_height = 320;
 	private int preview_width = 400;
@@ -441,6 +441,8 @@ public class MainGUI extends javax.swing.JFrame
 	FileSearchParameters fileSearchParameters;
 
 	FileRenamer filerenamer;
+
+	DefaultToolkitScreenSizeReader defaultToolkitScreenSizeReader;
 
 	public MainGUI() {
 		super();
@@ -781,57 +783,58 @@ public class MainGUI extends javax.swing.JFrame
 		}
 	}
 
-	private boolean copyFileTo(File pSource, File pTarget) {
-		boolean ret_code = false;
-		FileInputStream fin = null;
-		FileOutputStream fout = null;
-		byte[] buffer = new byte[4096]; // Buffer 4K at a time (you can
-		// change this).
-		int bytesRead;
-		try {
-			// open the files for input and output
-			fin = new FileInputStream(pSource);
-			fout = new FileOutputStream(pTarget);
-			// while bytesRead indicates a successful read, lets write...
-			while ((bytesRead = fin.read(buffer)) >= 0) {
-				fout.write(buffer, 0, bytesRead);
-			}
-			if (cbxLoggingCommandLine.isSelected()) {
-				FileUtilityHelper.log(
-						"Copy file successfull : " + pSource.getAbsolutePath() + " -> " + pTarget.getAbsolutePath(),
-						cbxLoggingCommandLine.isSelected());
-			}
-			ret_code = true;
-
-		} catch (IOException e) { // Error copying file...
-			IOException wrapper = new IOException("copyFiles: Unable to copy file: " + pSource.getAbsolutePath() + "to"
-					+ pTarget.getAbsolutePath() + ".");
-			wrapper.initCause(e);
-			wrapper.setStackTrace(e.getStackTrace());
-			return false;
-
-		} finally { // Ensure that the files are closed (if they were open).
-			if (fin != null) {
-				try {
-					fin.close();
-				} catch (IOException e) {
-					//
-					e.printStackTrace();
-				}
-			}
-			if (fout != null) {
-				try {
-					fout.close();
-				} catch (IOException e) {
-					//
-					e.printStackTrace();
-				}
-			}
-		}
-		return ret_code;
-	}
+//	private boolean copyFileTo_XXX(File pSource, File pTarget) {
+//		boolean ret_code = false;
+//		FileInputStream fin = null;
+//		FileOutputStream fout = null;
+//		byte[] buffer = new byte[4096]; // Buffer 4K at a time (you can
+//		// change this).
+//		int bytesRead;
+//		try {
+//			// open the files for input and output
+//			fin = new FileInputStream(pSource);
+//			fout = new FileOutputStream(pTarget);
+//			// while bytesRead indicates a successful read, lets write...
+//			while ((bytesRead = fin.read(buffer)) >= 0) {
+//				fout.write(buffer, 0, bytesRead);
+//			}
+//			if (cbxLoggingCommandLine.isSelected()) {
+//				FileUtilityHelper.log(
+//						"Copy file successfull : " + pSource.getAbsolutePath() + " -> " + pTarget.getAbsolutePath(),
+//						cbxLoggingCommandLine.isSelected());
+//			}
+//			ret_code = true;
+//
+//		} catch (IOException e) { // Error copying file...
+//			IOException wrapper = new IOException("copyFiles: Unable to copy file: " + pSource.getAbsolutePath() + "to"
+//					+ pTarget.getAbsolutePath() + ".");
+//			wrapper.initCause(e);
+//			wrapper.setStackTrace(e.getStackTrace());
+//			return false;
+//
+//		} finally { // Ensure that the files are closed (if they were open).
+//			if (fin != null) {
+//				try {
+//					fin.close();
+//				} catch (IOException e) {
+//					//
+//					e.printStackTrace();
+//				}
+//			}
+//			if (fout != null) {
+//				try {
+//					fout.close();
+//				} catch (IOException e) {
+//					//
+//					e.printStackTrace();
+//				}
+//			}
+//		}
+//		return ret_code;
+//	}
 
 	private void copySelectedFilesToDir() {
+		// TODO: Move to other class
 		// copyFileTo(File pSouce, File pTarget);
 		// This was not a directory, so lets just copy the file
 		int counter = 0;
@@ -882,7 +885,7 @@ public class MainGUI extends javax.swing.JFrame
 						target = new File(lSelDir, "Copy_Of_" + i + "_" + lOnlyFilename);
 					}
 					if (target != null && source != null) {
-						if (copyFileTo(source, target)) {
+						if (FileCopyHelper.copyFileTo(source, target, cbxLoggingCommandLine.isSelected())) {
 							counter++;
 						} else {
 							JOptionPane.showMessageDialog(this, "Error copy file " + source + " --> " + target);
@@ -893,6 +896,25 @@ public class MainGUI extends javax.swing.JFrame
 			}
 			JOptionPane.showMessageDialog(this, "Total copied files: " + counter);
 		}
+	}
+
+	private java.util.List<File> getSelectedSearchedFileLists_TODO() {
+		// copyFileTo(File pSouce, File pTarget);
+		// This was not a directory, so lets just copy the file
+//		int[] intselected = tableSearchResult.getSelectedRows();
+//		if (tableSearchResult.getRowCount() == 0) {
+//			return null;
+//		} else if (intselected.length == 0) {
+//			return null;
+//		}
+		java.util.List<File> selectedSourceFileList = new ArrayList<File>();
+		for (int i = tableSearchResult.getSelectedRows().length - 1; i >= 0; i--) {
+			String selectedSourceFilename = (String) tableSearchResult.getValueAt(i, 1);
+			selectedSourceFileList.add(new File(selectedSourceFilename));
+			// String lOnlyFilename =
+			// FileUtilityHelper.getOnlyFilenameFromPath(sourceFilename);
+		}
+		return selectedSourceFileList;
 	}
 
 	private void createCSVFile(JTable pTable) {
@@ -1100,16 +1122,16 @@ public class MainGUI extends javax.swing.JFrame
 		}
 	}
 
-	private void determinePreferedSizes() {
-		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		WIDTH_SCR = d.width;
-		HEIGHT_SCR = d.height;
-
-		WIDTH_FRM = (WIDTH_SCR * ZOOM_FACTOR / 100);
-		WIDTH_FRM = WIDTH_FRM > WIDTH_SCR ? WIDTH_SCR : WIDTH_FRM;
-
-		HEIGHT_FRM = (HEIGHT_SCR * ZOOM_FACTOR / 100);
-		HEIGHT_FRM = HEIGHT_FRM > HEIGHT_SCR ? HEIGHT_SCR : HEIGHT_FRM;
+	private void xxx_determinePreferedSizes() {
+//		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+//		WIDTH_SCR = d.width;
+//		HEIGHT_SCR = d.height;
+//
+//		WIDTH_FRM = (WIDTH_SCR * ZOOM_FACTOR / 100);
+//		WIDTH_FRM = WIDTH_FRM > WIDTH_SCR ? WIDTH_SCR : WIDTH_FRM;
+//
+//		HEIGHT_FRM = (HEIGHT_SCR * ZOOM_FACTOR / 100);
+//		HEIGHT_FRM = HEIGHT_FRM > HEIGHT_SCR ? HEIGHT_SCR : HEIGHT_FRM;
 	}
 
 //	private boolean dirExist(String pDirectory) {
@@ -1933,9 +1955,10 @@ public class MainGUI extends javax.swing.JFrame
 //		}
 
 		return FileSearchParameters.getFileSearchParameters(txtStartsWith.getText(), txtEndsWith.getText(),
-				txtContainStr.getText(), txtSearchPattern.getText(), ConverterUtilityHelper.getIntValue(txtFileSize.getText()),
-				rbtFileSizeGreater.isSelected(), rbtFileSizeLower.isSelected(), rbtFileSizeEqual.isSelected(),
-				date_from, date_to, cbxSuccessiveUppercaseChars.isSelected());
+				txtContainStr.getText(), txtSearchPattern.getText(),
+				ConverterUtilityHelper.getIntValue(txtFileSize.getText()), rbtFileSizeGreater.isSelected(),
+				rbtFileSizeLower.isSelected(), rbtFileSizeEqual.isSelected(), date_from, date_to,
+				cbxSuccessiveUppercaseChars.isSelected());
 
 		// return fileSearchParameters;
 	}
@@ -2894,12 +2917,15 @@ public class MainGUI extends javax.swing.JFrame
 
 			// Toolkit.getDefaultToolkit().getSystemEventQueue().push(new
 			// MyEventQueue());
-
+			Dimension d1 = Toolkit.getDefaultToolkit().getScreenSize();
+			initDefaultToolkitScreenSizeReader();
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			getContentPane().setLayout(null);
-			determinePreferedSizes();
+			// determinePreferedSizes();
 			loadPropertiesFile(PROPS_FILE);
-			this.setPreferredSize(new java.awt.Dimension(WIDTH_FRM, HEIGHT_FRM));
+			
+			this.setPreferredSize(new java.awt.Dimension(defaultToolkitScreenSizeReader.getFrameWidth(),
+					defaultToolkitScreenSizeReader.getFrameHeight()));
 			if (OSValidator.isWindows()) {
 				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 			}
@@ -3298,7 +3324,7 @@ public class MainGUI extends javax.swing.JFrame
 			// pnlTopCmdButtonsLayout.setAlignment(FlowLayout.RIGHT);
 			pnlTopCmdButtonsLayout.setAlignment(FlowLayout.LEFT);
 			pnlTopCmdButtons.setLayout(pnlTopCmdButtonsLayout);
-			pnlTopCmdButtons.setBounds(10, 340, WIDTH_FRM - 10, 30);
+			pnlTopCmdButtons.setBounds(10, 340, defaultToolkitScreenSizeReader.getFrameWidth() - 10, 30);
 			// pnlTopCmdButtons.setBounds(60, 330, 720 , 30);
 			getContentPane().add(pnlTopCmdButtons);
 
@@ -3348,15 +3374,18 @@ public class MainGUI extends javax.swing.JFrame
 
 			// Panel for Table Scroll
 			jTabbedPanelForTables = new JTabbedPane();
-			// jTabbedPanelForTables.setBounds(10, 370, WIDTH_FRM - 60, 220);
-			jTabbedPanelForTables.setBounds(10, 370, WIDTH_FRM - 30, HEIGHT_FRM - 550 - 30);
+			// jTabbedPanelForTables.setBounds(10, 370,
+			// defaultToolkitScreenSizeReader.getFrameWidth() - 60, 220);
+			jTabbedPanelForTables.setBounds(10, 370, defaultToolkitScreenSizeReader.getFrameWidth() - 30,
+					defaultToolkitScreenSizeReader.getFrameHeight() - 550 - 30);
 			getContentPane().add(jTabbedPanelForTables);
 
 			pnlTableForRenameFiles = new JPanel();
-			pnlTableForRenameFiles.setBounds(10, 390, WIDTH_FRM - 80, 200);
+			pnlTableForRenameFiles.setBounds(10, 390, defaultToolkitScreenSizeReader.getFrameHeight() - 80, 200);
 
 			scrollPaneForRenameFiles = new JScrollPane();
-			scrollPaneForRenameFiles.setPreferredSize(new java.awt.Dimension(WIDTH_FRM - 80, 200));
+			scrollPaneForRenameFiles
+					.setPreferredSize(new java.awt.Dimension(defaultToolkitScreenSizeReader.getFrameWidth() - 80, 200));
 
 			searchTableModel = new SearcherTableModel(null, SearcherTableModel.TABLE_COLUMN_SEARCH);
 
@@ -3420,10 +3449,11 @@ public class MainGUI extends javax.swing.JFrame
 			// table for Comparison
 
 			pnlTableForCompare = new JPanel();
-			pnlTableForCompare.setBounds(10, 390, WIDTH_FRM - 80, 210);
+			pnlTableForCompare.setBounds(10, 390, defaultToolkitScreenSizeReader.getFrameWidth() - 80, 210);
 
 			scrollPaneForCompare = new JScrollPane();
-			scrollPaneForCompare.setPreferredSize(new java.awt.Dimension(WIDTH_FRM - 80, 210));
+			scrollPaneForCompare
+					.setPreferredSize(new java.awt.Dimension(defaultToolkitScreenSizeReader.getFrameWidth() - 80, 210));
 
 			scrollPaneForCompare.add(pnlTableForCompare);
 
@@ -3481,7 +3511,7 @@ public class MainGUI extends javax.swing.JFrame
 
 			pnlBottomCmdButton = new JPanel();
 			pnlBottomCmdButton.setBounds(60, jTabbedPanelForTables.getY() + jTabbedPanelForTables.getHeight() + 20,
-					WIDTH_FRM - 60, 30);
+					defaultToolkitScreenSizeReader.getFrameWidth() - 60, 30);
 			add(pnlBottomCmdButton);
 
 			btnConvertImage = new JButton("Convert Image");
@@ -3521,14 +3551,17 @@ public class MainGUI extends javax.swing.JFrame
 			lblFileInfo = new JLabel("File: ");
 			lblFileInfo.setBackground(Color.GREEN);
 			pnlInfo.add(lblFileInfo);
-			// pnlInfo.setBounds(60, 590, WIDTH_FRM - 60, 30);
-			pnlInfo.setBounds(60, pnlBottomCmdButton.getY() + pnlBottomCmdButton.getHeight() + 10, WIDTH_FRM - 10, 20);
+			// pnlInfo.setBounds(60, 590, defaultToolkitScreenSizeReader.getFrameWidth() -
+			// 60, 30);
+			pnlInfo.setBounds(60, pnlBottomCmdButton.getY() + pnlBottomCmdButton.getHeight() + 10,
+					defaultToolkitScreenSizeReader.getFrameWidth() - 10, 20);
 
 			add(pnlInfo);
 
 			JPanel pnlProgressBar = new JPanel();
 			pnlProgressBar.setLayout(new FlowLayout(FlowLayout.CENTER));
-			pnlProgressBar.setBounds(60, pnlInfo.getY() + pnlInfo.getHeight() + 10, WIDTH_FRM - 60, 30);
+			pnlProgressBar.setBounds(60, pnlInfo.getY() + pnlInfo.getHeight() + 10,
+					defaultToolkitScreenSizeReader.getFrameWidth() - 60, 30);
 			add(pnlProgressBar);
 
 			UIManager.put("ProgressBar.foreground", new Color(8, 32, 128));
@@ -3592,6 +3625,12 @@ public class MainGUI extends javax.swing.JFrame
 			pack();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void initDefaultToolkitScreenSizeReader() {
+		if (defaultToolkitScreenSizeReader == null) {
+			defaultToolkitScreenSizeReader = new DefaultToolkitScreenSizeReader();
 		}
 	}
 
@@ -4270,7 +4309,7 @@ public class MainGUI extends javax.swing.JFrame
 
 				String leftPath = txtSearchDir.getText();
 				String rightPath = txtCompareDir.getText();
-				
+
 				if (!FileUtilityHelper.dirExistWithMessage(leftPath, new JFrame())) {
 					return;
 				}
@@ -4335,7 +4374,7 @@ public class MainGUI extends javax.swing.JFrame
 					leftFile = leftFileCollector.getFile();
 
 					String lText = "Process file:..." + leftFileCollector.getFile().getAbsoluteFile();
-					FileUtilityHelper.logOnGUI(lText, cbxLoggingCommandLine.isSelected() ,lblFileInfo);
+					FileUtilityHelper.logOnGUI(lText, cbxLoggingCommandLine.isSelected(), lblFileInfo);
 					// lblFileInfo.setText(lText);
 
 					setFileInfoText(lblFileInfo, lText);
@@ -4958,7 +4997,7 @@ public class MainGUI extends javax.swing.JFrame
 	@Override
 	public void windowOpened(WindowEvent arg0) {
 		// log("windowOpened");
-		determinePreferedSizes();
+		// determinePreferedSizes();
 		// loadPropertiesFile(PROPS_FILE);
 		btnSearchFiles.requestFocus();
 		setMyIconImage();
@@ -5046,6 +5085,7 @@ public class MainGUI extends javax.swing.JFrame
 	}
 
 	private void writeCSVFile(String pCSVFile, JTable pTable, int pStartInd, int pEndInd) {
+		// TODO: moving other class
 		try {
 			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pCSVFile), "UTF-8"));
 			int total_Tbl_Items = pTable.getRowCount();
@@ -5064,6 +5104,21 @@ public class MainGUI extends javax.swing.JFrame
 			out.close();
 		} catch (IOException e1) {
 			e1.printStackTrace();
+		}
+	}
+
+	private void getSelectedFilesFromTable(JTable pTable, int pStartInd, int pEndInd) {
+		// TODO: moving other class
+		int total_Tbl_Items = pTable.getRowCount();
+		for (int i = pStartInd; i < pEndInd; i++) {
+			if (i < total_Tbl_Items) {
+				String filename = (String) tableSearchResult.getValueAt(i, 1);
+				String[] piece = filename.trim().split("[\\\\]");
+//					out.write(piece[piece.length - 3] + ";" + piece[piece.length - 2] + ";" + piece[piece.length - 1]
+//							+ System.getProperty("line.separator"));
+//					FileUtilityHelper.log("GetValueAt : " + (String) tableSearchResult.getValueAt(i, 1),
+//							cbxLoggingCommandLine.isSelected());
+			}
 		}
 	}
 }
