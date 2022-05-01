@@ -732,7 +732,7 @@ public class MainGUI extends javax.swing.JFrame
 			return;
 		}
 		int numrows = pTabModel.getRowCount();
-		for (int i = numrows - 1; i >= 0; i--) {
+		for (int i = numrows - 1; i > 0; i--) {
 			pTabModel.removeRow(i);
 		}
 		repaint();
@@ -772,7 +772,7 @@ public class MainGUI extends javax.swing.JFrame
 					int[] intselected = tableSearchResult.getSelectedRows();
 					java.util.List<String> img_filelist = new ArrayList<String>();
 
-					for (int i = intselected.length - 1; i >= 0; i--) {
+					for (int i = intselected.length - 1; i > 0; i--) {
 						img_filelist.add((String) tableSearchResult.getValueAt(i, 1));
 					}
 					new BatchImageConverterGUI(img_filelist, lTargetFormat, false);
@@ -862,7 +862,7 @@ public class MainGUI extends javax.swing.JFrame
 			}
 			boolean bRecursive = true;
 			if (lSelDir != null && lSelDir.isDirectory()) {
-				for (int i = intselected.length - 1; i >= 0; i--) {
+				for (int i = intselected.length - 1; i > 0; i--) {
 					String sourceFile = (String) tableSearchResult.getValueAt(i, 1);
 					File source = new File(sourceFile);
 					String lOnlyFilename = FileUtilityHelper.getOnlyFilenameFromPath(sourceFile);
@@ -1902,7 +1902,8 @@ public class MainGUI extends javax.swing.JFrame
 
 		List<String> pFileLists = new ArrayList<String>();
 		try {
-			walkDirectory(pPath, pRecursiveMode, pIncludeFiles, pIncludeDirectories, pSearchLimit, pFileLists);
+			FileUtilityHelper.walkDirectory(pPath, pRecursiveMode, pIncludeFiles, pIncludeDirectories, pSearchLimit,
+					pFileLists, searchTableModel.getRowCount());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2923,7 +2924,7 @@ public class MainGUI extends javax.swing.JFrame
 			getContentPane().setLayout(null);
 			// determinePreferedSizes();
 			loadPropertiesFile(PROPS_FILE);
-			
+
 			this.setPreferredSize(new java.awt.Dimension(defaultToolkitScreenSizeReader.getFrameWidth(),
 					defaultToolkitScreenSizeReader.getFrameHeight()));
 			if (OSValidator.isWindows()) {
@@ -4256,6 +4257,82 @@ public class MainGUI extends javax.swing.JFrame
 		}
 	}
 
+	private void renameSelectedFiles(JTable pTableSearchResult, boolean pLoggingCommandLine) {
+		String lLogText = "";
+		int renameCountr = 0;
+		int[] intselected = pTableSearchResult.getSelectedRows();
+		if (pTableSearchResult.getRowCount() == 0) {
+			JOptionPane.showMessageDialog(this, "You have no file(s) to rename.");
+			return;
+		} else if (intselected.length == 0) {
+			JOptionPane.showMessageDialog(this, "For rename select one or more files.");
+			return;
+		}
+
+		if (JOptionPane.showConfirmDialog(null, "Do you realy want to rename selected file(s)?", "Rename files?",
+				JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
+			for (int i = intselected.length - 1; i >= 0; i--) {
+				String oldfile = (String) pTableSearchResult.getValueAt(intselected[i], 1);
+				String newfile = (String) pTableSearchResult.getValueAt(intselected[i], 2);
+
+				if (!oldfile.equals(newfile)) {
+					try {
+						new File(oldfile).renameTo(new File(newfile));
+						lLogText = "Rename " + oldfile + " --> " + newfile + " succesful!";
+						renameCountr++;
+					} catch (SecurityException exp) {
+						exp.printStackTrace();
+						lLogText = "Can't rename " + oldfile + " --> " + newfile + " !";
+					}
+					FileUtilityHelper.log(lLogText, pLoggingCommandLine);
+				}
+			}
+
+			if (renameCountr > 0) {
+				JOptionPane.showMessageDialog(this, "Total renamed files: " + String.valueOf(renameCountr));
+			}
+		}
+	}
+
+	private List<File> getFileListFromJTable(JTable pTableSearchResult, int TableColumnPosition,
+			boolean pLoggingCommandLine) {
+		List<File> fileList = new ArrayList<File>();
+
+		Enumeration<String> enumerator = Collections
+				.enumeration(getFileNameListFromJTable(pTableSearchResult, TableColumnPosition, pLoggingCommandLine));
+		while (enumerator.hasMoreElements()) {
+			fileList.add(new File(enumerator.nextElement()));
+		}
+
+//		for (int i = intselected.length - 1; i >= 0; i--) {
+//				String fileName = (String) pTableSearchResult.getValueAt(intselected[i], TableColumnPosition);
+//				fileListName.add(fileName);
+//		}
+		return fileList;
+	}
+
+	private List<String> getFileNameListFromJTable(JTable pTableSearchResult, int TableColumnPosition,
+			boolean pLoggingCommandLine) {
+		List<String> fileListName = new ArrayList<String>();
+		;
+		String lLogText = "";
+		int renameCountr = 0;
+		int[] intselected = pTableSearchResult.getSelectedRows();
+		if (pTableSearchResult.getRowCount() == 0) {
+			JOptionPane.showMessageDialog(this, "You have no file(s) to rename.");
+			return null;
+		} else if (intselected.length == 0) {
+			JOptionPane.showMessageDialog(this, "For rename select one or more files.");
+			return null;
+		}
+
+		for (int i = intselected.length - 1; i >= 0; i--) {
+			String fileName = (String) pTableSearchResult.getValueAt(intselected[i], TableColumnPosition);
+			fileListName.add(fileName);
+		}
+		return fileListName;
+	}
+
 	private void resetSearchOption(JPanel pPanelname) {
 		// TODO Auto-generated method stub
 
@@ -4929,8 +5006,8 @@ public class MainGUI extends javax.swing.JFrame
 		new FileDeleterGUI(getLogDir(LOG_DIR), new String[] { "No", "Logfiles", "Modified", "Size [KB]" });
 	}
 
-	public void walkDirectory(String pPath, boolean pRecursiveMode, boolean pIncludeFiles, boolean pIncludeDirectories,
-			int pSearchLimit, List<String> pFileLists) throws IOException {
+	public void walkDirectory_XXX(String pPath, boolean pRecursiveMode, boolean pIncludeFiles,
+			boolean pIncludeDirectories, int pSearchLimit, List<String> pFileLists) throws IOException {
 
 		File root = new File(pPath);
 		File[] list = root.listFiles();
@@ -4944,7 +5021,7 @@ public class MainGUI extends javax.swing.JFrame
 
 		for (File f : list) {
 			if (f.isDirectory()) {
-				walkDirectory(f.getAbsolutePath(), pRecursiveMode, pIncludeFiles, pIncludeDirectories, pSearchLimit,
+				walkDirectory_XXX(f.getAbsolutePath(), pRecursiveMode, pIncludeFiles, pIncludeDirectories, pSearchLimit,
 						pFileLists);
 				// System.out.println( "Dir:" + f.getAbsoluteFile() );
 				if (pIncludeDirectories) {

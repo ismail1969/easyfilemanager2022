@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -201,6 +202,49 @@ public class FileUtilityHelper {
 		return System.getProperty("file.separator");
 	}
 
+	public static void walkDirectory(String pPath, boolean pRecursiveMode, boolean pIncludeFiles, boolean pIncludeDirectories,
+			int pSearchLimit, List<String> pFileLists, int pEntryCount) throws IOException {
+
+		File root = new File(pPath);
+		File[] list = root.listFiles();
+
+		if (isSearchLimitReached(pSearchLimit, pEntryCount)) {
+			return;
+		}
+
+		if (list == null)
+			return;
+
+		for (File f : list) {
+			if (f.isDirectory()) {
+				walkDirectory(f.getAbsolutePath(), pRecursiveMode, pIncludeFiles, pIncludeDirectories, pSearchLimit,
+						pFileLists, pEntryCount);
+				// System.out.println( "Dir:" + f.getAbsoluteFile() );
+				if (pIncludeDirectories) {
+					pFileLists.add(f.getCanonicalPath());
+				}
+
+				if (isSearchLimitReached(pSearchLimit, pEntryCount)) {
+					return;
+				}
+
+			} else {
+				// System.out.println( "File:" + f.getAbsoluteFile() );
+				if (pIncludeFiles) {
+					pFileLists.add(f.getCanonicalPath());
+				}
+				if (isSearchLimitReached(pSearchLimit, pEntryCount)) {
+					return;
+				}
+			}
+		}
+	}
+	
+	private static boolean isSearchLimitReached(int pSearchLimit, int pEntryCount) {
+		// TODO Auto-generated method stub
+		return (pSearchLimit > 0 && (pEntryCount >= pSearchLimit));
+	}	
+	
 	// LOGGING
 	public static void writeToLogFile(String pLogFilename, StringBuffer pStrBuffer, String pCarSet) {
 		if (pCarSet.isEmpty())
